@@ -1,0 +1,13 @@
+{
+  "name": "ebid",
+  "description": "ebid online biding system like ebay.",
+  "homepage": "http://maxwell.sju.edu/~wy590204/",
+  "author": "yanwsh@gmail.com",
+  "dependencies": {
+      "bootstrap":">= 3.0.0",
+      "jquery": ">=2.1.1",
+      "requirejs": ">=2.1.15",
+      "less" : ">=2.0.0-b3",
+      "fancybox" : ">=2.1.5"
+  }
+}

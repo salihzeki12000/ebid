@@ -1,0 +1,19 @@
+{
+  "name" : "ebid",
+  "description" : "ebid online biding system like ebay.",
+  "version" : "0.1",
+  "require" : {
+    "php" : "=5.3.3"
+  },
+  "autoload" : {
+    "psr-0" : {
+      "ebid" : "src/",
+      "ebid\\Tests" : "tests"
+    }
+  },
+  "authors" : [ {
+    "name" : "Wensheng Yan",
+    "email" : "yanwsh@gmail.com",
+    "role" : "student"
+  } ]
+}

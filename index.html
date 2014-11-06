@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>ebid -- Homepage</title>
+	<link href="vendor/kendo/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="vendor/kendo/styles/kendo.bootstrap.min.css" rel="stylesheet" />
+    <link href="vendor/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="vendor/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="vendor/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
+    <link href="style/main.less" rel="stylesheet/less" type="text/css"  />
+    <script type="text/javascript" src="vendor/less/dist/less.min.js"></script>
+	<script type="text/javascript" data-main="js/main" src="vendor/requirejs/require.js"></script>
+	
+</head>
+<body ng-controller="mainController">
+	<!-- ToDo: add header here -->
+	<header></header>
+	<div class="container">
+		<div ng-view></div>
+	</div>
+	<!-- ToDo: add footer here -->
+	<footer></footer>
+</body>
+</html>
