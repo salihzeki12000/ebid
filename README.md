@@ -1,13 +1,13 @@
 <h1>ToDo</h1>
 
-Nov 6, 2014
-Xiaoyan: /index.html
-      check your page at http://localhost/#/
-rui : /partial/category.html
-      check your page at http://localhost/#/category
-yanping: /partial/user/index.html
-      check your page at http://localhost/#/user
-siwen: /partial/auth/login.html
-	/partial/auth/register.html
-      check your page at http://localhost/#/auth/login
-      check your page at http://localhost/#/auth/register
+<div><h2>Nov 6, 2014</h2></div>
+Xiaoyan: /index.html<br/>
+      check your page at http://localhost/#/<br/>
+rui : /partial/category.html<br/>
+      check your page at http://localhost/#/category<br/>
+yanping: /partial/user/index.html<br/>
+      check your page at http://localhost/#/user<br/>
+siwen: /partial/auth/login.html<br/>
+	/partial/auth/register.html<br/>
+      check your page at http://localhost/#/auth/login<br/>
+      check your page at http://localhost/#/auth/register<br/>
