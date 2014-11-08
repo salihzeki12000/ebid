@@ -1,0 +1,23 @@
+default:
+    path:     /
+    defaults: { _controller: 'ebid\Controller\testController::foo1Action' }
+
+test:
+    path:     /foo/{slug}
+    defaults: { _controller: 'ebid\Controller\testController::fooAction' }
+    
+test1:
+    path:     /foo
+    defaults: { _controller: 'ebid\Controller\testController::foo1Action' }
+    
+admin:
+    path:     /admin
+    defaults: { _controller: 'ebid\Controller\adminController::indexAction'}
+
+admin_success:
+    path:     /admin/success
+    defaults: { _controller: 'ebid\Controller\adminController::successAction'}
+    
+admin_logout:
+    path:     /admin/logout
+    defaults: { _controller: 'ebid\Controller\testController::foo1Action'}

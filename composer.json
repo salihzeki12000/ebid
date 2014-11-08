@@ -3,7 +3,17 @@
   "description" : "ebid online biding system like ebay.",
   "version" : "0.1",
   "require" : {
-    "php" : "=5.3.3"
+    "php" : ">=5.3.3",
+    "symfony/http-foundation" : ">=v2.5.6",
+    "symfony/dependency-injection" : ">=v2.5.6",
+    "symfony/serializer" : ">=v2.5.5",
+    "symfony/event-dispatcher" : ">=v2.5.6",
+    "symfony/security" : ">=v2.5.6",
+    "symfony/validator" : ">=v2.5.6",
+    "symfony/http-kernel" : ">=v2.5.6",
+    "symfony/routing" : ">=v2.5.6",
+    "symfony/yaml" : ">=v2.5.6",
+    "symfony/config" : ">=v2.5.5"
   },
   "autoload" : {
     "psr-0" : {
