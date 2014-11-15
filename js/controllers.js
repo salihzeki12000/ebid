@@ -20,14 +20,51 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 		animate($('.bannerText'),'animated bounceIn');
 		setTimeout(repeatText, 5000);
 	}
+	
+    function adjustModalMaxHeightAndPosition(){
+    	  $('.modal').each(function(){
+    	    if($(this).hasClass('in') == false){
+    	      $(this).show();
+    	    };
+    	    var contentHeight = $(window).height() - 60;
+    	    var headerHeight = $(this).find('.modal-header').outerHeight() || 2;
+    	    var footerHeight = $(this).find('.modal-footer').outerHeight() || 2;
+
+    	    $(this).find('.modal-content').css({
+    	      'max-height': function () {
+    	        return contentHeight;
+    	      }
+    	    });
+
+    	    $(this).find('.modal-body').css({
+    	      'max-height': function () {
+    	        return (contentHeight - (headerHeight + footerHeight));
+    	      }
+    	    });
+
+    	    $(this).find('.modal-dialog').css({
+    	      'margin-top': function () {
+    	        return -($(this).outerHeight() / 2);
+    	      },
+    	      'margin-left': function () {
+    	        return -($(this).outerWidth() / 2);
+    	      }
+    	    });
+    	    if($(this).hasClass('in') == false){
+    	      $(this).hide();
+    	    };
+    	  });
+    	};
+
+    	$(window).resize(adjustModalMaxHeightAndPosition).trigger("resize");
+
 	ebidController.controller('mainController',['$scope', function($scope){
-		$scope.welcomeMessage = "Welcome to online ebid!";
 		animate($('.logo'), 'animated rotateIn',function(){
-			animate($('.logo'), 'animated pulse');
+			animate($('.logo'), 'animated bounceIn');
 		});
 
 		$('.logo').mouseover(function(){
-			animate($('.logo'), 'animated pulse');
+			animate($('.logo'), 'animated bounceIn');
 		});
 		$('.bannerText').hide();
 		animate($('.banner'), 'animated bounceInRight', function(){
@@ -37,9 +74,25 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 				setTimeout(repeatText, 5000);
 			});
 		});
+		$('#loginModal').on('show.bs.modal', function (event) {
+			adjustModalMaxHeightAndPosition();
+		});
+		$('.fb').mouseover(function(){
+			animate($('.fb'), 'animated bounceIn');
+		});
+		$('.tw').mouseover(function(){
+			animate($('.tw'), 'animated bounceIn');
+		});
+		$('.google').mouseover(function(){
+			animate($('.google'), 'animated bounceIn');
+		});
+		$('.youtube').mouseover(function(){
+			animate($('.youtube'), 'animated bounceIn');
+		});
+		new WOW().init();
 	}]);
 	
-	ebidController.controller('defaultController',['$scope', function($scope){
+	ebidController.controller('itemController',['$scope', function($scope){
 		kendo.culture("en-US"); 
 		$scope.price = 29999.99;
 		$scope.bidPrice = $scope.price + 500;
@@ -84,6 +137,20 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 	}]);	
 	ebidController.controller('registerController',['$scope', function($scope){
 		
+	}]);
+	ebidController.controller('homeController',['$scope', function($scope){
+		$scope.source = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "http://localhost/demo/products.json",
+                    dataType: "json",
+                    cache: true
+                }
+            },
+            pageSize: 10
+        });
+        
+        $scope.listViewTemplate = $("#template").html();
 	}]);
 	ebidController.controller('NotFoundController',['$scope', '$location', function($scope, $location){
 		$scope.homeURL = '#';

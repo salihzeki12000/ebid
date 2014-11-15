@@ -53,7 +53,6 @@ requirejs.config({
 require(['angular', 'jquery', 'app', 'wow'], function(angular, $){
 	$(document).ready(function(){
 		try{
-			new WOW().init();
 			angular.bootstrap(document, ['ebid']);
 		}catch (e) {
             console.error(e.stack || e.message || e);

@@ -18,11 +18,15 @@ define("app",['angular','controllers', 'directives','angularplugin/angular-route
 			$routeProvider.
 			when('/',{
 				templateUrl: 'partial/index.html',
-				controller: 'defaultController'
+				controller: 'homeController'
 			})
 			.when('/category',{
 				templateUrl: 'partial/category.html',
 				controller: 'categoryController'				
+			})
+			.when('/bid',{
+				templateUrl: 'partial/item.html',
+				controller: 'itemController'				
 			})
 			.when('/user',{
 				templateUrl: 'partial/user/index.html',

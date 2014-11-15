@@ -1,135 +1,76 @@
-<div class="row">
-	<div class="col-md-12">
-		<h1 class="title">2014 NEW CAR</h1>
-	</div>
-</div>
-<hr />
-<div class="row">
-	<div class="col-md-5">
-	<div class="productImgBox">
-		<img id="productImg" src="http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/small/image1.png"
-data-zoom-image="http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/large/image1.jpg"
- ng-elevate-zoom k-option='{"gallery": "productGallery", "imageCrossfade" : "true","galleryActiveClass": "active"}' />
- </div>
- <div id="productGallery" class="img_gallery"> 
- <a href="#" class="thumbnail" data-image="http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/small/image1.png" data-zoom-image="http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/large/image1.jpg"> 
- <img id="img_01" src="http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/small/image1.png" /> </a> 
- <a href="#" class="thumbnail" data-image="http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/small/image2.png" data-zoom-image="http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/large/image2.jpg"> 
- <img id="img_01" src="http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/small/image2.png" /> </a> 
+<div class="container top20">
+	<div id="carousel-banner" class="carousel slide" data-ride="carousel">
+		<!-- Indicators -->
+		<ol class="carousel-indicators">
+			<li data-target="#carousel-banner" data-slide-to="0" class="active"></li>
+			<li data-target="#carousel-banner" data-slide-to="1"></li>
+		</ol>
 
- <a href="#" class="thumbnail" data-image="http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/small/image3.png" data-zoom-image="http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/large/image3.jpg"> 
- <img id="img_01" src="http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/small/image3.png" /> </a> 
-
- <a href="#" class="thumbnail" data-image="http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/small/image4.png" data-zoom-image="http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/large/image4.jpg"> 
- <img id="img_01" src="http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/small/image4.png" /> </a> 
- </div>
- <div class="clearfix"></div>
-	</div>
-	<div class="col-md-7">
-
-		<div class="row">
-			<div class="col-md-8">
-				<div class="well well-lg">
-					<div class="list-item">
-						<div class="row">
-							<div class="col-md-4 text">Item condition:</div>
-							<div class="col-md-8"><b>New</b></div>
-						</div>
-					</div>
-					<div class="list-item">
-						<div class="row">
-							<div class="col-md-4 text">Time left:</div>
-							<div class="col-md-4">
-								<b class="timeReminder">7m 34s</b>
-							</div>
-							<div class="col-md-4">
-								[ <a href="#">{{bidnumber}} bids</a>]
-							</div>
-						</div>
-					</div>
-				    <div class="list-item">
-				    	<div class="row">
-				    		<div class="col-md-4 text">Current bid:</div>
-				    		<div class="col-md-4">
-				    			<div>
-				    				<b class="pricecurrency">US {{priceCurrency}}</b>
-				    			</div>
-				    			<div class="list-item">
-				    				<input id="bidTextbox" type="text" kendo-numeric-text-box k-step="500" k-min="{{bidPrice}}" k-options="{format: 'c'}" k-ng-model="bidPrice" />
-				    			</div>
-				    			<div class="list-item small-text">
-				    				Enter US {{bidPriceCurrency}} or more
-				    			</div>
-				    		
-				    		</div>
-				    		<div class="col-md-4">
-				    			<div class="row">
-				    				<div class="col-xs-12">
-				    					<button type="button" class="btn btn-primary" ng-click="placebid()"><b>Place bid</b></button>
-				    				</div>
-				    			</div>
-				    		</div>
-				    	</div>
-				    </div>
-				    <div class="list-item">
-						<div class="row">
-							<div class="col-md-4 text">Shipping:</div>
-							<div class="col-md-8"><b>$7.95</b> Standard Shipping</div>
-						</div>
-					</div>
-					<div class="list-item">
-						<div class="row">
-							<div class="col-md-4 text">Payments:</div>
-							<div class="col-md-8">
-								<span><img src="http://ir.ebaystatic.com/pictures/aw/pics/logos/logoPayPal_51x14.png" /></span>
-								<span><img src="http://ir.ebaystatic.com/pictures/aw/pics/logos/CC_icons.png" /></span>
-							</div>
-						</div>
-					</div>
-					<div class="list-item">
-						<div class="row">
-							<div class="col-md-4 text">Returns:</div>
-							<div class="col-md-8">14 days money back, you pay return shipping</div>
-						</div>
-					</div>
-				</div>
-
+		<!-- Wrapper for slides -->
+		<div class="carousel-inner" role="listbox">
+			<div class="item active">
+				<img src="images/banner1.png" alt="join now">
 			</div>
-			<div class="col-md-4">
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<strong>seller information</strong>
+			<div class="item">
+				<img src="images/banner2.jpg" alt="shipping free">
+			</div>
+		</div>
+
+		<!-- Controls -->
+		<a class="left carousel-control" href="#carousel-banner" role="button"
+			data-slide="prev"> <span class="glyphicon glyphicon-chevron-left"
+			aria-hidden="true"></span> <span class="sr-only">Previous</span>
+		</a> <a class="right carousel-control" href="#carousel-banner"
+			role="button" data-slide="next"> <span
+			class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+			<span class="sr-only">Next</span>
+		</a>
+	</div>
+	<div class="panel panel-primary top20">
+		<div class="panel-heading">
+			<h3 class="panel-title">Ending Soon</h3>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div kendo-listview  class="listView" k-data-source="source" k-template='listViewTemplate'></div>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-danger top20">
+		<div class="panel-heading">
+			<h3 class="panel-title">Hot Bidding</h3>
+		</div>
+		<div class="panel-body">
+			<div class="rows">
+				<div kendo-listview  class="listView" k-data-source="source" k-template='listViewTemplate'></div>
+			</div>
+		</div>
+	</div>
+	<script type="text/x-kendo-angular-template" id="template">
+	<div class="col-md-2 col-xs-12">
+		<div class="panel panel-default">
+  			<div class="panel-body product-header">
+				<div class="product-img">
+					<a href="\\#/test"><img ng-src="http://demos.telerik.com/kendo-ui/content/web/foods/#:ProductID#.jpg" alt=" #:ProductName# image" />
+                    </a>
+				</div>
+				<div class="product-wrapper">
+					<div class="product-description">
+						<div>Full Name: #: ProductName #</div>
+						<div>Price: #:kendo.toString(UnitPrice, "c")#</div>
 					</div>
-					<div class="panel-body">
-						<div class="list-item">tessietreasures</div>
-						<div class="list-item">100% Positive feedback</div>
+					<div class="props-mask"></div>
+				</div>
+  			</div>
+  			<div class="panel-footer">
+				<div class="row">
+					<div class="col-md-5"><div>From: Food</div><div>#:kendo.toString(UnitPrice, "c")#</div></div>
+					<div class="col-md-3">
+						<button type="button" class="btn btn-primary">Bid</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-	     <ul id="detail_tab" class="nav nav-tabs">
-               <li class="active"><a href="#description" data-toggle="description"><i class="description"></i>Description</a></li>
-               <li><a href="#Shipping" data-toggle="tab"><i class="Shipping"></i>Shipping and payments</a></li>
-         </ul>
-	     <div id="detail_tab_content" class="tab-content">
-                <div class="tab-pane fade in active" id="description">
-  					<div class="content">
-  					<!-- content begin -->
-			<div class="prodDetailSec">
-			<div class="section-ttl"><h3 class="p_det_title">Detailed item info</h3><div class="rd-sep"></div></div>
-			<table width="100%"><tbody><tr><td><table cellpadding="0" cellspacing="0" border="0" width="100%"><tbody><tr><td colspan="2"><font face="Arial, Helvetica, sans-serif" size="2"><b>Product Information</b></font></td></tr><tr><td colspan="2"><font face="Arial, Helvetica, sans-serif" size="2">Stylish and smooth, the HTC Hero is a mid-range smartphone suitable for people of all ages. The HTC smartphone runs on Android 1.5 Cupcake OS that is packed with Google mobile services and also supports installation of preferred applications. The phone features a 3.2-inch HVGA resolution screen with LED backlight, delivering images with rich colors. The Android mobile has a 5 MP auto focus camera that lets you capture photographs in amazing quality. With 3G support and Wi-Fi connectivity on the HTC Hero, you can surf the web, check mails and stream videos. As the HTC smartphone comes with multiple messaging options such as text, picture, instant messaging and email, you can always stay in touch with your contacts. The Android mobile has an on-board GPS with A-GPS support to offer navigational assistance to reach your destination. With this Bluetooth-enabled HTC Hero, you can easily sync files with other portable devices.</font><br class="br"><br class="br"></td></tr><tr><td colspan="2"><font face="Arial, Helvetica, sans-serif" size="2"><b>Product Highlights</b></font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Video</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2"><div id="webyclipEmbeded"><iframe id="YTEmbedded0" src="http://code.webyclip.com/YTEmbedded.html?_w=460&amp;_h=267&amp;_vid=WSxMch8NG6g&amp;_mid=53396f7ec2c61&amp;origin=http://www.ebay.com&amp;_pi=0&amp;_pid=5339653de8ea7d321f8b456c&amp;_cb=1&amp;_di=1&amp;_ui=EN&amp;_ipm=false&amp;_ism=false&amp;_iop=false" frameborder="0" allowfullscreen="1" width="460" height="350" scrolling="no"></iframe></div></font></td></tr><tr><td colspan="2"><br class="br"></td></tr><tr><td colspan="2"><font face="Arial, Helvetica, sans-serif" size="2"><b>Product Identifiers</b></font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Brand</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">HTC</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">MPN </font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">APA6277KT</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Carrier</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Sprint</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Family Line</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">HTC Hero</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Model</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Hero</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">UPC</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">821793004132</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Type</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Smartphone</font></td></tr><tr><td colspan="2"><br class="br"></td></tr><tr><td colspan="2"><font face="Arial, Helvetica, sans-serif" size="2"><b>Key Features</b></font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Storage Capacity</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">512 MB</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Color</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Silver</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Network Generation</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">3G</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Network Technology</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">CDMA2000 1X, EVDO, EVDO Rev. A</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Band</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">CDMA2000 1X 1900/800</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Camera</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">5.0 MP</font></td></tr><tr><td colspan="2"><br class="br"></td></tr><tr><td colspan="2"><font face="Arial, Helvetica, sans-serif" size="2"><b>Memory</b></font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Supported Flash Memory Cards</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">MicroSD</font></td></tr><tr><td colspan="2"><br class="br"></td></tr><tr><td colspan="2"><font face="Arial, Helvetica, sans-serif" size="2"><b>Battery</b></font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Battery Type</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Lithium Ion</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Battery Capacity</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">1500 mAh</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Battery Talk Time</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Up to 250 min</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Battery Standby Time</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Up to 360 hr</font></td></tr><tr><td colspan="2"><br class="br"></td></tr><tr><td colspan="2"><font face="Arial, Helvetica, sans-serif" size="2"><b>Display</b></font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Display Technology</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">LCD display</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Diagonal Screen Size</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">3.2 in.</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Display Resolution</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">320 x 480 pixels</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Color Depth</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">18-bit (262000 Colors)</font></td></tr><tr><td colspan="2"><br class="br"></td></tr><tr><td colspan="2"><font face="Arial, Helvetica, sans-serif" size="2"><b>Other Features</b></font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Touch Screen</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Yes</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Bluetooth</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Yes</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Digital Camera</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Yes</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">GPS</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Yes</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">QWERTY Physical Keyboard</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">No</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Email Access</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Yes</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Internet Browser</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Yes</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Speakerphone</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Yes</font></td></tr><tr><td colspan="2"><br class="br"></td></tr><tr><td colspan="2"><font face="Arial, Helvetica, sans-serif" size="2"><b>Dimensions</b></font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Height</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">4.49 in.</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Depth</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">0.55 in.</font></td></tr><tr><td width="35%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">Width</font></td><td width="65%" valign="top"><font face="Arial, Helvetica, sans-serif" size="2">2.2 in.</font></td></tr><tr><td colspan="2"><br class="br"></td></tr></tbody></table></td></tr></tbody></table>			
-			</div>
-				<!-- content end -->
-  					</div>
-                </div>
-                 <div class="tab-pane fade" id="Shipping">
-                       <div class="loading"></div>
-                 </div>
-          </div>
-	
-	</div>
+    </script>
 </div>
