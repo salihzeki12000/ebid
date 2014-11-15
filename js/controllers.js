@@ -7,8 +7,36 @@
  */
 define("controllers", ['angular','kendo','bootstrap'], function(angular){
 	var ebidController = angular.module('ebid/controller', []);
+	var animate = function($element, $animateName,callback){
+		$element.addClass($animateName);
+		$element.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+			$element.removeClass($animateName);
+			if(callback){
+				(callback)();
+			}
+		});
+	};
+	var repeatText = function() {
+		animate($('.bannerText'),'animated bounceIn');
+		setTimeout(repeatText, 5000);
+	}
 	ebidController.controller('mainController',['$scope', function($scope){
-		
+		$scope.welcomeMessage = "Welcome to online ebid!";
+		animate($('.logo'), 'animated rotateIn',function(){
+			animate($('.logo'), 'animated pulse');
+		});
+
+		$('.logo').mouseover(function(){
+			animate($('.logo'), 'animated pulse');
+		});
+		$('.bannerText').hide();
+		animate($('.banner'), 'animated bounceInRight', function(){
+			$('.bannerText').show();
+			animate($('.bannerText'), 'animated bounceInRight', function(){
+				animate($('.bannerText'),'animated bounceIn');
+				setTimeout(repeatText, 5000);
+			});
+		});
 	}]);
 	
 	ebidController.controller('defaultController',['$scope', function($scope){
@@ -56,6 +84,9 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 	}]);	
 	ebidController.controller('registerController',['$scope', function($scope){
 		
+	}]);
+	ebidController.controller('NotFoundController',['$scope', '$location', function($scope, $location){
+		$scope.homeURL = '#';
 	}]);	
 	return ebidController;
 });

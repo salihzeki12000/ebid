@@ -9,6 +9,10 @@
 
 define("app",['angular','controllers', 'directives','angularplugin/angular-route','angularplugin/angular-animate','kendo'], function(angular){
 	var app = angular.module('ebid', ['ngRoute','kendo.directives','ebid/controller', 'ebid/directives', 'ngAnimate']);
+	app.constant('baseHref', '/ebid/index.html');
+	app.config(function($locationProvider) {
+		  $locationProvider.html5Mode({enabled: false, requireBase: true});
+	})
 	app.config(['$routeProvider', '$locationProvider',
 		function($routeProvider, $locationProvider){
 			$routeProvider.
@@ -31,7 +35,11 @@ define("app",['angular','controllers', 'directives','angularplugin/angular-route
 			.when('/auth/register',{
 				templateUrl: 'partial/auth/register.html',
 				controller: 'registerController'					
-			})			
+			})
+			.otherwise({
+				templateUrl: 'partial/404.html',
+				controller: 'NotFoundController'	
+			});
 		}
 	]);
 	return app;

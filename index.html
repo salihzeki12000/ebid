@@ -1,25 +1,138 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>ebid -- Homepage</title>
-	<link href="vendor/kendo/styles/kendo.common.min.css" rel="stylesheet" />
-    <link href="vendor/kendo/styles/kendo.bootstrap.min.css" rel="stylesheet" />
-    <link href="vendor/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="vendor/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" />
-    <link href="vendor/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
-    <link href="style/main.less" rel="stylesheet/less" type="text/css"  />
-    <script type="text/javascript" src="vendor/less/dist/less.min.js"></script>
-	<script type="text/javascript" data-main="js/main" src="vendor/requirejs/require.js"></script>
-	
+<meta charset="UTF-8">
+<title>ebid -- Homepage</title>
+<link href="vendor/kendo/styles/kendo.common.min.css" rel="stylesheet" />
+<link href="vendor/kendo/styles/kendo.bootstrap.min.css"
+	rel="stylesheet" />
+<link href="vendor/bootstrap/dist/css/bootstrap.min.css"
+	rel="stylesheet" />
+<link href="vendor/bootstrap/dist/css/bootstrap-theme.min.css"
+	rel="stylesheet" />
+<link href="vendor/fancybox/source/jquery.fancybox.css" rel="stylesheet" />
+<link href="vendor/animate.css/animate.min.css" rel="stylesheet" />
+<link href="styles/bid.less" rel="stylesheet/less" type="text/css" />
+<link href="styles/style.less" rel="stylesheet/less" type="text/css" />
+<script type="text/javascript" src="vendor/less/dist/less.min.js"></script>
+<script type="text/javascript" data-main="js/main"
+	src="vendor/requirejs/require.js"></script>
 </head>
 <body ng-controller="mainController">
-	<!-- ToDo: add header here -->
-	<header></header>
+	<header>
+		<div class="toolbar">
+			<div class="container">
+				<div class="quick-link">
+					<span>{{welcomeMessage}}</span> <span> <a href="#"
+						data-toggle="modal" data-target="#loginModal">Login</a> <a
+						href="#">Register</a>
+					</span>
+				</div>
+				<nav class="nav-link navbar navbar-default" role="navigation">
+					<div class="collapse navbar-collapse">
+						<ul id="topmenu" class="nav navbar-nav">
+							<li class="dropdown"><a href="#" data-toggle="dropdown"
+								data-hover="dropdown" class="dropdown-toggle"> My Store <b
+									class="caret"></b>
+							</a>
+								<ul class="dropdown-menu">
+									<li><a href="#">favourate</a></li>
+								</ul></li>
+							<li class="dropdown"><a href="#" data-toggle="dropdown"
+								data-hover="dropdown" class="dropdown-toggle"> Customer
+									Center <b class="caret"></b>
+							</a>
+								<ul class="dropdown-menu">
+									<li><a href="#">favourate</a></li>
+								</ul></li>
+						</ul>
+					</div>
+				</nav>
+
+			</div>
+		</div>
+		<div class="container">
+			<div class="top20 row">
+				<div class="col-md-2">
+					<div class="logo">
+						<a href="#/"><img src="images/logo.png" alt="" /></a>
+					</div>
+				</div>
+				<div class="col-md-offset-1 col-md-7 col-xs-12">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="banner">
+								<img src="images/banner.png" alt="" />
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="bannerText">
+								<h1>Bid with confidence</h1>
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+
+			<div class="menu">
+				<a class="toggleMenu" href="#"><img src="images/nav.png" alt="" /></a>
+				<ul class="nav" id="nav">
+					<li class="active"><a href="index.html">CATEGORIES</a></li>
+					<li><a href="#">ACTIONS</a></li>
+					<li><a href="#">STORE</a></li>
+					<li><a href="#">BLOG</a></li>
+					<li><a href="#">MY ACCOUNT</a></li>
+					<li><a href="#">HELP</a></li>
+					<li><a href="#">BUY BIDS</a></li>
+				</ul>
+				<div class="clearfix"></div>
+			</div>
+			<div class="clearfix"></div>
+
+		</div>
+	</header>
 	<div class="container">
 		<div ng-view></div>
 	</div>
 	<!-- ToDo: add footer here -->
 	<footer></footer>
+	<!-- Modal -->
+	<div class="modal fade" id="loginModal" tabindex="-1" role="dialog"
+		aria-labelledby="loginModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Login</h4>
+				</div>
+				<div class="modal-body">
+					<form id="loginForm">
+						<fieldset id="body">
+							<fieldset>
+								<label for="email">Email Address</label> 
+								<input type="text" name="email" id="email">
+							</fieldset>
+							<fieldset>
+								<label for="password">Password</label> <input type="password"
+									name="password" id="password">
+							</fieldset>
+							<input type="submit" id="login" value="Sign in"> <label
+								for="checkbox"><input type="checkbox" id="checkbox">
+								<i>Remember me</i></label>
+						</fieldset>
+						<span><a href="#">Forgot your password?</a></span>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Login</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

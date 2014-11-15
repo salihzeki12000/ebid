@@ -5,7 +5,7 @@ class Result
 {
     const SUCCESS = 0;
     const FAILURE = 1;
-    const LOGINREQUIRE = 2;
+    const LOGIN_REQUIRE = 2;
     const DUPLICATE = 3;
     const INTERNAL_ERROR = 4;
     public $type;

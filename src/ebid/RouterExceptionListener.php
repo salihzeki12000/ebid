@@ -4,6 +4,8 @@ namespace ebid;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use ebid\Entity\Result;
 /**
  *
  * @author yanwsh
@@ -20,15 +22,21 @@ class RouterExceptionListener
     {
         // You get the exception object from the received event
         $exception = $event->getException();
+        // don't handle Access Denied Exception
+        if($exception instanceof AccessDeniedException){
+            return;
+        }
         $message = sprintf(
             'Error: %s with code: %s',
             $exception->getMessage(),
             $exception->getCode()
         );
+        
+        $result = new Result(Result::INTERNAL_ERROR, $message);
     
         // Customize your response object to display the exception details
         $response = new Response();
-        $response->setContent($message);
+        $response->setContent(json_encode($result));
     
         // HttpExceptionInterface is a special type of exception that
         // holds status code and header details

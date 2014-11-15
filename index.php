@@ -90,8 +90,8 @@ $dispatcher->addListener(
 );
 
 $dispatcher->addListener(
-    KernelEvents::EXCEPTION, array(new RouterExceptionListener(), 'onKernelException', 999)
- );
+   KernelEvents::EXCEPTION, array(new RouterExceptionListener(), 'onKernelException'), 0
+);
 
 // actually execute the kernel, which turns the request into a response
 // by dispatching events, calling a controller, and returning the response

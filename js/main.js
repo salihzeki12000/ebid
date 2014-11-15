@@ -9,13 +9,14 @@ requirejs.config({
 	baseUrl: 'js',
 	paths: {
 		jquery : '../vendor/jquery/dist/jquery',
-		angular : '../vendor/angularjs/angular',
-		angularplugin : '../vendor/angularjs',
+		angular : '../vendor/angular/angular',
+		angularplugin : '../vendor/angular',
 		bootstrap : '../vendor/bootstrap/dist/js/bootstrap',	
 		kendo : '../vendor/kendo/js/kendo.all.min',
 		elevatezoom : '../vendor/elevatezoom/jquery.elevatezoom',
 		bootstrapHoverDropdown : '../vendor/bootstrap-hover-dropdown/bootstrap-hover-dropdown',
-		fancybox : '../vendor/fancybox/source/jquery.fancybox'
+		fancybox : '../vendor/fancybox/source/jquery.fancybox',
+		wow : '../vendor/wow/dist/wow',
 	},
 	shim:{
 		'angular' : {
@@ -49,9 +50,10 @@ requirejs.config({
 	}
 });
 
-require(['angular', 'jquery', 'app'], function(angular, $){
+require(['angular', 'jquery', 'app', 'wow'], function(angular, $){
 	$(document).ready(function(){
 		try{
+			new WOW().init();
 			angular.bootstrap(document, ['ebid']);
 		}catch (e) {
             console.error(e.stack || e.message || e);
