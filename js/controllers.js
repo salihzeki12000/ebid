@@ -142,7 +142,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 		$scope.source = new kendo.data.DataSource({
             transport: {
                 read: {
-                    url: "http://localhost/demo/products.json",
+                    url: "test/products.json",
                     dataType: "json",
                     cache: true
                 }
