@@ -15,7 +15,14 @@ class MySQLParser
     {
         $this->mysql = $mysql;
     }
-    
+
+    /**
+     * fetch data from database
+     * @param $entity model need to fetch
+     * @param null $condition fetch data condition
+     * @param null $sort sort condition
+     * @return array an array of objects
+     */
     public function select($entity, $condition = NULL, $sort = NULL){
         $sql = "SELECT * FROM ". _table($this->parse_classname(get_class($entity)));
         if($condition){
@@ -29,7 +36,13 @@ class MySQLParser
 
         return $result;
     }
-    
+
+    /**
+     * insert data to database
+     * @param $entity model need to insert
+     * @param array $exclude the fields which do not need to insert
+     * @param array $restrict the fields which don't need to add quote mark
+     */
     public function insert($entity, $exclude = array("id"), $restrict = array()){
         $keys = array();
         $values = array();
@@ -49,7 +62,14 @@ class MySQLParser
         $sql .= "(" . implode(",", $keys) . ") VALUES (" . implode(",", $values) . ")";
         $this->mysql->executeSQL($sql);
     }
-    
+
+    /**
+     * update model to database
+     * @param $entity model need to update
+     * @param array $exclude the fields which don't need to update
+     * @param array $restrict the fields which don't need to add quote mark
+     * @param string $searchId update condition
+     */
     public function update($entity, $exclude = array("id"), $restrict = array(), $searchId = "id"){
         $field = array();
         $sql = "UPDATE ". _table($this->parse_classname(get_class($entity))) . " SET ";
@@ -66,7 +86,14 @@ class MySQLParser
         $sql .= implode(",", $field) . "WHERE $searchId=". $this->{$searchId};
         $this->mysql->executeSQL($sql);
     }
-    
+
+    /**
+     * update model to database
+     * @param $entity model need to update
+     * @param array $include the fields which need to update
+     * @param array $restrict the fields which don't need to add quote mark
+     * @param string $searchId update condition
+     */
     public function updateSpecific($entity, $include = array(), $restrict = array(), $searchId = "id"){
         $field = array();
         $sql = "UPDATE ". _table($this->parse_classname(get_class($entity))) . " SET ";
@@ -81,7 +108,12 @@ class MySQLParser
         $sql .= implode(",", $field) . "WHERE $searchId=". $this->{$searchId};
         $this->mysql->executeSQL($sql);
     }
-    
+
+    /**
+     * delete model to database
+     * @param $entity model need to update
+     * @param string $searchId delete condition
+     */
     public function delete($entity, $searchId = "id"){
         $sql = "DELETE FROM ". _table($this->parse_classname(get_class($entity))) . "WHERE $searchId=". $this->{$searchId};
         $this->mysql->executeSQL($sql);

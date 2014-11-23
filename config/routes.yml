@@ -38,3 +38,7 @@ register:
 upload:
     path:     /ajax/upload
     defaults: { _controller: 'ebid\Controller\AjaxController::uploadAction'}
+
+ProductAdd:
+    path:     /product/add
+    defaults: { _controller: 'ebid\Controller\ProductController::addAction'}

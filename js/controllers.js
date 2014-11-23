@@ -128,7 +128,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 					_password : password
 				}
 			}).done(function(data){
-				if(data.type == 0){
+				if(data.type == SUCCESS){
 					$scope.InfoNotification.show(data.message, "success");
 					$scope.username = username;
 					$("#unlogin").hide();

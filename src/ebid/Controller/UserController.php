@@ -17,7 +17,7 @@ class UserController extends baseController
         $data = json_decode($this->request->getContent());
         $user = new User(0, $data->username);
         if(!$user->isValid($data)){
-            $result = new Result(Result::FAILURE, 'post data not valid.');
+            $result = new Result(Result::FAILURE, 'post data is not valid.');
             return new Response(json_encode($result));
         }
         $user->set($data);
