@@ -1,0 +1,97 @@
+
+<div class="container">
+
+	<form action="#" id="bidForm" role="form">
+
+		<div class="well clearfix">
+			<div class="form-horizontal form-widgets col-lg-12">
+				<fieldset>
+					<legend>Item Information</legend>
+
+					<div class="form-group">
+						<label class="col-md-2 control-label" for="ProductName">Name</label>
+						<div class="col-md-10">
+							<input id="ProductName" type="text" class="k-content" required  kendo-auto-complete  k-options="ProductNameAutoCompleteOptions" />
+							<script id="ProductNameAutoCompleteTemplate" type="text/x-kendo-template">
+							<div class="row">
+								<div class="col-md-2">
+									<div><img src="#= galleryURL #" /></div>
+								</div>
+        						<div class="col-md-8">
+            						<div>#= data.title #</div>
+        						</div>
+							</div>
+    						</script>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 control-label" for="Photos">Photos</label>
+						<div class="col-md-10">
+							 <input id="pictures" type="file" kendo-upload k-async="{ saveUrl: 'save', removeUrl: 'remove', autoUpload: true }" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 control-label" for="Details">Details</label>
+						<div class="col-md-10">
+							<textarea id="editor" kendo-editor rows="10" cols="30" style="height: 220px"></textarea>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-2 control-label" for="Listas">List as</label>
+						<div class="col-md-10">
+							<input id="lists" kendo-drop-down-list k-data-text-field="'listas'" k-data-value-field="'listId'"
+            					k-data-source="bidType" required style="width: 153px" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-2 control-label" for="startprice">Start
+							Price</label>
+						<div class="col-md-10">
+							<input type="price" required placeholder="ex. $10.98" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-2 control-label" for="startprice">Expect
+							Price</label>
+						<div class="col-md-10">
+							<input type="price" required placeholder="ex. $10.98" /><span>optional<span>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-2 control-label" for="startprice">Buy
+							Now Price</label>
+						<div class="col-md-10">
+							<input type="price" required placeholder="ex. $10.98"/><span>optional<span>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-2 control-label" for="endday">End Day</label>
+						<div class="col-md-10">
+							<input id="datetimepicker" kendo-date-time-picker required style="width: 153px" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-2 control-label" for="freeshiping">Free
+							Shipping</label>
+						<div class="col-md-10">
+							<input id="freeshipping" kendo-drop-down-list k-data-text-field="'vendors'" k-data-value-field="'listId'"
+            					k-data-source="shippingType" required style="width: 153px" />
+						</div>
+					</div>
+
+					<div class="col-xs-6 col-xs-offset-3 top20 text-center">
+						<input type="submit" class="btn btn-primary" value="Submit" />
+						<input type="submit" class="btn btn-default" formnovalidate value="Save for later" />
+					</div>
+
+				</fieldset>
+			</div>
+		</div>
+	</form>
+</div>
