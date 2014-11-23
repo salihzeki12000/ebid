@@ -5,8 +5,9 @@ use Symfony\Component\HttpFoundation\Response;
  * @author yanwsh
  * 
  */
-class testController 
+class testController extends baseController
 {
+   
     public function fooAction($slug)
     {
         return new Response('Hello world! '. $slug);
@@ -14,6 +15,7 @@ class testController
     
     public function foo1Action()
     {
+        
         return new Response('Hello world!');
     }
 }

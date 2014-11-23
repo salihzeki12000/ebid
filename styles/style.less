@@ -7,6 +7,10 @@ body a{
 	-ms-transition:0.5s all;
 }
 
+.marginL_5{
+	margin-left: 5px;
+}
+
 .margin_15{
 	margin-right: 15px;
 }
@@ -331,23 +335,13 @@ ul.footer_social li a i.youtube {
 	color:#e94e38;
 }
 
- /** login **/
- #loginForm:after {
-	content: '';
-	position: absolute;
-	right: 25px;
-	top: -10px;
-	border-left:10px solid rgba(0, 0, 0, 0);
-	border-right:10px solid rgba(0, 0, 0, 0);
-	border-bottom: 10px solid #f0f0f0;
-}
 /* Login Form */
-#loginForm {
+.loginForm {
 	width: 451px;
 	background: #fff;
 	border: none;
 }
-#loginForm fieldset {
+.loginForm fieldset {
     margin:0 0 15px 0;
     display:block;
     border:0;
@@ -361,7 +355,7 @@ fieldset.body {
     padding:15px 15px;
     margin:0;
 }
-#loginForm #checkbox {
+.loginForm .logincheckbox {
     width:auto;
     margin:3px 6px 0 0;
     float:left;
@@ -377,7 +371,7 @@ fieldset.body {
     font-size:0.85em;
     font-weight: 400;
 }
-#loginForm .body fieldset label{
+.loginForm .body fieldset label{
     display:block;
     float:none;
     margin:0 0 6px 0;
@@ -388,7 +382,7 @@ fieldset.body {
 	font-style:normal;
 }
 /* Default Input */
-#loginForm input {
+.loginForm input {
     width:92%;
     border:1px solid #DADADA;
 	color: #222;
@@ -450,4 +444,45 @@ fieldset.body {
 	filter:Alpha(opacity=50);
 	height: 80px;
 	width: 100%;
+}
+
+.hot{
+	background-image: linear-gradient(to bottom,#FFA0A0 0,#B01D1D 100%)!important;
+}
+
+.hot .panel-title{
+	color: #fff;
+}
+
+#bidForm .form-horizontal .control-label{
+	text-align:left;
+}
+
+#bidForm .k-autocomplete{
+	width:100%;
+}
+
+#ProductName_listbox .row{
+	margin: 0;
+}
+
+#registration .form-group{
+	width: 600px;
+}
+
+.ng-invalid {
+    border-color: red;
+    outline-color: red;
+}
+
+.ng-valid {
+    border-color: green;
+    outline-color: green;
+}
+
+.messages {
+  font-size: smaller;
+  padding-top: 5px;
+  padding-bottom: 10px;
+  color: red;
 }

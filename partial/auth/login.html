@@ -1,11 +1,29 @@
 <div class="container">
 	<div class="rows">
 		<div class="col-xs-12 no_padding top20">
-			<ng-include src="'partial/auth/lightLogin.html'"></ng-include>
-			<div class="tools_button">
-				<button type="button" class="btn btn-primary">Login</button>
-				<button type="button" class="btn btn-default">Clear</button>
-			</div>
+			<form name="login_Form" class="loginForm"  ng-submit="submit()">
+				<div id="login_Info_Panel" class="panel panel-danger">
+					<div class="panel-heading">Error</div>
+					<div class="panel-body"></div>
+				</div>
+				<fieldset class="body">
+					<fieldset>
+						<label for="login_username">Username</label> <input type="text"
+							name="username" id="login_username">
+					</fieldset>
+					<fieldset>
+						<label for="login_password">Password</label> <input type="password"
+							name="password" id="login_password">
+					</fieldset>
+					<label for="checkbox"><input type="checkbox" id="login_checkbox" class="logincheckbox">
+						<i>Remember me</i></label>
+				</fieldset>
+				<span><a href="#">Forgot your password?</a></span>
+				<div class="tools_button">
+					<button type="submit" class="btn btn-primary">Login</button>
+					<button type="reset" class="btn btn-default">Clear</button>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>

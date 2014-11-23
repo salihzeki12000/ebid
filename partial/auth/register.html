@@ -1,1 +1,110 @@
-<!-- ToDo: add register html code here. -->
+<div class="container">
+	<form name="registrationForm" role="form" ng-submit="submit()">
+		<div class="well clearfix">
+			<div class="form-horizontal form-widgets col-xs-12">
+				<fieldset>
+					<legend>Register</legend>
+					<div class="form-group">
+						<label class="col-md-3 control-label">User Name: </label>
+						<div class="col-md-7">
+							<input type="text" name="username" ng-model="user.username"
+								class="form-control" required />
+							<div ng-messages="registrationForm.username.$error">
+								<div class="messages help-block">
+									<div ng-message="required">Please input username.</div>
+									<div ng-message="minlength">Username is too short.</div>
+									<div ng-message="maxlength">Username is too long.</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-3 control-label">Password: </label>
+						<div class="col-md-7">
+							<input type="password" name="password" ng-model="user.password"
+								class="form-control" required />
+							<div ng-messages="registrationForm.password.$error">
+								<div class="messages help-block">
+									<div ng-message="required">Password is Required.</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-3 control-label">Confirm Password: </label>
+						<div class="col-md-7">
+							<input type="password" name="confirmPassword"
+								class="form-control" ng-model="confirmPassword"
+								compare-to="user.password" required />
+							<div ng-messages="registrationForm.confirmPassword.$error">
+								<div class="messages help-block">
+									<div ng-message="required">Please re enter your password.</div>
+									<div ng-message="compareTo">Must match your previous password.</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-3 control-label">E-mail Address: </label>
+						<div class="col-md-7">
+							<input type="email" name="email" ng-model="user.email"
+								class="form-control" required minlength="5" /> 
+							<div ng-messages="registrationForm.email.$error">
+								<div class="messages help-block">
+									<div ng-message="required">Please enter your email address.</div>
+									<div ng-message="email">Your email address is invalid.</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-3 control-label">Address: </label>
+						<div class="col-md-7">
+							<input type="text" name="address" ng-model="user.address"
+								class="form-control" placeholder="Enter Address" /> <span
+								id="addressHelpBlock" class="help-block">Please Enter
+								your address.</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-3 control-label">State: </label>
+						<div class="col-md-7">
+							<input type="text" name="state" ng-model="user.state"
+								class="form-control" placeholder="Enter State" /> <span
+								id="stateHelpBlock" class="help-block">Please Enter your
+								state.</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-3 control-label">Postcode: </label>
+						<div class="col-md-7">
+							<input type="text" name="zipcode" ng-model="user.zipcode"
+								class="form-control" placeholder="Enter PostCode" /> <span
+								id="stateHelpBlock" class="help-block">Please Enter your
+								postcode.</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-offset-2 col-md-8">
+							<strong>By clicking "Submit" I agree that:</strong>
+							<ul>
+								<li>I have read and accepted the User Agreement and Privacy Policy.</li>
+								<li>I may receive communications from ebid and can change my notification preferences in My ebid.</li>
+								<li>I am at least 18 years old.</li>
+							</ul>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-offset-4">
+							<button type="submit" class="btn btn-primary btn"
+								style="text-shadow: black 5px 3px 3px;">
+								<span class="glyphicon glyphicon-user"></span> Submit
+							</button>
+						</div>
+
+					</div>
+				</fieldset>
+			</div>
+		</div>
+	</form>
+</div>

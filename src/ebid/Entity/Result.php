@@ -9,16 +9,20 @@ class Result
     const DUPLICATE = 3;
     const INTERNAL_ERROR = 4;
     public $type;
+    public $message;
     public $data;
     
-    public function __construct($type, $data = NUll){
+    public function __construct($type, $message = NULL, $data = NUll){
         $this->type = $type;
+        $this->message = $message;
         $this->data = $data;
     }
     
     public function set($data) {
         foreach ($data AS $key => $Value)
-            $this->{$key} = $Value;
+            if(property_exists($this, $key)){
+                $this->{$key} = addslashes($Value);
+            }
     }
 }
 

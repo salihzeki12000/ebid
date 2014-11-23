@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/config.php';
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernel;
@@ -12,6 +11,8 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing\Router; 
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader as DIYamlFileLoader;
 use Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
@@ -41,36 +42,73 @@ use Symfony\Component\Security\Http\Firewall\LogoutListener;
 use Symfony\Component\Security\Http\Logout\DefaultLogoutSuccessHandler;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGenerator;
-use ebid\Db\mysql;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\Config\ConfigCache;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use ebid\RouterExceptionListener;
+use ebid\Auth\AuthenticationSuccessHandler;
+use ebid\Auth\AuthenticationFailureHandler;
+use ebid\Auth\LogoutSuccessHandler;
 
 error_reporting(E_ERROR);
 ini_set('display_errors','On');
-//database setting
-global $dbhost, $dbuser,$dbpass,$dbname;
-$mysql = new mysql($dbhost, $dbuser, $dbpass, $dbname);
+
+$isDebug = true;
+$file = __DIR__ .'/cache/container.php';
+
+$containerConfigCache = new ConfigCache($file, $isDebug);
+
+if (!$isDebug && file_exists($file) && $containerConfigCache->isFresh()) {
+    require_once $file;
+    $container = new CachedContainer();
+} else {
+    //Dependency Injection
+    $container = new ContainerBuilder();
+    
+    $loader = new DIYamlFileLoader($container, new FileLocator(__DIR__));
+    $loader->load('config/services.yml');
+    
+    $container->compile();
+
+    if (!$isDebug) {
+        $dumper = new PhpDumper($container);
+        file_put_contents(
+        $file,
+        $dumper->dump(array('class' => 'CachedContainer'))
+        );
+    }
+}
 
 
 $request = Request::createFromGlobals();
-$session = new Session();
+//$session = new Session();
+$session = $container->get('Session');
 $session->start();
 $request->setSession($session);
 
-$dispatcher = new EventDispatcher();
-
-$resolver = new ControllerResolver();
+//$dispatcher = new EventDispatcher();
+$dispatcher = $container->get('EventDispatcher');
+//$resolver = new ControllerResolver();
+$resolver = $container->get('ControllerResolver');
 // instantiate the kernel
-$kernel = new HttpKernel($dispatcher, $resolver);
+//$kernel = new HttpKernel($dispatcher, $resolver);
+$kernel = $container->get('HttpKernel');
 
 //routing
 
-$context = new RequestContext();
-$context->fromRequest($request);
-if(null == $routes = $session->get("route_setting")){
-     $routes = getRoutesConfig();
-     $session->set("route_setting", $routes);
-}
-$matcher = new UrlMatcher($routes, $context);
+$requestContext = new RequestContext();
+$requestContext->fromRequest($request);
+
+$router = new Router(
+    new YamlFileLoader(new FileLocator(__DIR__)),
+    'config/routes.yml',
+    array('cache_dir' => __DIR__.'/cache'),
+    $requestContext
+);
+$routeCollection = $router->getRouteCollection();
+
+$matcher = new UrlMatcher($routeCollection, $requestContext);
     
 
 $dispatcher->addSubscriber(new RouterListener($matcher));
@@ -78,8 +116,14 @@ $dispatcher->addSubscriber(new ResponseListener('UTF-8'));
 
 //security
 $map = $session->get("firewall_context");
+$defaultEncoder = $container->get('MessageDigestPasswordEncoder');
+$encoders = array(
+    'ebid\\Entity\\User' => $defaultEncoder
+);
+
+$encoderFactory = new EncoderFactory($encoders);
 if($map == null){
-    $urlgenerator = new UrlGenerator($routes, $context);
+    $urlgenerator = new UrlGenerator($routeCollection, $requestContext);
     $map = setupFireWall($kernel, $dispatcher, $urlgenerator);
     $session->set("firewall_context", $map);
 }
@@ -93,6 +137,8 @@ $dispatcher->addListener(
    KernelEvents::EXCEPTION, array(new RouterExceptionListener(), 'onKernelException'), 0
 );
 
+$mysql = $container->get('db');
+$mysql->connect();
 // actually execute the kernel, which turns the request into a response
 // by dispatching events, calling a controller, and returning the response
 $response = $kernel->handle($request);
@@ -103,51 +149,36 @@ $response->send();
 // triggers the kernel.terminate event
 $kernel->terminate($request, $response);
 
-//$contentType = $request->server->get("CONTENT_TYPE");
-//echo $path = $request->getPathInfo();
-/*
-if($contentType != "application/json"){
-    $response = new RedirectResponse('error.html');
-}*/
-
-function getRoutesConfig(){ 
-    $locator = new FileLocator(array(__DIR__));
-    $loader = new YamlFileLoader($locator);
-    $collection = $loader->load('config/routes.yml');
-    return $collection;
-}
 
 function _table($table) {
-    global $prefix;
-    return $prefix . $table;
+    global $container;
+    $db = $container->get('db');
+    return $db->getPrefix() . $table;
 }
 
-function setupFireWall($kernel, $dispatcher, $urlgenerator){    
+function setupFireWall($kernel, $dispatcher, $urlgenerator){  
+    global $session, $container, $encoderFactory;
+    $userProvider = $container->get('UserProvider');
+    /*
     $userProvider = new InMemoryUserProvider(
         array(
             'admin' => array(
                 // password is "foo"
                 'password' => '5FZ2Z8QIkA7UTZ4BYkoC+GsReLf569mSKDsfods6LYQ8t+a8EW9oaircfMpmaLbPBh4FOBiiFyLfuZmTSUwzZg==',
-                'roles'    => array('ROLE_ADMIN'),
+                'roles'    => array('ROLE_ADMIN','ROLE_USER'),
             ),
         )
-    );
+    );*/
     
     // for some extra checks: is account enabled, locked, expired, etc.?
     $userChecker = new UserChecker();
-    
-    $defaultEncoder = new MessageDigestPasswordEncoder('sha512', true, 5000);
-    $encoders = array(
-        'Symfony\\Component\\Security\\Core\\User\\User' => $defaultEncoder
-    );
-    
-    $encoderFactory = new EncoderFactory($encoders);
     
     $provider = new DaoAuthenticationProvider(
         $userProvider,
         $userChecker,
         'ebid.security',
-        $encoderFactory
+        $encoderFactory,
+        false
     );
     $authenticationManager = new AuthenticationProviderManager(array($provider));
     
@@ -164,17 +195,23 @@ function setupFireWall($kernel, $dispatcher, $urlgenerator){
         $authenticationManager,
         $accessDecisionManager
     );
-    
+
+    $session->set("security_context", $securityContext);
     $httpUtils = new HttpUtils($urlgenerator);
     
     //$basicentrypoint = new BasicAuthenticationEntryPoint('Secured Demo Area');
     //$basiclistener = new BasicAuthenticationListener($securityContext, $authenticationManager, "ebid.security",$basicentrypoint);
     //$userlistener = new UserAuthenticationListener($securityContext, $authenticationManager, "ebid.security", new SessionAuthenticationStrategy(SessionAuthenticationStrategy::INVALIDATE));
-    $userlistener = new UsernamePasswordFormAuthenticationListener($securityContext, $authenticationManager,
+    /*$userlistener = new UsernamePasswordFormAuthenticationListener($securityContext, $authenticationManager,
         new SessionAuthenticationStrategy(SessionAuthenticationStrategy::NONE), $httpUtils, "ebid.security",
         new DefaultAuthenticationSuccessHandler($httpUtils, array('default_target_path'=>'/admin/success')),
         new DefaultAuthenticationFailureHandler($kernel, $httpUtils, array('failure_path'=>'/foo/error')),
-        array('check_path' => '/admin'));
+        array('check_path' => '/auth/check'));*/
+    $userlistener = new UsernamePasswordFormAuthenticationListener($securityContext, $authenticationManager,
+        new SessionAuthenticationStrategy(SessionAuthenticationStrategy::NONE), $httpUtils, "ebid.security",
+        new AuthenticationSuccessHandler(),
+        new AuthenticationFailureHandler(),
+        array('check_path' => '/auth/login'));
     $anonymouslistener = new AnonymousAuthenticationListener($securityContext, "ebid.security");
     
     $accessMap = new AccessMap();
@@ -189,12 +226,12 @@ function setupFireWall($kernel, $dispatcher, $urlgenerator){
     );
     $map = new FirewallMap();
     
-    $requestMatcher = new RequestMatcher('^/admin/logout');
-    $logoutlistener = new LogoutListener($securityContext, $httpUtils, new DefaultLogoutSuccessHandler($httpUtils, '/foo/logoutsuccess'),
-        array('logout_path'=> '/admin/logout'));
+    $requestMatcher = new RequestMatcher('^/auth/logout');
+    $logoutlistener = new LogoutListener($securityContext, $httpUtils, new LogoutSuccessHandler(),
+        array('logout_path'=> '/auth/logout'));
     $listeners = array($accessListener, $logoutlistener);
     $exceptionListener = new ExceptionListener($securityContext, $trustResolver, $httpUtils, "ebid.security",
-        new FormAuthenticationEntryPoint($kernel, $httpUtils, '/foo/a', false));
+        new FormAuthenticationEntryPoint($kernel, $httpUtils, '/auth/login', false));
     $map->add($requestMatcher, $listeners, $exceptionListener);
     
     $requestMatcher = new RequestMatcher('^/');

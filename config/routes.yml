@@ -2,14 +2,18 @@ default:
     path:     /
     defaults: { _controller: 'ebid\Controller\testController::foo1Action' }
 
-test:
-    path:     /foo/{slug}
-    defaults: { _controller: 'ebid\Controller\testController::fooAction' }
+islogin:
+    path:     /auth/islogin
+    defaults: { _controller: 'ebid\Controller\AuthController::isloginAction' }
     
-test1:
-    path:     /foo
-    defaults: { _controller: 'ebid\Controller\testController::foo1Action' }
-    
+login:
+    path:     /auth/login
+    defaults: { _controller: 'ebid\Controller\AuthController::loginAction' }
+
+logout:
+    path:     /auth/logout
+    defaults: { _controller: 'ebid\Controller\AuthController::logoutAction' }
+        
 admin:
     path:     /admin
     defaults: { _controller: 'ebid\Controller\adminController::indexAction'}
@@ -21,3 +25,16 @@ admin_success:
 admin_logout:
     path:     /admin/logout
     defaults: { _controller: 'ebid\Controller\testController::foo1Action'}
+    
+ajax_autocomplete:
+    path:     /ajax/autoCompleteProducts
+    defaults: { _controller: 'ebid\Controller\AjaxController::autoCompleteProductsAction'}
+    
+register:
+    path:     /user/register
+    defaults: { _controller: 'ebid\Controller\UserController::registerAction'}
+    methods:  ['POST']
+
+upload:
+    path:     /ajax/upload
+    defaults: { _controller: 'ebid\Controller\AjaxController::uploadAction'}

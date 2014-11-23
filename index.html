@@ -18,15 +18,15 @@
 <script type="text/javascript" data-main="js/main"
 	src="vendor/requirejs/require.js"></script>
 </head>
-<body ng-controller="mainController">
+<body ng-controller="mainController" ng-cloak class="ng-cloak">
 	<header>
 		<div class="toolbar">
 			<div class="container">
 				<div class="quick-link">
-					<span>Welcome to ebid system!</span> <span> <a href="#"
+					<span>Welcome to ebid system!</span> <span id="unlogin"> <a href="#"
 						data-toggle="modal" data-target="#loginModal">Login</a> <a
-						href="#">Register</a>
-					</span>
+						href="#/auth/register">Register</a>
+					</span> <span id="alreadylogin" style="display:none;"> Hello, {{username}} <a href="javascript:void(0);" ng-click="logout()">Logout</a></span>
 				</div>
 				<nav class="nav-link navbar navbar-default" role="navigation">
 					<div class="collapse navbar-collapse">
@@ -36,14 +36,14 @@
 									class="caret"></b>
 							</a>
 								<ul class="dropdown-menu">
-									<li><a href="#">favourate</a></li>
+									<li><a href="#">Favorite</a></li>
 								</ul></li>
 							<li class="dropdown"><a href="#" data-toggle="dropdown"
 								data-hover="dropdown" class="dropdown-toggle"> Customer
 									Center <b class="caret"></b>
 							</a>
 								<ul class="dropdown-menu">
-									<li><a href="#">favourate</a></li>
+									<li><a href="#">Favorite</a></li>
 								</ul></li>
 						</ul>
 					</div>
@@ -134,10 +134,12 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Login</button>
+					<button type="button" id="loginAction" class="btn btn-primary" ng-click="login()">Login</button>
 				</div>
 			</div>
 		</div>
 	</div>
+	<!-- notification -->
+	<span kendo-notification="InfoNotification" k-options="{autoHideAfter: 2000, show: onShow, stacking: 'down'}" style="display:none"></span>
 </body>
 </html>

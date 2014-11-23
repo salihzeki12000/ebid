@@ -7,8 +7,8 @@
  */
 'use strict';
 
-define("app",['angular','controllers', 'directives','angularplugin/angular-route','angularplugin/angular-animate','kendo'], function(angular){
-	var app = angular.module('ebid', ['ngRoute','kendo.directives','ebid/controller', 'ebid/directives', 'ngAnimate']);
+define("app",['angular','controllers', 'directives','angularplugin/angular-route','angularplugin/angular-animate','kendo', 'angularplugin/angular-messages'], function(angular){
+	var app = angular.module('ebid', ['ngRoute','kendo.directives','ebid/controller', 'ebid/directives', 'ngAnimate','ngMessages']);
 	app.constant('baseHref', '/ebid/index.html');
 	app.config(function($locationProvider) {
 		  $locationProvider.html5Mode({enabled: false, requireBase: true});
@@ -28,6 +28,10 @@ define("app",['angular','controllers', 'directives','angularplugin/angular-route
 				templateUrl: 'partial/item.html',
 				controller: 'itemController'				
 			})
+			.when('/bid/add', {
+				templateUrl: 'partial/bid/form.html',
+				controller: 'bidAddController'
+			})
 			.when('/user',{
 				templateUrl: 'partial/user/index.html',
 				controller: 'userController'					
@@ -46,5 +50,11 @@ define("app",['angular','controllers', 'directives','angularplugin/angular-route
 			});
 		}
 	]);
+	/** clear cache in develop model**/
+	app.run(function($rootScope, $templateCache) {
+		   $rootScope.$on('$viewContentLoaded', function() {
+		      $templateCache.removeAll();
+		   });
+		});
 	return app;
 });

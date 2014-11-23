@@ -12,7 +12,7 @@ requirejs.config({
 		angular : '../vendor/angular/angular',
 		angularplugin : '../vendor/angular',
 		bootstrap : '../vendor/bootstrap/dist/js/bootstrap',	
-		kendo : '../vendor/kendo/js/kendo.all.min',
+		kendo : ['../vendor/kendo/src/js/kendo.all', '../vendor/kendo/js/kendo.all.min'],
 		elevatezoom : '../vendor/elevatezoom/jquery.elevatezoom',
 		bootstrapHoverDropdown : '../vendor/bootstrap-hover-dropdown/bootstrap-hover-dropdown',
 		fancybox : '../vendor/fancybox/source/jquery.fancybox',
@@ -30,6 +30,9 @@ requirejs.config({
 			deps: ['jquery', 'angular']
 		},
 		'angularplugin/angular-animate':{
+			deps: ['jquery', 'angular']
+		},
+		'angularplugin/angular-messages':{
 			deps: ['jquery', 'angular']
 		},
 		'kendo' :{

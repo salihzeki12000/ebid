@@ -9,21 +9,20 @@ namespace ebid\Db;
         private $dbuser;
         private $dbpass;
         private $dbname;
+        private $prefix;
         private $conn;
 
-        public function __construct($dbhost, $dbuser, $dbpass, $dbname){
+        public function __construct($dbhost, $dbuser, $dbpass, $dbname, $prefix){
             $this->dbhost = $dbhost;
             $this->dbuser = $dbuser;
             $this->dbpass = $dbpass;
             $this->dbname = $dbname;
+            $this->prefix = $prefix;
         }
         
         public function connect(){
-            $this->conn = mysql_connect($this->dbhost, $this->dbuser, $this->dbpass)
-                or die (mysql_error());
-            
-            mysql_select_db($this->dbname)
-                or die (mysql_error());
+            $this->conn = mysql_connect($this->dbhost, $this->dbuser, $this->dbpass);
+            mysql_select_db($this->dbname);
         }
         
         public function executeSQLRowResult($dbquery){
@@ -32,7 +31,7 @@ namespace ebid\Db;
             
             //*** die if no result
             if (!$result)
-                die("Query Failed.");
+                throw new \Exception(mysql_error());
             
             $array = array();
             for ($i = 0; $i < mysql_num_rows($result); $i++){
@@ -51,7 +50,8 @@ namespace ebid\Db;
             
             //*** die if no result
             if (!$result)
-                die("Query Failed.");
+                throw new \Exception(mysql_error());
+            
             $array = array();
             for ($i = 0; $i < mysql_num_rows($result); $i++){
                 array_push($array, mysql_fetch_assoc($result));
@@ -61,7 +61,7 @@ namespace ebid\Db;
             return $array;
         }
         
-        public function executeSQL ($dbquery) {
+        public function executeSQL($dbquery) {
             return mysql_query($dbquery);
         }
         
@@ -69,6 +69,10 @@ namespace ebid\Db;
             if($this->conn){
                 mysql_close($this->conn);
             }
+        }
+        
+        public function getPrefix(){
+            return $this->prefix;
         }
     }
 ?>
