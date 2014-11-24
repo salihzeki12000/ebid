@@ -51,11 +51,10 @@ CREATE TABLE IF NOT EXISTS `Product` (
   `endTime` DATETIME NOT NULL,
   `categoryid` INT NULL,
   `shippingCost` DECIMAL(6,2),
-  `auction` INT NULL,
+  `auction` BLOB NULL,
   PRIMARY KEY (`pid`),
   CONSTRAINT `categoryid`
     FOREIGN KEY (`categoryid`)
-    REFERENCES `category` (`categoryid`),
-  constraint 'auction_const' check ('auction' in (0, 1))
+    REFERENCES `category` (`categoryid`)
   )
 ENGINE = InnoDB;
