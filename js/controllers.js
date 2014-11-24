@@ -345,6 +345,10 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 		        data: "productFamilies"
 		    }
 		});
+        $scope.imagelistViewTemplate = $('#imagepreviewtemplate').html();
+        $scope.Imageslistsource = new kendo.data.DataSource({
+            data: [{'ImageName': '404.jpg', 'ImageURL':'upload/images/wensheng/404.jpg'}]
+        });
 		$scope.ProductNameAutoCompleteOptions = {
 		          dataSource: $scope.ProductNameAutoComplete,
 		          dataTextField: "title",
@@ -373,8 +377,50 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                     saveUrl: BASEURL + "/ajax/upload",
                     removeUrl: BASEURL + "/ajax/upload/remove",
                     autoUpload: true
+                },
+                success: function (e) {
+                    var files = e.files;
+                    if (e.operation == "upload") {
+                        var data = e.response;
+                        if(data.type == SUCCESS){
+                            $.each(data.data, function(i, item){
+                                $.each(files, function(j, file){
+                                    if(file.name == item.ImageName){
+                                        item['targetUid'] = file.uid;
+                                    }
+                                });
+                                $scope.Imageslistsource.add(item);
+                            });
+                            $scope.$apply();
+                        }
+                    }else{
+                        var data = $scope.Imageslistsource.data().slice(0);
+                        $.each(data, function(i, item){
+                           var name = item.ImageName;
+                            $.each(files, function(j, file){
+                                if(file.name == name){
+                                    $scope.Imageslistsource.remove(item);
+                                }
+                            });
+                        });
+                    }
                 }
 		};
-	}]);
+        $scope.ImageDefault = function(name, url){
+            var a = name;
+        }
+        $scope.ImageDelete = function(name, uid){
+            if(uid){
+                var lists = $('.k-file-success');
+                $.each(lists, function(i, list){
+                    var test = $(list).attr('data-uid');
+                    if($(list).attr('data-uid') == uid){
+                        var button = $(list).find('button');
+                        button.click();
+                    }
+                });
+            }
+        }
+    }]);
 	return ebidController;
 });

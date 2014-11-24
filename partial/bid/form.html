@@ -27,7 +27,21 @@
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="pictures">Photos</label>
 						<div class="col-md-10">
-							 <input id="pictures" name="images[]" type="file" kendo-upload k-options="uploadPicturesOptions" />
+                            <div>
+                                <input id="pictures" name="images[]" type="file" kendo-upload k-options="uploadPicturesOptions" />
+                            </div>
+                            <div class="imagePreview">
+                                <div class="row">
+                                    <div kendo-list-view id="imageslistView" class="k-widget k-listview" k-data-source="Imageslistsource" k-template='imagelistViewTemplate'></div>
+                                    <script type="text/x-kendo-angular-template" id="imagepreviewtemplate">
+                                        <div class="col-md-3 imageViewer" ng-mouseover="hover = true" ng-mouseleave="hover = false">
+                                            <img ng-src="{{dataItem.ImageURL}}" alt=" {{dataItem.ImageName}}"  />
+                                            <button type="button" class="btn btn-primary default" ng-class="{show: hover}"  ng-click="ImageDefault(dataItem.ImageName, dataItem.ImageURL)" >Default</button>
+                                            <button type="button" class="btn btn-danger delete" ng-class="{show: hover}" ng-if="dataItem.targetUid != null" ng-click="ImageDelete(dataItem.ImageName, dataItem.targetUid)">Delete</button>
+                                        </div>
+                                    </script>
+                                </div>
+                            </div>
 						</div>
 					</div>
 					<div class="form-group">

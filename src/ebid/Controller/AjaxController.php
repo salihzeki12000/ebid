@@ -57,8 +57,10 @@ class AjaxController extends baseController
     }
     
     public function uploadAction(){
-        
+        global $session;
+        $this->checkAuthentication();
         $files = $this->request->files->get('images');
+        $data = [];
         foreach ($files as $file){
             if(($file instanceof UploadedFile)&&($file->getError() == UPLOAD_ERR_OK)){
                 $extension = $file->getClientOriginalExtension();
@@ -66,29 +68,46 @@ class AjaxController extends baseController
                 if(!in_array($extension, $valid_filetypes)){
                     throw new \Exception("uplod file unvalid. must be image file.");
                 }
+                $securityContext = $session->get("security_context");
+                $user = $securityContext->getToken()->getUser();
+                $username = $user->getUsername();
+
                 $file->move(
-                    $this->getUploadImagesDir(),
-                    $this->getfilename($extension)
-                ); 
-                $result = new Result(Result::SUCCESS, "file upload successfully.");
+                    $this->getUploadImagesDir($username),
+                    $file->getClientOriginalName()
+                );
+
+                $data[] = array(
+                    'ImageName' => $file->getClientOriginalName(),
+                    'ImageURL' => $this->getRelativeImageDir($username) . $file->getClientOriginalName()
+                );
             }
 
         }
+        $result = new Result(Result::SUCCESS, "file upload successfully.", $data);
         return new Response(json_encode($result));
     }
     
     public function uploadRemoveAction(){
-        
+        global $session;
+        $this->checkAuthentication();
+        $filename = $this->request->get('fileNames');
+        $securityContext = $session->get("security_context");
+        $user = $securityContext->getToken()->getUser();
+        $username = $user->getUsername();
+        unlink($this->getUploadImagesDir($username) . $filename);
+        $result = new Result(Result::SUCCESS, "file delete successfully.");
+        return new Response(json_encode($result));
     }
-    
-    function getfilename($extension){
-        $filename = date('Ymdms'). '.'.$extension;
-        return $filename;
+
+    function getRelativeImageDir($username){
+        return 'upload/images/'. $username . '/';
     }
+
     
-    function getUploadImagesDir(){
+    function getUploadImagesDir($username){
         global $root;
-        return $root . '/upload/images/';
+        return $root . '/upload/images/' . $username . '/';
     }
 }
 
