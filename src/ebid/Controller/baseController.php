@@ -1,6 +1,7 @@
 <?php
 namespace ebid\Controller;
 
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Response;
 use ebid\Entity\Result;
 
@@ -58,6 +59,14 @@ class baseController
         } while(true);
         fclose ($handle);
         return $contents;
+    }
+
+    function checkAuthentication(){
+        global $session;
+        $securityContext = $session->get("security_context");
+        if (false === $securityContext->isGranted('ROLE_USER')) {
+            throw new Exception("You need to login before use this feature.");
+        }
     }
     
 }

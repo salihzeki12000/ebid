@@ -340,6 +340,10 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 		        data: "productFamilies"
 		    }
 		});
+        $scope.imagelistViewTemplate = $('#imagepreviewtemplate').html();
+        $scope.Imageslistsource = new kendo.data.DataSource({
+            data: [] //[{'ImageName': 'dbrelation.png', 'ImageURL':'upload/images/wensheng/dbrelation.png'}]
+        });
 		$scope.ProductNameAutoCompleteOptions = {
 		          dataSource: $scope.ProductNameAutoComplete,
 		          dataTextField: "title",
@@ -368,6 +372,27 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                     saveUrl: BASEURL + "/ajax/upload",
                     removeUrl: BASEURL + "/ajax/upload/remove",
                     autoUpload: true
+                },
+                success: function (e) {
+                    var files = e.files;
+                    if (e.operation == "upload") {
+                        var data = e.response;
+                        if(data.type == SUCCESS){
+                            $.each(data.data, function(i, item){
+                                    $scope.Imageslistsource.add(item);
+                            });
+                            $scope.$apply();
+                        }
+                    }else{
+                        $.each($scope.Imageslistsource.data(), function(i, item){
+                           var name = item.ImageName;
+                            $.each(files, function(j, file){
+                                if(file.name == name){
+                                    $scope.Imageslistsource.remove(item);
+                                }
+                            });
+                        });
+                    }
                 }
 		};
 	}]);
