@@ -315,12 +315,17 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 								{ vendors: "Fedex", listId: 2 },
 								{ vendors: "UPS", listId: 3 }
 							];
-        $scope.categoryType = [
-            { name: "Electronic", categoryId: 1 },
-            { name: "Movies & TV", categoryId: 2 },
-            { name: "Food", categoryId: 3 },
-            { name: "Books", categoryId: 4 }
-        ];
+        $scope.categoryType = new kendo.data.DataSource ({
+            transport: {
+                read: {
+                    url: BASEURL + "/ajax/getCategory",
+                    dataType: "json"
+                }
+            },
+            dataTextField: "categoryName",
+            dataValueField: "categoryId"
+
+        });
 		$scope.ProductNameAutoComplete = new kendo.data.DataSource({
 			transport: {
 				read: {

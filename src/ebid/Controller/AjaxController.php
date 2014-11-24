@@ -34,6 +34,22 @@ class AjaxController extends baseController
         }
         return new Response(json_encode($result));
     }
+
+    public function getCategory(){
+        $MySQLParser = $this->container->get('MySQLParser');
+        $arr = $MySQLParser->select("category");
+        $result = array();
+
+        foreach($arr as $item){
+            $row = array();
+            if($item[2] != null)
+                $item[2] = '-'.$item[2];
+            $row->categoryId = $item[0];
+            $row->categoryName = $item[1];
+            $result[] = $row;
+        }
+        return new Response(json_encode($result));
+    }
     
     public function getProductDetailAction($itemId){
         $url = 'http://open.api.ebay.com/shopping?callname=GetSingleItem&responseencoding=JSON&appid=' . AjaxController::APPID .'&%20siteid=0&version=515&ItemID=' . $itemId .'&IncludeSelector=Description,ItemSpecifics';
