@@ -39,6 +39,10 @@ upload:
     path:     /ajax/upload
     defaults: { _controller: 'ebid\Controller\AjaxController::uploadAction'}
 
+uploadRemove:
+    path:     /ajax/upload/remove
+    defaults: { _controller: 'ebid\Controller\AjaxController::uploadRemoveAction'}
+
 ProductAdd:
     path:     /product/add
     defaults: { _controller: 'ebid\Controller\ProductController::addAction'}

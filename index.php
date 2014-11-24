@@ -55,6 +55,7 @@ error_reporting(E_ERROR);
 ini_set('display_errors','On');
 
 $isDebug = true;
+$root = __DIR__;
 $file = __DIR__ .'/cache/container.php';
 
 $containerConfigCache = new ConfigCache($file, $isDebug);

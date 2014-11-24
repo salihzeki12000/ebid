@@ -3,6 +3,7 @@ namespace ebid\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use ebid\Entity\Result;
 /**
  *
  * @author yanwsh
@@ -40,10 +41,38 @@ class AjaxController extends baseController
     }
     
     public function uploadAction(){
-        $file = $request->files->get('img');
-        if(($file instanceof UploadedFile)&&($file->getError() == UPLOAD_ERR_OK)){
-            
+        
+        $files = $this->request->files->get('images');
+        foreach ($files as $file){
+            if(($file instanceof UploadedFile)&&($file->getError() == UPLOAD_ERR_OK)){
+                $extension = $file->getClientOriginalExtension();
+                $valid_filetypes = array('jpg','jpeg','bmp','png','gif');
+                if(!in_array($extension, $valid_filetypes)){
+                    throw new \Exception("uplod file unvalid. must be image file.");
+                }
+                $file->move(
+                    $this->getUploadImagesDir(),
+                    $this->getfilename($extension)
+                ); 
+                $result = new Result(Result::SUCCESS, "file upload successfully.");
+            }
+
         }
+        return new Response(json_encode($result));
+    }
+    
+    public function uploadRemoveAction(){
+        
+    }
+    
+    function getfilename($extension){
+        $filename = date('Ymdms'). '.'.$extension;
+        return $filename;
+    }
+    
+    function getUploadImagesDir(){
+        global $root;
+        return $root . '/upload/images/';
     }
 }
 

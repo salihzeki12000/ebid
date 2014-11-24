@@ -363,6 +363,13 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 		           },
 		           height: 500
 		        };
+		$scope.uploadPicturesOptions = {
+                async: {
+                    saveUrl: BASEURL + "/ajax/upload",
+                    removeUrl: BASEURL + "/ajax/upload/remove",
+                    autoUpload: true
+                }
+		};
 	}]);
 	return ebidController;
 });
