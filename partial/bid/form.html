@@ -25,7 +25,7 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="Photos">Photos</label>
+						<label class="col-md-2 control-label" for="pictures">Photos</label>
 						<div class="col-md-10">
 							 <input id="pictures" type="file" kendo-upload k-async="{ saveUrl: 'save', removeUrl: 'remove', autoUpload: true }" />
 						</div>
@@ -33,51 +33,59 @@
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="Details">Details</label>
 						<div class="col-md-10">
-							<textarea id="editor" kendo-editor rows="10" cols="30" style="height: 220px"></textarea>
+							<textarea id="Details" kendo-editor rows="10" cols="30" style="height: 220px"></textarea>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="Listas">List as</label>
+						<label class="col-md-2 control-label" for="lists">List as</label>
 						<div class="col-md-10">
 							<input id="lists" kendo-drop-down-list k-data-text-field="'listas'" k-data-value-field="'listId'"
             					k-data-source="bidType" required style="width: 153px" />
 						</div>
 					</div>
 
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="categoryas">Category</label>
+                        <div class="col-md-10">
+                            <input id="categoryas" kendo-drop-down-list k-data-text-field="'name'" k-data-value-field="'categoryId'"
+                                   k-data-source="categoryType" required style="width: 153px" />
+                        </div>
+                    </div>
+
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="startprice">Start
 							Price</label>
 						<div class="col-md-10">
-							<input type="price" required placeholder="ex. $10.98" />
+							<input id="startprice" required placeholder="ex. $10.98" />
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="startprice">Expect
+						<label class="col-md-2 control-label" for="expectprice">Expect
 							Price</label>
 						<div class="col-md-10">
-							<input type="price" required placeholder="ex. $10.98" /><span>optional<span>
+							<input id="expectprice" required placeholder="ex. $10.98" /><span>optional</span>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="startprice">Buy
+						<label class="col-md-2 control-label" for="buynowprice">Buy
 							Now Price</label>
 						<div class="col-md-10">
-							<input type="price" required placeholder="ex. $10.98"/><span>optional<span>
+							<input id="buynowprice" required placeholder="ex. $10.98"/><span>optional</span>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="endday">End Day</label>
+						<label class="col-md-2 control-label" for="datetimepicker">End Day</label>
 						<div class="col-md-10">
 							<input id="datetimepicker" kendo-date-time-picker required style="width: 153px" />
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="freeshiping">Free
+						<label class="col-md-2 control-label" for="freeshipping">Free
 							Shipping</label>
 						<div class="col-md-10">
 							<input id="freeshipping" kendo-drop-down-list k-data-text-field="'vendors'" k-data-value-field="'listId'"
