@@ -342,7 +342,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 		});
         $scope.imagelistViewTemplate = $('#imagepreviewtemplate').html();
         $scope.Imageslistsource = new kendo.data.DataSource({
-            data: [] //[{'ImageName': 'dbrelation.png', 'ImageURL':'upload/images/wensheng/dbrelation.png'}]
+            data: [{'ImageName': '404.jpg', 'ImageURL':'upload/images/wensheng/404.jpg'}]
         });
 		$scope.ProductNameAutoCompleteOptions = {
 		          dataSource: $scope.ProductNameAutoComplete,
@@ -379,12 +379,18 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                         var data = e.response;
                         if(data.type == SUCCESS){
                             $.each(data.data, function(i, item){
-                                    $scope.Imageslistsource.add(item);
+                                $.each(files, function(j, file){
+                                    if(file.name == item.ImageName){
+                                        item['targetUid'] = file.uid;
+                                    }
+                                });
+                                $scope.Imageslistsource.add(item);
                             });
                             $scope.$apply();
                         }
                     }else{
-                        $.each($scope.Imageslistsource.data(), function(i, item){
+                        var data = $scope.Imageslistsource.data().slice(0);
+                        $.each(data, function(i, item){
                            var name = item.ImageName;
                             $.each(files, function(j, file){
                                 if(file.name == name){
@@ -395,6 +401,21 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                     }
                 }
 		};
-	}]);
+        $scope.ImageDefault = function(name, url){
+            var a = name;
+        }
+        $scope.ImageDelete = function(name, uid){
+            if(uid){
+                var lists = $('.k-file-success');
+                $.each(lists, function(i, list){
+                    var test = $(list).attr('data-uid');
+                    if($(list).attr('data-uid') == uid){
+                        var button = $(list).find('button');
+                        button.click();
+                    }
+                });
+            }
+        }
+    }]);
 	return ebidController;
 });
