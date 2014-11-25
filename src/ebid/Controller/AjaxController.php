@@ -26,6 +26,7 @@ class AjaxController extends baseController
             $items = $obj->findItemsByKeywordsResponse[0]->searchResult[0]->item;
             foreach($items as $item){
                 $myitem = array(
+                    'itemId'=> $item->itemId[0],
                     'title'=> $item->title[0],
                     'galleryURL' => $item->galleryURL[0]
                 );
@@ -34,6 +35,47 @@ class AjaxController extends baseController
         }catch(\Exception $e){
         }
         return new Response(json_encode($result));
+    }
+
+    public function findProductsAction(){
+        $searchTerm = urlencode($this->request->query->get('searchTerm'));
+        $maxFetch = $this->request->query->get('maxFetch');
+        $url = "http://open.api.ebay.com/shopping?callname=FindProducts&responseencoding=JSON&appid=". AjaxController::APPID . "&version=525&siteid=0&QueryKeywords=". $searchTerm."&MaxEntries=" . $maxFetch ."&IncludeSelector=Items,Details";
+        $data = parent::getHttpContent($url);
+        $obj = json_decode($data);
+        $result = array('productFamilies'=>array());
+        try{
+            $items = $obj->Product;
+            foreach($items as $item){
+                $myitem = array(
+                    'title'=> $item->Title,
+                    'detailURL' => $item->DetailsURL,
+                    'galleryURL' => $item->StockPhotoURL
+                );
+                if($myitem['galleryURL'] == null){
+                    $myitem['galleryURL'] = 'images/noimage.png';
+                }
+                $result['productFamilies'][] = $myitem;
+            }
+        }catch(\Exception $e){
+        }
+        return new Response(json_encode($result));
+    }
+
+    public function getDetailAction(){
+        $url = urldecode($this->request->query->get('url'));
+
+        if(substr( $url, 0, 27 ) == 'http://syicatalogs.ebay.com'){
+            $result = parent::getHttpContent($url);
+            if (preg_match ("/<body.*?>([\w\W]*?)<\/body>/", $result, $regs)) {
+                $result = $regs[1];
+            }
+
+        }else{
+            $data = new Result(Result::FAILURE, "domain is not correct.");
+            $result = json_encode($data);
+        }
+        return new Response($result);
     }
 
     public function getCategoryAction(){
@@ -53,9 +95,21 @@ class AjaxController extends baseController
         return new Response(json_encode($result));
     }
     
-    public function getProductDetailAction($itemId){
+    public function getProductByIdAction($itemId){
         $url = 'http://open.api.ebay.com/shopping?callname=GetSingleItem&responseencoding=JSON&appid=' . AjaxController::APPID .'&%20siteid=0&version=515&ItemID=' . $itemId .'&IncludeSelector=Description,ItemSpecifics';
-        
+        $data = parent::getHttpContent($url);
+        $obj = json_decode($data);
+        $result = array();
+        try{
+            $item = $obj->Item;
+            $result = array(
+                'Description'=> $item->Description,
+                'PictureURL' => $item->PictureURL,
+                'GalleryURL' => $item->GalleryURL
+            );
+        }catch(\Exception $e){
+        }
+        return new Response(json_encode($result));
     }
     
     public function uploadAction(){

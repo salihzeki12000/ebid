@@ -29,6 +29,18 @@ admin_logout:
 ajax_autocomplete:
     path:     /ajax/autoCompleteProducts
     defaults: { _controller: 'ebid\Controller\AjaxController::autoCompleteProductsAction'}
+
+ajax_findProducts:
+    path:    /ajax/findProducts
+    defaults: { _controller: 'ebid\Controller\AjaxController::findProductsAction'}
+
+ajax_getProductById:
+    path:     /ajax/getProductById/{itemId}
+    defaults: { _controller: 'ebid\Controller\AjaxController::getProductByIdAction'}
+
+ajax_getDetail:
+    path:     /ajax/getDetail
+    defaults: { _controller: 'ebid\Controller\AjaxController::getDetailAction'}
     
 register:
     path:     /user/register

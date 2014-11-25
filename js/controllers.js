@@ -301,7 +301,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 	ebidController.controller('NotFoundController',['$scope', '$location', function($scope, $location){
 		$scope.homeURL = '#';
 	}]);	
-	ebidController.controller('bidAddController',['$scope', '$location', function($scope, $location){
+	ebidController.controller('bidAddController',['$scope', '$location', '$http', function($scope, $location, $http){
 		isLogin(null, function(){
 			$location.path('/auth/login');
 			if(!$scope.$$phase) $scope.$apply();
@@ -330,8 +330,9 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 		$scope.ProductNameAutoComplete = new kendo.data.DataSource({
 			transport: {
 				read: {
+					//url: BASEURL + "/ajax/findProducts",
 					url: BASEURL + "/ajax/autoCompleteProducts",
-					dataType: "json",
+                    dataType: "json",
 	                data: {
 	                	maxFetch: 3,
 	                	searchTerm: function() {
@@ -348,7 +349,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 		});
         $scope.imagelistViewTemplate = $('#imagepreviewtemplate').html();
         $scope.Imageslistsource = new kendo.data.DataSource({
-            data: [{'ImageName': '404.jpg', 'ImageURL':'upload/images/wensheng/404.jpg'}]
+            data: []
         });
 		$scope.ProductNameAutoCompleteOptions = {
 		          dataSource: $scope.ProductNameAutoComplete,
@@ -371,6 +372,56 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 		           change: function(){
 		        	   this.dataSource.read();
 		           },
+                   select: function(e) {
+                       var val = e.item.text().trim();
+                       var data = $scope.ProductNameAutoComplete.data().slice(0);
+                       var obj;
+                       $.each(data, function(i, item){
+                           var name = item.title.trim();
+                           if(val === name){
+                               obj = item;
+                               return false;
+                           }
+                       });
+                       var itemId = obj.itemId;
+                       //remove all pictures
+                       $scope.Imageslistsource.data([]);
+                       //clear default image
+                       $scope.product.DefaultImage = null;
+                       $http.get(BASEURL + "/ajax/getProductById/" + itemId)
+                           .success(function(data, status, headers, config) {
+                               $scope.product.detail = data.Description;
+                               $.each(data.PictureURL, function(i, item){
+                                   var image = {
+                                       ImageName: i,
+                                       ImageURL: item,
+                                       targetUid: null
+                                   };
+                                   $scope.Imageslistsource.add(image);
+                               });
+                               if(!$scope.$$phase) {
+                                   $scope.$apply();
+                               }
+                           });
+                       /*
+                       var detailurl = obj.detailURL;
+                       var item = {
+                           ImageName: 'original',
+                           ImageURL: obj.galleryURL,
+                           targetUid: null
+                       };
+                       $scope.Imageslistsource.add(item);
+                       $http({
+                           method: 'GET',
+                           url: BASEURL + "/ajax/getDetail?url=" + encodeURIComponent(detailurl)
+                       }).success(function(data, status, headers, config) {
+                           $scope.product.detail = data;
+                               if(!$scope.$$phase) {
+                                   $scope.$apply();
+                               }
+                       })
+                       */
+                   },
 		           height: 500
 		        };
 		$scope.uploadPicturesOptions = {
@@ -400,6 +451,9 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                            var name = item.ImageName;
                             $.each(files, function(j, file){
                                 if(file.name == name){
+                                    if(item.ImageURL == $scope.product.DefaultImage){
+                                        $scope.product.DefaultImage = null;
+                                    }
                                     $scope.Imageslistsource.remove(item);
                                 }
                             });
@@ -408,8 +462,9 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                 }
 		};
         $scope.ImageDefault = function(name, url){
-            var a = name;
-        }
+            $scope.product.DefaultImage = url;
+
+        };
         $scope.ImageDelete = function(name, uid){
             if(uid){
                 var lists = $('.k-file-success');
@@ -420,8 +475,21 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                         button.click();
                     }
                 });
+            }else{
+                var data = $scope.Imageslistsource.data().slice(0);
+                $.each(data, function(i, item){
+                    if(item.ImageName == name){
+                        if(item.ImageURL == $scope.product.DefaultImage){
+                            $scope.product.DefaultImage = null;
+                        }
+                        $scope.Imageslistsource.remove(item);
+                    }
+                });
             }
-        }
+        };
+        $scope.product = {
+            detail : ""
+        };
     }]);
 	return ebidController;
 });

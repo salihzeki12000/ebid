@@ -15,7 +15,7 @@
 							<script id="ProductNameAutoCompleteTemplate" type="text/x-kendo-template">
 							<div class="row">
 								<div class="col-md-2">
-									<div><img src="#= galleryURL #" /></div>
+									<div><img  src="#= galleryURL #" /></div>
 								</div>
         						<div class="col-md-8">
             						<div>#= data.title #</div>
@@ -30,6 +30,17 @@
                             <div>
                                 <input id="pictures" name="images[]" type="file" kendo-upload k-options="uploadPicturesOptions" />
                             </div>
+						</div>
+					</div>
+                    <div class="form-group" ng-if="product.DefaultImage != null">
+                        <label class="col-md-2 control-label">Default Image</label>
+                        <div class="col-md-10">
+                            <img ng-src="{{product.DefaultImage}}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Preview</label>
+                        <div class="col-md-10">
                             <div class="imagePreview">
                                 <div class="row">
                                     <div kendo-list-view id="imageslistView" class="k-widget k-listview" k-data-source="Imageslistsource" k-template='imagelistViewTemplate'></div>
@@ -37,17 +48,17 @@
                                         <div class="col-md-3 imageViewer" ng-mouseover="hover = true" ng-mouseleave="hover = false">
                                             <img ng-src="{{dataItem.ImageURL}}" alt=" {{dataItem.ImageName}}"  />
                                             <button type="button" class="btn btn-primary default" ng-class="{show: hover}"  ng-click="ImageDefault(dataItem.ImageName, dataItem.ImageURL)" >Default</button>
-                                            <button type="button" class="btn btn-danger delete" ng-class="{show: hover}" ng-if="dataItem.targetUid != null" ng-click="ImageDelete(dataItem.ImageName, dataItem.targetUid)">Delete</button>
+                                            <button type="button" class="btn btn-danger delete" ng-class="{show: hover}"  ng-click="ImageDelete(dataItem.ImageName, dataItem.targetUid)">Delete</button>
                                         </div>
                                     </script>
                                 </div>
                             </div>
-						</div>
-					</div>
+                        </div>
+                    </div>
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="Details">Details</label>
 						<div class="col-md-10">
-							<textarea id="Details" kendo-editor rows="10" cols="30" style="height: 220px"></textarea>
+							<textarea id="Details" kendo-editor ng-model="product.detail" rows="10" cols="30" style="height: 350px"></textarea>
 						</div>
 					</div>
 
