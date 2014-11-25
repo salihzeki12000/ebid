@@ -315,6 +315,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 								{ vendors: "Fedex", listId: 2 },
 								{ vendors: "UPS", listId: 3 }
 							];
+
         $scope.categoryType = new kendo.data.DataSource ({
             transport: {
                 read: {

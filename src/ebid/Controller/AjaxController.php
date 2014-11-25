@@ -1,6 +1,7 @@
 <?php
 namespace ebid\Controller;
 
+use ebid\Entity\Category;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use ebid\Entity\Result;
@@ -35,17 +36,18 @@ class AjaxController extends baseController
         return new Response(json_encode($result));
     }
 
-    public function getCategory(){
+    public function getCategoryAction(){
         $MySQLParser = $this->container->get('MySQLParser');
-        $arr = $MySQLParser->select("category");
+        $category = new Category();
+        $arr = $MySQLParser->select($category);
         $result = array();
 
         foreach($arr as $item){
-            $row = array();
-            if($item[2] != null)
-                $item[2] = '-'.$item[2];
-            $row->categoryId = $item[0];
-            $row->categoryName = $item[1];
+            $row = null;
+            if($item['parentId'] != null)
+                $item['cname'] = '-'.$item['cname'];
+            $row->categoryId = $item['categoryId'];
+            $row->categoryName = $item['cname'];
             $result[] = $row;
         }
         return new Response(json_encode($result));
