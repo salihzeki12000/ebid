@@ -13,7 +13,13 @@ class baseEntity {
     public function set($data) {
         foreach ($data AS $key => $Value)
             if(property_exists($this, $key)){
-                $this->{$key} = addslashes($Value);
+                if(is_array($Value)){
+                    foreach ($Value as $item) {
+                        $this->{$key}[] = $item;
+                    }
+                }else {
+                    $this->{$key} = addslashes($Value);
+                }
             }
     }
 

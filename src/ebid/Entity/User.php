@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
  * @author yanwsh
  *        
  */
-class User implements AdvancedUserInterface
+class User extends baseEntity implements AdvancedUserInterface
 { 
     public $uid;
     public $username;
@@ -57,22 +57,6 @@ class User implements AdvancedUserInterface
     public function getUsername()
     {
         return $this->username;
-    }
-    
-    public function set($data) {
-        foreach ($data AS $key => $Value)
-            if(property_exists($this, $key)){
-            $this->{$key} = addslashes($Value);
-        }
-    }
-    
-    public function isValid($data){
-        foreach ($data AS $key => $Value){
-            if(!property_exists($this, $key)){
-                return false;
-            }
-        }
-        return true;
     }
     
     public function getId(){

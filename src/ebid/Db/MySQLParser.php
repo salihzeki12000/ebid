@@ -50,9 +50,16 @@ class MySQLParser
         foreach ($entity AS $key => $value){
             if(!in_array($key, $exclude)){
                 $keys[] = "`{$key}`";
+                if(is_array($value)){
+                    $value = json_encode($value);
+                }
                 $value = addslashes($value);
                 if(in_array($key, $restrict)){
-                    $values[] = "{$value}";
+                    if($value == null){
+                        $values[] = "NULL";
+                    }else{
+                        $values[] = "{$value}";
+                    }
                 }else{
                     $values[] = "'{$value}'";
                 }
@@ -75,9 +82,17 @@ class MySQLParser
         $sql = "UPDATE ". _table($this->parse_classname(get_class($entity))) . " SET ";
         foreach ($entity AS $key => $value){
             if(!in_array($key, $exclude)){
+                if(is_array($value)){
+                    $value = json_encode($value);
+                }
                 $value = addslashes($value);
                 if(in_array($key, $restrict)){
-                    $field[] = " $key = $value ";
+                    if($value == null){
+                        $field[] = " $key = NULL ";
+                    }else{
+                        $field[] = " $key = $value ";
+                    }
+
                 }else{
                     $field[] = " $key = '$value' "; 
                 }
@@ -98,12 +113,20 @@ class MySQLParser
         $field = array();
         $sql = "UPDATE ". _table($this->parse_classname(get_class($entity))) . " SET ";
         foreach ($include AS $key => $value){
-                $value = addslashes($value);
-                if(in_array($key, $restrict)){
-                    $field[] = "$key = $value";
+            if(is_array($value)){
+                $value = json_encode($value);
+            }
+            $value = addslashes($value);
+            if(in_array($key, $restrict)){
+                if($value == null){
+                    $field[] = " $key = NULL ";
                 }else{
-                    $field[] = "$key = '$value'";
+                    $field[] = "$key = $value";
                 }
+
+            }else{
+                $field[] = "$key = '$value'";
+            }
         }
         $sql .= implode(",", $field) . "WHERE $searchId=". $this->{$searchId};
         $this->mysql->executeSQL($sql);
