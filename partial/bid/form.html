@@ -1,7 +1,7 @@
 
 <div class="container">
 
-	<form action="#" id="bidForm" role="form">
+	<form class="bidForm" name="bidForm" role="form" ng-submit="submit()">
 
 		<div class="well clearfix">
 			<div class="form-horizontal form-widgets col-lg-12">
@@ -11,7 +11,7 @@
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="ProductName">Name</label>
 						<div class="col-md-10">
-							<input id="ProductName" type="text" class="k-content" required  kendo-auto-complete  k-options="ProductNameAutoCompleteOptions" />
+							<input id="ProductName" type="text" class="k-content" ng-model="product.pname" required  kendo-auto-complete  k-options="ProductNameAutoCompleteOptions" />
 							<script id="ProductNameAutoCompleteTemplate" type="text/x-kendo-template">
 							<div class="row">
 								<div class="col-md-2">
@@ -32,10 +32,10 @@
                             </div>
 						</div>
 					</div>
-                    <div class="form-group" ng-if="product.DefaultImage != null">
+                    <div class="form-group" ng-if="product.defaultImage != null">
                         <label class="col-md-2 control-label">Default Image</label>
                         <div class="col-md-10">
-                            <img ng-src="{{product.DefaultImage}}" />
+                            <img ng-src="{{product.defaultImage}}" ng-model="product.defaultImage" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -58,7 +58,7 @@
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="Details">Details</label>
 						<div class="col-md-10">
-							<textarea id="Details" kendo-editor ng-model="product.detail" rows="10" cols="30" style="height: 350px"></textarea>
+							<textarea id="Details" kendo-editor ng-model="product.description" rows="10" cols="30" style="height: 350px"></textarea>
 						</div>
 					</div>
 
@@ -66,7 +66,7 @@
 						<label class="col-md-2 control-label" for="lists">List as</label>
 						<div class="col-md-10">
 							<input id="lists" kendo-drop-down-list k-data-text-field="'listas'" k-data-value-field="'listId'"
-            					k-data-source="bidType" required style="width: 153px" />
+            					k-data-source="bidType" required style="width: 153px" ng-model="product.auction" />
 						</div>
 					</div>
 
@@ -74,7 +74,7 @@
                         <label class="col-md-2 control-label" for="categoryas">Category</label>
                         <div class="col-md-10">
                             <input id="categoryas" kendo-drop-down-list k-data-text-field="'categoryName'" k-data-value-field="'categoryId'"
-                                   k-data-source="categoryType" required style="width: 153px" />
+                                   k-data-source="categoryType" required style="width: 153px"  ng-model="product.categoryId" />
                         </div>
                     </div>
 
@@ -82,7 +82,7 @@
 						<label class="col-md-2 control-label" for="startprice">Start
 							Price</label>
 						<div class="col-md-10">
-							<input id="startprice" required placeholder="ex. $10.98" />
+							<input id="startprice" required placeholder="ex. $10.98" ng-model="product.startPrice" />
 						</div>
 					</div>
 
@@ -90,7 +90,7 @@
 						<label class="col-md-2 control-label" for="expectprice">Expect
 							Price</label>
 						<div class="col-md-10">
-							<input id="expectprice" required placeholder="ex. $10.98" /><span>optional</span>
+							<input id="expectprice"  placeholder="ex. $10.98" ng-model="product.expectPrice" /><span>optional</span>
 						</div>
 					</div>
 
@@ -98,14 +98,14 @@
 						<label class="col-md-2 control-label" for="buynowprice">Buy
 							Now Price</label>
 						<div class="col-md-10">
-							<input id="buynowprice" required placeholder="ex. $10.98"/><span>optional</span>
+							<input id="buynowprice"  placeholder="ex. $10.98" ng-model="product.buyNowPrice"/><span>optional</span>
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="datetimepicker">End Day</label>
 						<div class="col-md-10">
-							<input id="datetimepicker" kendo-date-time-picker required style="width: 153px" />
+							<input id="datetimepicker" kendo-date-time-picker required style="width: 153px" ng-model="product.endTime" k-options="dateTimeOptions" />
 						</div>
 					</div>
 
@@ -114,13 +114,13 @@
 							Shipping</label>
 						<div class="col-md-10">
 							<input id="freeshipping" kendo-drop-down-list k-data-text-field="'vendors'" k-data-value-field="'listId'"
-            					k-data-source="shippingType" required style="width: 153px" />
+            					k-data-source="shippingType" ng-model="product.shippingType" required style="width: 153px" />
 						</div>
 					</div>
 
 					<div class="col-xs-6 col-xs-offset-3 top20 text-center">
 						<input type="submit" class="btn btn-primary" value="Submit" />
-						<input type="submit" class="btn btn-default" formnovalidate value="Save for later" />
+						<input type="reset" class="btn btn-default" formnovalidate value="Reset" />
 					</div>
 
 				</fieldset>

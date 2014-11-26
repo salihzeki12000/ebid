@@ -21,6 +21,7 @@ class Product extends baseEntity {
     public $startTime;
     public $endTime;
     public $categoryId;
+    public $shippingType;
     public $shippingCost;
     public $auction;
 
