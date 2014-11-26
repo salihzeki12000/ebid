@@ -65,3 +65,25 @@ INSERT INTO `IAD_Category` (`categoryId`, `cname`, `parentId`, `childrenId`) VAL
   (9, 'Music', 8, NULL),
   (10, 'DVD & Movies', 8, NULL),
   (11, 'Video games', 8, NULL);
+
+-- -----------------------------------------------------
+-- Table `IAD_Final_Project`.`bid`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `IAD_Bid` (
+  `uid` INT NOT NULL,
+  `pid` INT NOT NULL,
+  `bidPrice` DECIMAL(8,2) NOT NULL,
+  `bidTime` DATETIME NOT NULL,
+  PRIMARY KEY (`uid`, `pid`),
+  INDEX `pid_idx` (`pid` ASC),
+  CONSTRAINT `Uid`
+  FOREIGN KEY (`uid`)
+  REFERENCES `IAD_User` (`uid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `Pid`
+  FOREIGN KEY (`pid`)
+  REFERENCES `IAD_Product` (`pid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+  ENGINE = InnoDB;
