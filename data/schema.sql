@@ -38,10 +38,15 @@ CREATE TABLE `IAD_Product` (
   `shippingType` INT NULL,
   `shippingCost` DECIMAL(6,2),
   `auction` TINYINT NULL,
+  `seller` INT,
   PRIMARY KEY (`pid`),
   CONSTRAINT `categoryId`
   FOREIGN KEY (`categoryId`)
-  REFERENCES `IAD_Category` (`categoryId`)
+  REFERENCES `IAD_Category` (`categoryId`),
+  CONSTRAINT `sellerConst`
+  FOREIGN KEY (`seller`)
+  REFERENCES `IAD_User` (`uid`)
+
 )
   ENGINE = InnoDB;
 
