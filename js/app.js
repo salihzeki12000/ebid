@@ -44,6 +44,15 @@ define("app",['angular','controllers', 'directives','angularplugin/angular-route
 				templateUrl: 'partial/auth/register.html',
 				controller: 'registerController'					
 			})
+            .when('/help/rule', {
+                    templateUrl:'partial/help/rule.html'
+            })
+            .when('/help/dispute', {
+                    templateUrl:'partial/help/dispute.html'
+            })
+            .when('/help/contact', {
+                    templateUrl:'partial/help/contact.html'
+            })
 			.otherwise({
 				templateUrl: 'partial/404.html',
 				controller: 'NotFoundController'	
