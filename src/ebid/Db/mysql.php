@@ -62,7 +62,11 @@ namespace ebid\Db;
         }
         
         public function executeSQL($dbquery) {
-            return mysql_query($dbquery);
+            $result = mysql_query($dbquery);
+            if(mysql_errno()){
+                throw new Exception("MySQL error ". mysql_errno() . ": ". mysql_error());
+            }
+            return $result;
         }
         
         public function disconnect(){

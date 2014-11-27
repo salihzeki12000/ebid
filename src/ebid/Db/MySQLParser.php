@@ -156,9 +156,6 @@ class MySQLParser
     public function delete($entity, $searchId = "id"){
         $sql = "DELETE FROM ". _table($this->parse_classname(get_class($entity))) . "WHERE $searchId=". $this->{$searchId};
         $this->mysql->executeSQL($sql);
-        if(mysql_errno()){
-            throw new Exception("MySQL error ". mysql_errno() . ": ". mysql_error());
-        }
     }
     
     function parse_classname($name){
