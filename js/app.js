@@ -7,8 +7,8 @@
  */
 'use strict';
 
-define("app",['angular','controllers', 'directives','angular_route','angular_animate','kendo', 'angular_messages', 'angular_sanitize', 'angular_slick'], function(angular){
-	var app = angular.module('ebid', ['ngRoute','kendo.directives','ebid/controller', 'ebid/directives', 'ngAnimate','ngMessages','ngSanitize', 'slick']);
+define("app",['angular','controllers', 'directives','angular_route','angular_animate','kendo', 'angular_messages', 'angular_sanitize', 'angular_slick', 'angularfire'], function(angular){
+	var app = angular.module('ebid', ['ngRoute','kendo.directives','ebid/controller', 'ebid/directives', 'ngAnimate','ngMessages','ngSanitize', 'slick', 'firebase']);
 	app.constant('baseHref', '/ebid/index.html');
 	app.config(function($locationProvider) {
 		  $locationProvider.html5Mode({enabled: false, requireBase: true});

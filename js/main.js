@@ -21,7 +21,9 @@ requirejs.config({
 		fancybox : '../vendor/fancybox/source/jquery.fancybox',
 		wow : '../vendor/wow/dist/wow',
         slickcarousel : '../vendor/slick-carousel/slick/slick',
-        angular_slick : '../vendor/angular-slick/dist/slick'
+        angular_slick : '../vendor/angular-slick/dist/slick',
+        firebase : '../vendor/firebase/firebase',
+        angularfire : '../vendor/angularfire/dist/angularfire'
 	},
 	shim:{
 		'angular' : {
@@ -63,6 +65,9 @@ requirejs.config({
         },
         'angular_slick':{
             deps: ['jquery', 'angular', 'slickcarousel']
+        },
+        'angularfire':{
+            deps: ['angular', 'firebase']
         }
 	}
 });

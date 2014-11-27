@@ -10,6 +10,7 @@ namespace ebid\Entity;
 
 
 class Bid extends baseEntity {
+    public $bid;
     public $uid;
     public $pid;
     public $bidPrice;

@@ -239,9 +239,13 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 		new WOW().init();
 	}]);
 
-	ebidController.controller('itemController',['$scope','$http', '$routeParams', '$compile', '$sce','GlobalEnum',function($scope, $http, $routeParams, $compile, $sce,GlobalEnum){
+	ebidController.controller('itemController',['$scope','$http', '$routeParams', '$compile', '$sce', '$firebase','GlobalEnum',function($scope, $http, $routeParams, $compile, $sce, $firebase, GlobalEnum){
         kendo.culture("en-US");
         $scope.itemId = $routeParams.itemId;
+        var ref = new Firebase("https://ebid.firebaseio.com/bid/item");
+        var sync = $firebase(ref);
+        var syncObject = sync.$asObject();
+
         $http({
             method: 'GET',
             url: BASEURL + '/product/item/' + $scope.itemId

@@ -72,12 +72,14 @@ INSERT INTO `IAD_Category` (`categoryId`, `cname`, `parentId`, `childrenId`) VAL
 -- Table `IAD_Final_Project`.`bid`
 -- -----------------------------------------------------
 CREATE TABLE `IAD_Bid` (
+  `bid` INT NOT NULL  AUTO_INCREMENT,
   `uid` INT NOT NULL,
   `pid` INT NOT NULL,
   `bidPrice` DECIMAL(8,2) NOT NULL,
   `bidTime` DATETIME NOT NULL,
   INDEX `pid_idx` (`pid` ASC),
-  CONSTRAINT `Uid`
+  PRIMARY KEY (`bid`),
+  CONSTRAINT `uid`
   FOREIGN KEY (`uid`)
   REFERENCES `IAD_User` (`uid`)
     ON DELETE NO ACTION
