@@ -74,7 +74,6 @@ CREATE TABLE IF NOT EXISTS `IAD_Bid` (
   `pid` INT NOT NULL,
   `bidPrice` DECIMAL(8,2) NOT NULL,
   `bidTime` DATETIME NOT NULL,
-  PRIMARY KEY (`uid`, `pid`),
   INDEX `pid_idx` (`pid` ASC),
   CONSTRAINT `Uid`
   FOREIGN KEY (`uid`)
