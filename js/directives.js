@@ -15,15 +15,29 @@ define("directives", ['angular','jquery','elevatezoom','fancybox'], function(ang
 		      //Will watch for changes on the attribute
 		      attrs.$observe('zoomImage',function(){
 		        linkElevateZoom();
-		      })
+		      });
+
+                var isDuplicate = false;
 
 		      function linkElevateZoom(){
 		        //Check if its not empty
 		        if (!attrs.zoomImage) return;
-		        element.attr('data-zoom-image',attrs.zoomImage);
-		        var options = {};
-		        if(attrs.kOption)
-		          options = $.parseJSON(attrs.kOption);
+                  if(isDuplicate) return;
+                  var options = scope[attrs.kOption];
+                  if(options){
+                      if(options.gallery){
+                          var img = $("#" + options.gallery).find("img");
+                          if(img.length == 0){
+                              return;
+                          }
+                      }
+                  }
+                  isDuplicate = true;
+		          element.attr('data-zoom-image',attrs.zoomImage);
+                  if(!options){
+                      options = {};
+                  }
+
 		        $(element).elevateZoom(options);
 		        $(element).bind("click", function(e){
 		        	var ez = $(element).data('elevateZoom');
@@ -37,6 +51,7 @@ define("directives", ['angular','jquery','elevatezoom','fancybox'], function(ang
 		    }
 		  };
 		});
+
 	app.directive("compareTo", function(){
 	    return {
 	        require: "ngModel",

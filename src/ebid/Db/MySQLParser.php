@@ -23,8 +23,13 @@ class MySQLParser
      * @param null $sort sort condition
      * @return array an array of objects
      */
-    public function select($entity, $condition = NULL, $sort = NULL){
-        $sql = "SELECT * FROM ". _table($this->parse_classname(get_class($entity)));
+    public function select($entity, $condition = NULL, $sort = NULL, $field = NULL){
+        if($field == NULL){
+            $field = '*';
+        }else{
+            $field = implode(",", $field);
+        }
+        $sql = "SELECT ". $field. " FROM ". _table($this->parse_classname(get_class($entity)));
         if($condition){
             $sql .= " WHERE $condition";
         }

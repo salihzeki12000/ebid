@@ -25,5 +25,6 @@ class Product extends baseEntity {
     public $shippingCost;
     public $auction;
     public $seller;
+    public $condition;
 
 }

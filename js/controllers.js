@@ -10,7 +10,42 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 	var SUCCESS = 0;
 	var FAILURE = 1;
 	var LOGIN_REQUIRE = 2;
+
 	var ebidController = angular.module('ebid/controller', []);
+    ebidController.constant('GlobalEnum', {
+        EnumBidType : [
+            { listas: "Auction", listId: 1 },
+            { listas: "Fixed price", listId: 2 }
+        ],
+        EnumShippingType : [
+            { vendors: "USPS", listId: 1 },
+            { vendors: "Fedex", listId: 2 },
+            { vendors: "UPS", listId: 3 }
+        ],
+
+        EnumConditionType : [
+            {conditionId: 1, conditionName: "New"},
+            {conditionId: 2, conditionName: "Used"}
+        ]
+    });
+
+    function EnumBidTypeName (GlobalEnum, key) {
+        return GlobalEnum.EnumBidType.filter(function(enumItem) {
+            return enumItem.listId === parseInt(key);
+        })[0].listas;
+    };
+
+    function EnumConditionTypeName (GlobalEnum, key) {
+        return GlobalEnum.EnumConditionType.filter(function(enumItem) {
+            return enumItem.conditionId === parseInt(key);
+        })[0].conditionName;
+    };
+
+    function EnumShippingTypeName(GlobalEnum, key){
+        return GlobalEnum.EnumShippingType.filter(function(enumItem) {
+            return enumItem.listId === parseInt(key);
+        })[0].vendors;
+    };
 	var animate = function($element, $animateName,callback){
 		$element.addClass($animateName);
 		$element.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
@@ -40,7 +75,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 				}
 			}
 		});
-	}
+	};
 	var renderLoginState = function($scope){
 		$.ajax({
 			url: BASEURL + '/auth/islogin',
@@ -51,6 +86,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 				$("#unlogin").hide();
 				$("#alreadylogin").show();
 				$scope.username = data.data.username;
+                $scope.id = data.data.id;
 				$scope.$apply();
 			}
 		});
@@ -203,8 +239,61 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 		new WOW().init();
 	}]);
 
-	ebidController.controller('itemController',['$scope', function($scope){
-		kendo.culture("en-US"); 
+	ebidController.controller('itemController',['$scope','$http', '$routeParams', '$compile', '$sce','GlobalEnum',function($scope, $http, $routeParams, $compile, $sce,GlobalEnum){
+        kendo.culture("en-US");
+        $scope.itemId = $routeParams.itemId;
+        $http({
+            method: 'GET',
+            url: BASEURL + '/product/item/' + $scope.itemId
+        })
+        .success(function(data, status, headers, config) {
+                $scope.product = data.data;
+                $scope.product.auction = EnumBidTypeName(GlobalEnum, $scope.product.auction);
+                $scope.product.condition = EnumConditionTypeName(GlobalEnum, $scope.product.condition);
+                $scope.product.shippingType = EnumShippingTypeName(GlobalEnum, $scope.product.shippingType);
+                if($scope.product.shippingCost == 0){
+                    $scope.product.shippingCost = "Free";
+                }
+                $scope.toBigImg = function(image){
+                    return image.replace('$_12.JPG', '$_57.JPG');
+                };
+                $scope.userId = $scope.$parent.id;
+
+                //$scope.product.description = $sce.trustAsHtml($scope.product.description);
+        });
+        var marginPic = function(e){
+            var width = e.width();
+            var height = e.height();
+            if(e.width() <= 300 ){
+                e.css('margin-left', '100px');
+            }else{
+                e.css('margin-left', '0px');
+            }
+            if(e.height() <= 240){
+                e.css('margin-top', '50px');
+            }
+            else if(e.height() <= 300){
+                e.css('margin-top', '25px');
+            }
+            else{
+                e.css('margin-top', '0px');
+            }
+        };
+        $scope.ImageZoomConfig = {
+            gallery: "productGallery",
+            imageCrossfade : "true",
+            galleryActiveClass: "active",
+            onZoomedImageLoaded : marginPic,
+            onImageSwapComplete : marginPic
+        };
+        //recompile productImg
+        $scope.$watch(
+            function () { return $('#productGallery').html() },
+            function(newval, oldval){
+                if(oldval.trim() != newval.trim())
+                    $compile(angular.element("#productImg"))($scope);
+            }, true);
+
 		$scope.price = 29999.99;
 		$scope.bidPrice = $scope.price + 500;
 		$scope.priceCurrency = kendo.toString($scope.price, "c");
@@ -220,7 +309,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 			$(".pricecurrency").fadeTo('slow', 1);
 			$("#bidTextbox").data("kendoNumericTextBox").min($scope.bidPrice);
 		};
-		$("#bidTextbox").width(100);
+
 		var timer;
 		$('#detail_tab  > li > a').hover(function () {
 			var current = $(this);
@@ -230,10 +319,6 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 			}, 200);
 
 		});
-
-		//var productImg = $("#productImg").data('elevateZoom');
-		//productImg.options.gallery = "productGallery";
-		//productImg.options.imageCrossfade = true;
 
 
 	}]);
@@ -306,20 +391,15 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 	ebidController.controller('NotFoundController',['$scope', '$location', function($scope, $location){
 		$scope.homeURL = '#';
 	}]);	
-	ebidController.controller('bidAddController',['$scope', '$location', '$http', function($scope, $location, $http){
+	ebidController.controller('bidAddController',['$scope', '$location', '$http', 'GlobalEnum', function($scope, $location, $http, GlobalEnum){
 		isLogin(null, function(){
 			$location.path('/auth/login');
 			if(!$scope.$$phase) $scope.$apply();
 		});
-		$scope.bidType = [
-							{ listas: "Auction", listId: 1 },
-							{ listas: "Fixed price", listId: 2 }
-						];
-		$scope.shippingType = [
-								{ vendors: "USPS", listId: 1 },
-								{ vendors: "Fedex", listId: 2 },
-								{ vendors: "UPS", listId: 3 }
-							];
+		$scope.bidType = GlobalEnum.EnumBidType;
+		$scope.shippingType = GlobalEnum.EnumShippingType;
+
+        $scope.conditionType = GlobalEnum.EnumConditionType;
 
         $scope.categoryType = new kendo.data.DataSource ({
             transport: {

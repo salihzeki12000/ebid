@@ -63,3 +63,7 @@ getCategory:
 ProductAdd:
     path:     /product/add
     defaults: { _controller: 'ebid\Controller\ProductController::addAction'}
+
+ProductInfo:
+    path:     /product/item/{itemId}
+    defaults: { _controller: 'ebid\Controller\ProductController::itemAction'}

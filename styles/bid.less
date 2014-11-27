@@ -12,16 +12,30 @@
 	box-shadow: 2px 2px 5px #eee;
 }
 
+#productImg{
+  max-width: 450px;
+  max-height: 350px;
+}
+
+.productImgBox{
+  width: 450px;
+  height: 350px;
+  border: #ccc 1px solid;
+  overflow: hidden;
+}
+
 .img_gallery{
 	margin-top:10px;
+  width: 450px;
 }
-
-.img_gallery img{
-	width: 96px;
+.imgView{
+  width: 100px!important;
+  height: 82px!important;
+  text-align: center;
 }
-
-.img_gallery a{
-	float:left;
+.imgView img{
+  max-width: 90px;
+  max-height: 72px;
 }
 
 .nomargin{
@@ -70,11 +84,15 @@ to { opacity: 1; }
 }
 
 .tab-content .content{
-	padding:0 20px;
+	padding:20px;
 	border: 1px solid #ddd;
 	border-width: 1px;
 	border-top-color: transparent;
 	box-shadow: 2px 2px 5px #eee;
+}
+
+.bid-history{
+  height: 270px;
 }
 
 /******************************* 404 page style *******************************/
@@ -96,4 +114,8 @@ to { opacity: 1; }
 
 .nopage-button{
 	margin-top: 10px;
+}
+
+.slick-prev:before, .slick-next:before {
+  color:gray !important;
 }

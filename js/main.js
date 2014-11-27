@@ -10,13 +10,18 @@ requirejs.config({
 	paths: {
 		jquery : '../vendor/jquery/dist/jquery',
 		angular : '../vendor/angular/angular',
-		angularplugin : '../vendor/angular',
+        angular_route: '../vendor/angular-route/angular-route',
+        angular_animate: '../vendor/angular-animate/angular-animate',
+        angular_sanitize: '../vendor/angular-sanitize/angular-sanitize',
+		angular_messages : '../vendor/angular-messages/angular-messages',
 		bootstrap : '../vendor/bootstrap/dist/js/bootstrap',	
 		kendo : ['../vendor/kendo/src/js/kendo.all', '../vendor/kendo/js/kendo.all.min'],
 		elevatezoom : '../vendor/elevatezoom/jquery.elevatezoom',
 		bootstrapHoverDropdown : '../vendor/bootstrap-hover-dropdown/bootstrap-hover-dropdown',
 		fancybox : '../vendor/fancybox/source/jquery.fancybox',
 		wow : '../vendor/wow/dist/wow',
+        slickcarousel : '../vendor/slick-carousel/slick/slick',
+        angular_slick : '../vendor/angular-slick/dist/slick'
 	},
 	shim:{
 		'angular' : {
@@ -26,15 +31,18 @@ requirejs.config({
 		'jquery' : {
 			exports: '$'
 		},
-		'angularplugin/angular-route' :{
+		'angular_route' :{
 			deps: ['jquery', 'angular']
 		},
-		'angularplugin/angular-animate':{
+		'angular_animate':{
 			deps: ['jquery', 'angular']
 		},
-		'angularplugin/angular-messages':{
+		'angular_messages':{
 			deps: ['jquery', 'angular']
 		},
+        'angular_sanitize':{
+            deps: ['jquery', 'angular']
+        },
 		'kendo' :{
 			deps: ['jquery', 'angular']
 		},
@@ -49,7 +57,13 @@ requirejs.config({
 		},
 		'fancybox':{
 			deps: ['jquery']
-		}
+		},
+        'slickcarousel':{
+            deps: ['jquery']
+        },
+        'angular_slick':{
+            deps: ['jquery', 'angular', 'slickcarousel']
+        }
 	}
 });
 

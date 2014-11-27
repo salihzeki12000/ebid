@@ -19,8 +19,9 @@ class AuthController extends baseController
             $res = true;
             $user = $securityContext->getToken()->getUser();
             $username = $user->getUsername();
+            $id = $user->getId();
         }
-        $result = new Result(Result::SUCCESS, "", array( 'islogin' => $res, 'username'=> $username));
+        $result = new Result(Result::SUCCESS, "", array( 'islogin' => $res, 'username'=> $username, 'id'=> $id));
         return parent::renderJSON($result);
     }
     

@@ -18,7 +18,20 @@ class baseEntity {
                         $this->{$key}[] = $item;
                     }
                 }else {
-                    $this->{$key} = addslashes($Value);
+                    $this->{$key} = $Value;
+                }
+            }
+    }
+
+    public function setFromDb($data){
+        foreach ($data AS $key => $Value)
+            if(property_exists($this, $key)){
+                if(is_array($Value)){
+                    foreach ($Value as $item) {
+                        $this->{$key}[] = $item;
+                    }
+                }else {
+                    $this->{$key} = stripslashes($Value);
                 }
             }
     }

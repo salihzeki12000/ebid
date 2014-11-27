@@ -1,6 +1,7 @@
 DROP TABLE if EXISTS `IAD_User`;
 DROP TABLE if EXISTS `IAD_Category`;
 DROP TABLE if EXISTS `IAD_Product`;
+DROP TABLE if EXISTS `IAD_Bid`;
 
 CREATE TABLE `IAD_User` (
   `uid` INT NOT NULL AUTO_INCREMENT,
@@ -25,12 +26,12 @@ CREATE TABLE `IAD_Category` (
 
 CREATE TABLE `IAD_Product` (
   `pid` INT NOT NULL  AUTO_INCREMENT,
-  `pname` VARCHAR(50) NOT NULL,
+  `pname` VARCHAR(255) NOT NULL,
   `description` TEXT NULL,
   `startPrice` DECIMAL(8,2) NOT NULL,
   `expectPrice` DECIMAL(8,2) NULL,
   `buyNowPrice` DECIMAL(8,2) NULL,
-  `defaultImage` VARCHAR(45) NULL,
+  `defaultImage` VARCHAR(255) NULL,
   `imageLists` TEXT NULL,
   `startTime` DATETIME NOT NULL,
   `endTime` DATETIME NOT NULL,
@@ -39,6 +40,7 @@ CREATE TABLE `IAD_Product` (
   `shippingCost` DECIMAL(6,2),
   `auction` TINYINT NULL,
   `seller` INT,
+  `condition` INT NOT NULL,
   PRIMARY KEY (`pid`),
   CONSTRAINT `categoryId`
   FOREIGN KEY (`categoryId`)
@@ -69,7 +71,7 @@ INSERT INTO `IAD_Category` (`categoryId`, `cname`, `parentId`, `childrenId`) VAL
 -- -----------------------------------------------------
 -- Table `IAD_Final_Project`.`bid`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `IAD_Bid` (
+CREATE TABLE `IAD_Bid` (
   `uid` INT NOT NULL,
   `pid` INT NOT NULL,
   `bidPrice` DECIMAL(8,2) NOT NULL,
