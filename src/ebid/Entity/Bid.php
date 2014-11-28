@@ -10,9 +10,13 @@ namespace ebid\Entity;
 
 
 class Bid extends baseEntity {
+    const WIN = 0;
+    const NOTWIN = 1;
+
     public $bid;
     public $uid;
     public $pid;
     public $bidPrice;
     public $bidTime;
+    public $status;
 } 

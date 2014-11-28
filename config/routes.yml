@@ -1,6 +1,6 @@
 default:
     path:     /
-    defaults: { _controller: 'ebid\Controller\testController::foo1Action' }
+    defaults: { _controller: 'ebid\Controller\IndexController::DefaultAction' }
 
 islogin:
     path:     /auth/islogin
@@ -67,3 +67,7 @@ ProductAdd:
 ProductInfo:
     path:     /product/item/{itemId}
     defaults: { _controller: 'ebid\Controller\ProductController::itemAction'}
+
+ProductBid:
+    path:     /product/item/{itemId}/bid/{price}
+    defaults: { _controller: 'ebid\Controller\ProductController::bidAction'}

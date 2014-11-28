@@ -47,7 +47,7 @@
 								<b class="timeReminder">7m 34s</b>
 							</div>
 							<div class="col-md-4">
-								[ <a href="#">{{bidnumber}} bids</a>]
+								[ <a href="#">{{price.bidNumber}} bids</a>]
 							</div>
 						</div>
 					</div>
@@ -56,15 +56,15 @@
 							<div class="col-md-4 text">Current bid:</div>
 							<div class="col-md-4">
 								<div>
-									<b class="pricecurrency">US {{priceCurrency}}</b>
+									<b class="pricecurrency">US {{getPriceCurrency(price.currentPrice)}}</b>
 								</div>
 								<div class="list-item">
 									<input id="bidTextbox" type="text" kendo-numeric-text-box
-										k-step="500" k-min="{{bidPrice}}" k-options="{format: 'c'}"
-										k-ng-model="bidPrice" style="width: 100px" />
+										k-options="{format: 'c'}"
+										k-ng-model="product.bidPrice" style="width: 100px" />
 								</div>
 								<div class="list-item small-text">Enter US
-									{{bidPriceCurrency}} or more</div>
+									{{getPriceCurrency(product.userMinPrice)}} or more</div>
 
 							</div>
 							<div class="col-md-4" ng-if="userId != product.seller.uid">

@@ -75,9 +75,6 @@ class MySQLParser
         
         $sql .= "(" . implode(",", $keys) . ") VALUES (" . implode(",", $values) . ")";
         $this->mysql->executeSQL($sql);
-        if(mysql_errno()){
-            throw new Exception("MySQL error ". mysql_errno() . ": ". mysql_error());
-        }
     }
 
     /**
@@ -108,11 +105,8 @@ class MySQLParser
                 }
             }
         }
-        $sql .= implode(",", $field) . "WHERE $searchId=". $this->{$searchId};
+        $sql .= implode(",", $field) . "WHERE $searchId=". $entity->{$searchId};
         $this->mysql->executeSQL($sql);
-        if(mysql_errno()){
-            throw new Exception("MySQL error ". mysql_errno() . ": ". mysql_error());
-        }
     }
 
     /**
@@ -125,7 +119,8 @@ class MySQLParser
     public function updateSpecific($entity, $include = array(), $restrict = array(), $searchId = "id"){
         $field = array();
         $sql = "UPDATE ". _table($this->parse_classname(get_class($entity))) . " SET ";
-        foreach ($include AS $key => $value){
+        foreach ($entity AS $key => $value){
+            if(!in_array($key, $include)) continue;
             if(is_array($value)){
                 $value = json_encode($value);
             }
@@ -141,11 +136,8 @@ class MySQLParser
                 $field[] = "$key = '$value'";
             }
         }
-        $sql .= implode(",", $field) . "WHERE $searchId=". $this->{$searchId};
+        $sql .= implode(",", $field) . " WHERE $searchId=". $entity->{$searchId};
         $this->mysql->executeSQL($sql);
-        if(mysql_errno()){
-            throw new Exception("MySQL error ". mysql_errno() . ": ". mysql_error());
-        }
     }
 
     /**
@@ -154,8 +146,12 @@ class MySQLParser
      * @param string $searchId delete condition
      */
     public function delete($entity, $searchId = "id"){
-        $sql = "DELETE FROM ". _table($this->parse_classname(get_class($entity))) . "WHERE $searchId=". $this->{$searchId};
+        $sql = "DELETE FROM ". _table($this->parse_classname(get_class($entity))) . "WHERE $searchId=". $entity->{$searchId};
         $this->mysql->executeSQL($sql);
+    }
+
+    public function query($sql){
+        return $this->mysql->executeSQLASSOCResult($sql);
     }
     
     function parse_classname($name){

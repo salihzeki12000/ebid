@@ -239,12 +239,14 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 		new WOW().init();
 	}]);
 
-	ebidController.controller('itemController',['$scope','$http', '$routeParams', '$compile', '$sce', '$firebase','GlobalEnum',function($scope, $http, $routeParams, $compile, $sce, $firebase, GlobalEnum){
+	ebidController.controller('itemController',['$scope','$http', '$location', '$routeParams', '$compile', '$sce', '$firebase','GlobalEnum',function($scope, $http,$location, $routeParams, $compile, $sce, $firebase, GlobalEnum){
         kendo.culture("en-US");
         $scope.itemId = $routeParams.itemId;
+
         var ref = new Firebase("https://ebid.firebaseio.com/bid/item/" +$scope.itemId );
         var sync = $firebase(ref);
         var syncObject = sync.$asObject();
+        syncObject.$bindTo($scope, "price");
 
         $http({
             method: 'GET',
@@ -258,13 +260,18 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                 if($scope.product.shippingCost == 0){
                     $scope.product.shippingCost = "Free";
                 }
-                $scope.toBigImg = function(image){
-                    return image.replace('$_12.JPG', '$_57.JPG');
-                };
-                $scope.userId = $scope.$parent.id;
 
+                $scope.userId = $scope.$parent.id;
+                //sync.$set($scope.product);
                 //$scope.product.description = $sce.trustAsHtml($scope.product.description);
         });
+
+        $scope.toBigImg = function(image){
+            if(image){
+                if(image.match(/\$_[\d]+\.JPG/))
+                return image.replace(/\$_[\d]+\.JPG/, '$_57.JPG');
+            }
+        };
         var marginPic = function(e){
             var width = e.width();
             var height = e.height();
@@ -290,6 +297,25 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
             onZoomedImageLoaded : marginPic,
             onImageSwapComplete : marginPic
         };
+        $scope.getIncPrice = function (price){
+            if(price < 10){
+                return 0.5;
+            }else if(price < 50){
+                return 1;
+            }else if(price < 100){
+                return 2;
+            }else if(price < 300){
+                return 5;
+            }else if(price < 1000){
+                return 10;
+            }else if(price < 10000){
+                return 50;
+            }else if(price < 50000){
+                return 500;
+            }else{
+                return 1000;
+            }
+        };
         //recompile productImg
         $scope.$watch(
             function () { return $('#productGallery').html() },
@@ -298,20 +324,86 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                     $compile(angular.element("#productImg"))($scope);
             }, true);
 
-		$scope.price = 29999.99;
-		$scope.bidPrice = $scope.price + 500;
-		$scope.priceCurrency = kendo.toString($scope.price, "c");
-		$scope.bidPriceCurrency = kendo.toString($scope.bidPrice, "c");
-		$scope.bidnumber = 0;
+        $scope.$watch(
+            'price.currentPrice',
+            function(newval, oldval){
+                //current price change
+                if(newval && oldval){
+                    if($scope.product.userMinPrice <= newval){
+                        $scope.setUserMinPrice(newval);
+                        //$scope.InfoNotification.show("Your price is the highest price right now. happy bidding.", "success");
+                    }else{
+                        //$scope.InfoNotification.show("Your price is out of bidding. Please enter a higher price.", "error");
+                    }
+                }
+            }, true);
+
+
+        $scope.$watch(
+            'price.bidNumber',
+            function(newval, oldval){
+                //current price change
+                if(newval == 1 && $scope.product.userMinPrice == $scope.price.currentPrice){
+                    $scope.setUserMinPrice($scope.product.userMinPrice);
+                }
+            }, true);
+
+        $scope.setUserMinPrice = function(currentPrice){
+            var inc = $scope.getIncPrice(currentPrice);
+            $scope.product.userMinPrice = currentPrice + inc;
+            $(".pricecurrency").css("opacity", 0);
+            $(".pricecurrency").fadeTo('slow', 1);
+        };
+
+        $scope.$watch(
+            'product.userMinPrice',
+            function(newval, oldval){
+                if(newval){
+                    $scope.product.bidPrice = newval;
+                    $("#bidTextbox").data("kendoNumericTextBox").value(newval);
+                    $("#bidTextbox").data("kendoNumericTextBox").min(newval);
+                    $("#bidTextbox").data("kendoNumericTextBox").step($scope.getIncPrice(newval));
+                }
+            }, true);
+
+/*
+        $scope.$watch(
+            'price.increase',
+            function(newval, oldval){
+                if(newval){
+                    $("#bidTextbox").data("kendoNumericTextBox").step($scope.price.increase);
+                }
+            }, true);
+*/
+        $scope.getPriceCurrency = function(price){
+            return kendo.toString(price, "c");
+        };
+
 		$scope.placebid = function(){
-			$scope.bidnumber++;
-			$scope.price = $scope.bidPrice;
-			$scope.bidPrice = $scope.price + 500;
-			$scope.priceCurrency = kendo.toString($scope.price, "c");
-			$scope.bidPriceCurrency = kendo.toString($scope.bidPrice, "c");
-			$(".pricecurrency").css("opacity", 0);
-			$(".pricecurrency").fadeTo('slow', 1);
-			$("#bidTextbox").data("kendoNumericTextBox").min($scope.bidPrice);
+            if(!$scope.userId){
+                //$('#loginModal').modal();
+                $location.path('/auth/login');
+                return;
+            }
+            if($scope.userId == $scope.product.seller.uid){
+                $scope.InfoNotification.show("You can't bid your product.", "error");
+                return;
+            }
+            $http({
+                method: 'GET',
+                url: BASEURL + '/product/item/' + $scope.itemId + '/bid/' + $scope.product.bidPrice
+            })
+            .success(function(data, status, headers, config) {
+                    if(data.type == SUCCESS){
+                        $scope.product.userMinPrice = $scope.product.bidPrice + $scope.getIncPrice($scope.product.bidPrice);
+                        $scope.InfoNotification.show(data.messages, "success");
+                    }else{
+                        $scope.InfoNotification.show(data.message, "error");
+                    }
+            })
+            .error(function(data, status, headers, config) {
+                    $scope.InfoNotification.show(data.message, "error");
+            });
 		};
 
 		var timer;

@@ -31,6 +31,7 @@ CREATE TABLE `IAD_Product` (
   `startPrice` DECIMAL(8,2) NOT NULL,
   `expectPrice` DECIMAL(8,2) NULL,
   `buyNowPrice` DECIMAL(8,2) NULL,
+  `currentPrice` DECIMAL(8,2) NULL,
   `defaultImage` VARCHAR(255) NULL,
   `imageLists` TEXT NULL,
   `startTime` DATETIME NOT NULL,
@@ -41,6 +42,7 @@ CREATE TABLE `IAD_Product` (
   `auction` TINYINT NULL,
   `seller` INT,
   `condition` INT NOT NULL,
+  `status` INT NULL,
   PRIMARY KEY (`pid`),
   CONSTRAINT `categoryId`
   FOREIGN KEY (`categoryId`)
@@ -48,7 +50,6 @@ CREATE TABLE `IAD_Product` (
   CONSTRAINT `sellerConst`
   FOREIGN KEY (`seller`)
   REFERENCES `IAD_User` (`uid`)
-
 )
   ENGINE = InnoDB;
 
@@ -77,6 +78,7 @@ CREATE TABLE `IAD_Bid` (
   `pid` INT NOT NULL,
   `bidPrice` DECIMAL(8,2) NOT NULL,
   `bidTime` DATETIME NOT NULL,
+  `status` INT NOT NULL,
   INDEX `pid_idx` (`pid` ASC),
   PRIMARY KEY (`bid`),
   CONSTRAINT `uid`

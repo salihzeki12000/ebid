@@ -68,6 +68,12 @@ class baseController
             throw new Exception("You need to login before use this feature.");
         }
     }
+
+    public function checkValid($entity, $data){
+        if(!$entity->isValid($data)){
+            throw new Exception("post data is not valid.");
+        }
+    }
     
 }
 

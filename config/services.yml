@@ -22,4 +22,10 @@ services:
         arguments: [@MySQLParser]
     MessageDigestPasswordEncoder:
         class:     Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder
-        arguments: ["sha512", true, 5000]                   
+        arguments: ["sha512", true, 5000]
+    Firebase:
+        class:     ebid\firebase\Firebase
+        arguments: [%firebase_url%, @FirebaseTokeGenerator]
+    FirebaseTokeGenerator:
+        class:     ebid\firebase\FirebaseTokenGenerator
+        arguments: [%firebase_API%]

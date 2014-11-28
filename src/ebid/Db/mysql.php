@@ -64,7 +64,7 @@ namespace ebid\Db;
         public function executeSQL($dbquery) {
             $result = mysql_query($dbquery);
             if(mysql_errno()){
-                throw new Exception("MySQL error ". mysql_errno() . ": ". mysql_error());
+                throw new \Exception("MySQL error ". mysql_errno() . ": ". mysql_error());
             }
             return $result;
         }
