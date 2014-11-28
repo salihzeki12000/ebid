@@ -248,6 +248,10 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         var syncObject = sync.$asObject();
         syncObject.$bindTo($scope, "price");
 
+        var hisref = new Firebase("https://ebid.firebaseio.com/bid/history/" +$scope.itemId );
+        var hissync = $firebase(hisref);
+        $scope.histories = hissync.$asArray();
+
         $http({
             method: 'GET',
             url: BASEURL + '/product/item/' + $scope.itemId
@@ -331,13 +335,9 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                 if(newval && oldval){
                     if($scope.product.userMinPrice <= newval){
                         $scope.setUserMinPrice(newval);
-                        //$scope.InfoNotification.show("Your price is the highest price right now. happy bidding.", "success");
-                    }else{
-                        //$scope.InfoNotification.show("Your price is out of bidding. Please enter a higher price.", "error");
                     }
                 }
             }, true);
-
 
         $scope.$watch(
             'price.bidNumber',
@@ -360,9 +360,13 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
             function(newval, oldval){
                 if(newval){
                     $scope.product.bidPrice = newval;
-                    $("#bidTextbox").data("kendoNumericTextBox").value(newval);
-                    $("#bidTextbox").data("kendoNumericTextBox").min(newval);
-                    $("#bidTextbox").data("kendoNumericTextBox").step($scope.getIncPrice(newval));
+                    var textBox = $("#bidTextbox").data("kendoNumericTextBox");
+                    if(textBox){
+                        textBox.value(newval);
+                        textBox.min(newval);
+                        textBox.step($scope.getIncPrice(newval));
+                    }
+
                 }
             }, true);
 
@@ -389,13 +393,14 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                 $scope.InfoNotification.show("You can't bid your product.", "error");
                 return;
             }
+            $scope.product.userMinPrice = $scope.product.bidPrice + $scope.getIncPrice($scope.product.bidPrice);
             $http({
                 method: 'GET',
                 url: BASEURL + '/product/item/' + $scope.itemId + '/bid/' + $scope.product.bidPrice
             })
             .success(function(data, status, headers, config) {
                     if(data.type == SUCCESS){
-                        $scope.product.userMinPrice = $scope.product.bidPrice + $scope.getIncPrice($scope.product.bidPrice);
+                        $scope.product.isBid = true;
                         $scope.InfoNotification.show(data.messages, "success");
                     }else{
                         $scope.InfoNotification.show(data.message, "error");

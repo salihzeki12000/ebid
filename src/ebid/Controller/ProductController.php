@@ -72,17 +72,17 @@ class ProductController extends baseController {
 
 
         //set current price and bid number to firebase
-        global $session;
-        $ret = $session->get('bid/item/' . $itemId);
-        if($ret == null) {
+        //global $session;
+        //$ret = $session->get('bid/item/' . $itemId);
+        //if($ret == null) {
             //fetch current price.
-            $firebase = $this->container->get('Firebase');
-            $ret = $firebase->get('bid/item/' . $itemId);
-            if ($ret == null) {
+            //$firebase = $this->container->get('Firebase');
+            //$ret = $firebase->get('bid/item/' . $itemId);
+            //if ($ret == null) {
                 $this->updateFirebase($itemId, $product->currentPrice);
-            }
-            $session->set('bid/item/' . $itemId, $ret);
-        }
+            //}
+            //$session->set('bid/item/' . $itemId, $ret);
+        //}
         //get userminPrice
         //check is login?
         global $session;
@@ -91,6 +91,8 @@ class ProductController extends baseController {
         if($user == null || $user == "anon."){
             //not login
             $product->userMinPrice = $product->currentPrice + $forceInc;
+            //check whether user bid this product
+            $product->isBid = false;
         }else{
             $bid = new Bid();
             //get bid record
@@ -102,11 +104,14 @@ class ProductController extends baseController {
                 $maxPrice = ($maxPrice > $product->currentPrice)? $maxPrice : $product->currentPrice;
                 $minPrice = $maxPrice + $this->getIncPrice($maxPrice);
                 $product->userMinPrice = $minPrice;
+                $product->isBid = true;
             }else{
                 //no bid record
                 $product->userMinPrice = $product->currentPrice + $forceInc;
+                $product->isBid = false;
             }
         }
+
         $result = new Result(Result::SUCCESS, "get product successfully.", $product);
         return new Response(json_encode($result));
     }
@@ -166,9 +171,11 @@ class ProductController extends baseController {
         }
 
         $isWinner = true;
+        $history= null;
         if($higherRecord == null){
             //no bid record
             $product->currentPrice = $minPrice;
+            $history[] = array('username'=> $user->username, 'price' => floatval($product->currentPrice), 'post' => date('Y-m-d H:i:s', time()));
         }else{
             //highest price is the same user
             if($higherRecord->uid == $user->uid){
@@ -177,18 +184,28 @@ class ProductController extends baseController {
                 $higherRecord->status = Bid::NOTWIN;
                 $MySQLParser->updateSpecific($higherRecord, array('status'), array('status'), 'bid');
             }else{
+                $preHigherUser = new User($higherRecord->uid, "higheruser");
+                $res = $MySQLParser->select($preHigherUser, ' uid = ' . $higherRecord->uid);
+                $res = $res[0];
+                $preHigherUser->set($res);
+
                 //if price is greater than $higherRecord
                 if($price > $higherRecord->bidPrice){
                     $product->currentPrice = $higherRecord->bidPrice + $this->getIncPrice($higherRecord->bidPrice);
+                    $history[] = array('username'=> $user->username, 'price' => floatval($product->currentPrice), 'post' => date('Y-m-d H:i:s', time()));
                     //update higherRecord to not win
                     $higherRecord->status = Bid::NOTWIN;
                     $MySQLParser->updateSpecific($higherRecord, array('status'), array('status'), 'bid');
                 }else{
                     //price is lower or equal than higherRecord
                     if($price == $higherRecord->bidPrice){
+                        $history[] = array('username'=> $user->username, 'price' => floatval($product->currentPrice), 'post' => date('Y-m-d H:i:s', time()));
+                        $history[] = array('username'=> $preHigherUser->username, 'price' => floatval($higherRecord->bidPrice), 'post' => date('Y-m-d H:i:s', time()));
                         $product->currentPrice = $price;
                     }else{
+                        $history[] = array('username'=> $user->username, 'price' => floatval($product->currentPrice), 'post' => date('Y-m-d H:i:s', time()));
                         $product->currentPrice = $price + $this->getIncPrice($price);
+                        $history[] = array('username'=> $preHigherUser->username, 'price' => floatval($product->currentPrice), 'post' => date('Y-m-d H:i:s', time()));
                     }
                     $isWinner = false;
                 }
@@ -213,6 +230,14 @@ class ProductController extends baseController {
         //update firebase
         $this->updateFirebase($itemId, $product->currentPrice);
 
+        //update bid list
+        if($history != null){
+            $firebase = $this->container->get('Firebase');
+            foreach($history as $val){
+                $firebase->push('bid/history/' . $itemId, $val);
+            }
+        }
+
         $result = new Result(Result::SUCCESS, "bid post successfully.");
         return new Response(json_encode($result));
     }
@@ -222,7 +247,17 @@ class ProductController extends baseController {
         $sql = 'SELECT COUNT(*) FROM ' . _table('Bid') .' WHERE pid = '. $itemId;
         $res = $MySQLParser->query($sql);
         $bidNumber = intval($res[0]['COUNT(*)']);
-        $priceList = array('currentPrice' => floatval($currentPrice), 'bidNumber' => $bidNumber);
+        $sql = 'SELECT * FROM ' . _table('Bid') .' WHERE pid = '. $itemId .' ORDER BY bidPrice DESC, status ASC  LIMIT 0,1';
+        $res = $MySQLParser->query($sql);
+        if(count($res) > 0){
+            $res = $res[0];
+            $bid = new Bid();
+            $bid->set($res);
+            $winnerId = intval($bid->uid);
+        }else{
+            $winnerId = -1;
+        }
+        $priceList = array('currentPrice' => floatval($currentPrice), 'bidNumber' => $bidNumber, 'winner' => $winnerId);
         $firebase = $this->container->get('Firebase');
         $ret = $firebase->set('bid/item/' . $itemId, $priceList);
     }

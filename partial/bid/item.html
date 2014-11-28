@@ -1,6 +1,14 @@
 <div class="row">
 	<div class="col-md-12">
 		<h1 class="title">{{product.pname}}</h1>
+        <div ng-if="product.isBid == true && price.winner != userId" class="alert alert-warning alert-dismissible top10 messagebox" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <strong>Warning!</strong> Your are out of bidding. Please enter a higher price.
+        </div>
+        <div ng-if="product.isBid == true && price.winner == userId" class="alert alert-success alert-dismissible top10 messagebox" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <strong>Success!</strong> Congratulation, your price is the highest price right now. Happy bidding.
+        </div>
 	</div>
 </div>
 <hr />
@@ -47,7 +55,7 @@
 								<b class="timeReminder">7m 34s</b>
 							</div>
 							<div class="col-md-4">
-								[ <a href="#">{{price.bidNumber}} bids</a>]
+								[ <a href="javascript:void(0);">{{price.bidNumber}} bids</a>]
 							</div>
 						</div>
 					</div>
@@ -126,7 +134,16 @@
                         <strong>Bid History</strong>
                     </div>
                     <div class="panel-body">
-                        <div class="list-item">{{product.seller.username}}</div>
+                        <table class="table table-hover">
+                            <tr>
+                                <th>User</th>
+                                <th>Price</th>
+                            </tr>
+                            <tr ng-repeat="history in histories | orderBy: '-' | limitTo:4 ">
+                                <td>{{history.username}}</td>
+                                <td>{{history.price}}</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
 			</div>
