@@ -7,6 +7,7 @@
  */
 define("controllers", ['angular','kendo','bootstrap'], function(angular){
 	var BASEURL = 'index.php';
+    var FIREBASEURL = 'https://ebid.firebaseio.com';
 	var SUCCESS = 0;
 	var FAILURE = 1;
 	var LOGIN_REQUIRE = 2;
@@ -265,12 +266,12 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         kendo.culture("en-US");
         $scope.itemId = $routeParams.itemId;
 
-        var ref = new Firebase("https://ebid.firebaseio.com/bid/item/" +$scope.itemId );
+        var ref = new Firebase(FIREBASEURL + "/bid/item/" +$scope.itemId );
         var sync = $firebase(ref);
         var syncObject = sync.$asObject();
         syncObject.$bindTo($scope, "price");
 
-        var hisref = new Firebase("https://ebid.firebaseio.com/bid/history/" +$scope.itemId );
+        var hisref = new Firebase(FIREBASEURL + "/bid/history/" +$scope.itemId );
         var hissync = $firebase(hisref);
         $scope.histories = hissync.$asArray();
 
