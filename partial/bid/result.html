@@ -1,0 +1,63 @@
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="title">{{product.pname}}</h1>
+        <div ng-if="product.hasWinner == true && product.userHasBid == true && product.WinnerId == userId" class="alert alert-success alert-dismissible top10 messagebox" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <strong>Success!</strong> Congratulations, it's all yours!
+        </div>
+        <div ng-if="product.hasWinner == true && product.userHasBid == true && product.WinnerId != userId" class="alert alert-info alert-dismissible top10 messagebox" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <strong>Sorry!</strong> You didn't win. Try next time.
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2 padding20">
+        <div class="resImageBox">
+            <img ng-src="{{product.defaultImage}}" />
+            <img ng-if="product.isEnd == true" id="bidResult" ng-src="{{ product.productStatusImg }}" />
+        </div>
+    </div>
+    <div class="col-md-5 padding20">
+        <div class="row top20">
+            <div class="col-md-4 text">Item condition:</div>
+            <div class="col-md-8">
+                <b>{{product.condition}}</b>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 text">Ended:</div>
+            <div class="col-md-8">
+                {{product.endTime | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 text">Price:</div>
+            <div class="col-md-8">
+                <b class="pricecurrency">US {{getPriceCurrency(product.currentPrice)}}</b>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 text">Shipping:</div>
+            <div class="col-md-8">
+                <b>{{product.shippingCost}}</b> {{product.shippingType}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 text">Seller:</div>
+            <div class="col-md-8">
+                {{product.seller.username}}
+            </div>
+        </div>
+    </div>
+    <div ng-if="product.userHasBid == true" class="col-md-5 center">
+        <img class="statusImg" ng-src="{{product.userStatusImg}}" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-offset-4 col-md-4">
+        <button ng-if="product.isEnd == true && product.WinnerId == userId" type="button" class="btn btn-success">Pay Now</button>
+        <button ng-if="product.isEnd == false"  type="button" class="btn btn-success" ng-click="backtoproduct()">Back to Product</button>
+        <button type="button" class="btn btn-info" ng-click="backtohome()">Back to Home</button>
+    </div>
+</div>

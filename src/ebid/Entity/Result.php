@@ -8,6 +8,7 @@ class Result
     const LOGIN_REQUIRE = 2;
     const DUPLICATE = 3;
     const INTERNAL_ERROR = 4;
+    const EXPIRE = 5;
     public $type;
     public $message;
     public $data;

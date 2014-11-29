@@ -23,7 +23,9 @@ requirejs.config({
         slickcarousel : '../vendor/slick-carousel/slick/slick',
         angular_slick : '../vendor/angular-slick/dist/slick',
         firebase : '../vendor/firebase/firebase',
-        angularfire : '../vendor/angularfire/dist/angularfire'
+        angularfire : '../vendor/angularfire/dist/angularfire',
+        momentjs : '../vendor/moment/moment',
+        "angular-moment" : '../vendor/angular-moment/angular-moment'
 	},
 	shim:{
 		'angular' : {
@@ -68,6 +70,13 @@ requirejs.config({
         },
         'angularfire':{
             deps: ['angular', 'firebase']
+        },
+        'angular-moment':{
+            deps: ['jquery', 'angular', 'momentjs']
+        },
+        'momentjs':{
+            deps: ["jquery"],
+            exports: 'moment'
         }
 	}
 });

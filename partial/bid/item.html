@@ -20,6 +20,7 @@
                  data-zoom-image="{{toBigImg(product.defaultImage)}}"
                  ng-elevate-zoom
                  k-option='ImageZoomConfig' />
+            <
 		</div>
 
 		<div id="productGallery" class="img_gallery">
@@ -52,7 +53,7 @@
 						<div class="row">
 							<div class="col-md-4 text">Time left:</div>
 							<div class="col-md-4">
-								<b class="timeReminder">7m 34s</b>
+								<b id="timeReminder">{{product.remaining}}</b>
 							</div>
 							<div class="col-md-4">
 								[ <a href="javascript:void(0);">{{price.bidNumber}} bids</a>]

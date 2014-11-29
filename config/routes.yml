@@ -71,3 +71,7 @@ ProductInfo:
 ProductBid:
     path:     /product/item/{itemId}/bid/{price}
     defaults: { _controller: 'ebid\Controller\ProductController::bidAction'}
+
+ProductResult:
+    path:     /product/item/{itemId}/result
+    defaults: { _controller: 'ebid\Controller\ProductController::resultAction'}

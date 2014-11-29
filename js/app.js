@@ -7,8 +7,8 @@
  */
 'use strict';
 
-define("app",['angular','controllers', 'directives','angular_route','angular_animate','kendo', 'angular_messages', 'angular_sanitize', 'angular_slick', 'angularfire'], function(angular){
-	var app = angular.module('ebid', ['ngRoute','kendo.directives','ebid/controller', 'ebid/directives', 'ngAnimate','ngMessages','ngSanitize', 'slick', 'firebase']);
+define("app",['angular','controllers', 'directives','angular_route','angular_animate','kendo', 'angular_messages', 'angular_sanitize', 'angular_slick', 'angularfire', 'angular-moment'], function(angular){
+    var app = angular.module('ebid', ['ngRoute','kendo.directives','ebid/controller', 'ebid/directives', 'ngAnimate','ngMessages','ngSanitize', 'slick', 'firebase', 'angularMoment']);
 	app.constant('baseHref', '/ebid/index.html');
 	app.config(function($locationProvider) {
 		  $locationProvider.html5Mode({enabled: false, requireBase: true});
@@ -28,6 +28,10 @@ define("app",['angular','controllers', 'directives','angular_route','angular_ani
 				templateUrl: 'partial/bid/item.html',
 				controller: 'itemController'				
 			})
+            .when('/bid/item/:itemId/result',{
+                templateUrl: 'partial/bid/result.html',
+                controller: 'resultController'
+            })
 			.when('/bid/add', {
 				templateUrl: 'partial/bid/form.html',
 				controller: 'bidAddController'

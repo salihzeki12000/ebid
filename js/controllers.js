@@ -10,6 +10,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 	var SUCCESS = 0;
 	var FAILURE = 1;
 	var LOGIN_REQUIRE = 2;
+    var EXPIRE = 5;
 
 	var ebidController = angular.module('ebid/controller', []);
     ebidController.constant('GlobalEnum', {
@@ -239,7 +240,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 		new WOW().init();
 	}]);
 
-	ebidController.controller('itemController',['$scope','$http', '$location', '$routeParams', '$compile', '$sce', '$firebase','GlobalEnum',function($scope, $http,$location, $routeParams, $compile, $sce, $firebase, GlobalEnum){
+	ebidController.controller('itemController',['$scope','$http', '$location', '$routeParams', '$compile', '$sce', '$firebase', '$interval','GlobalEnum',function($scope, $http,$location, $routeParams, $compile, $sce, $firebase, $interval, GlobalEnum){
         kendo.culture("en-US");
         $scope.itemId = $routeParams.itemId;
 
@@ -257,6 +258,12 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
             url: BASEURL + '/product/item/' + $scope.itemId
         })
         .success(function(data, status, headers, config) {
+                if(data.type == FAILURE){
+                    $location.path('/nopage');
+                }
+                if(data.type == EXPIRE){
+                    $location.path('/bid/item/' + $scope.itemId + '/result');
+                }
                 $scope.product = data.data;
                 $scope.product.auction = EnumBidTypeName(GlobalEnum, $scope.product.auction);
                 $scope.product.condition = EnumConditionTypeName(GlobalEnum, $scope.product.condition);
@@ -266,6 +273,43 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                 }
 
                 $scope.userId = $scope.$parent.id;
+                var end = moment($scope.product.endTime);
+                var now = moment();
+                var duration = moment.duration(end.diff(now));
+                $scope.remaindays = duration.days();
+                $scope.remainhours = duration.hours();
+                if($scope.remaindays != 0){
+                    $scope.product.remaining = $scope.remaindays + " d " + $scope.remainhours + " h";
+                }else{
+                    $scope.remainminutes = duration.minutes();
+                    if($scope.remainhours != 0){
+                        $scope.product.remaining = $scope.remainhours + " h " + $scope.remainminutes + " m";
+                    }else{
+                        $scope.remainseconds = duration.seconds();
+                        if($scope.product.remainminutes != 0){
+                            $scope.product.remaining = $scope.remainminutes + " m " + $scope.remainseconds + " s";
+                        }else{
+                            $scope.product.remaining = $scope.remainseconds + " s ";
+                        }
+                        $('#timeReminder').addClass("hurry");
+                        $interval(function(){
+                            var now = moment();
+                            var duration = moment.duration(end.diff(now));
+                            if(duration < 0){
+                                $location.path('/bid/item/' + $scope.itemId + '/result');
+                            }
+                            $scope.remainminutes = duration.minutes();
+                            $scope.remainseconds = duration.seconds();
+                            if($scope.remainminutes != 0){
+                                $scope.product.remaining = $scope.remainminutes + " m " + $scope.remainseconds + " s";
+                            }else{
+                                $scope.product.remaining = $scope.remainseconds + " s ";
+                            }
+                        }, 1000);
+
+                    }
+                }
+
                 //sync.$set($scope.product);
                 //$scope.product.description = $sce.trustAsHtml($scope.product.description);
         });
@@ -423,12 +467,56 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 
 
 	}]);
-	ebidController.controller('categoryController',['$scope', function($scope){
+    ebidController.controller('resultController',['$scope','$http', '$location', '$routeParams','GlobalEnum', function($scope, $http, $location, $routeParams, GlobalEnum){
+        kendo.culture("en-US");
+        $scope.itemId = $routeParams.itemId;
+        $http({
+            method: 'GET',
+            url: BASEURL + '/product/item/' + $scope.itemId +'/result'
+        })
+        .success(function(data, status, headers, config) {
+                if(data.type == FAILURE){
+                    $location.path('/nopage');
+                }
+                $scope.product = data.data;
+                $scope.product.auction = EnumBidTypeName(GlobalEnum, $scope.product.auction);
+                $scope.product.condition = EnumConditionTypeName(GlobalEnum, $scope.product.condition);
+                $scope.product.shippingType = EnumShippingTypeName(GlobalEnum, $scope.product.shippingType);
+                if($scope.product.shippingCost == 0){
+                    $scope.product.shippingCost = "Free";
+                }
+                $scope.userId = $scope.$parent.id;
+                if($scope.product.isEnd == true && $scope.product.hasWinner == true){
+                    $scope.product.productStatusImg = "images/imgSold.png";
+                }else{
+                    $scope.product.productStatusImg = "images/imgEnded.png";
+                }
+
+                if($scope.product.isEnd == true && $scope.product.WinnerId == $scope.userId){
+                    $scope.product.userStatusImg = "images/winner.jpg";
+                }else{
+                    $scope.product.userStatusImg = "images/fail.gif";
+                }
+        });
+
+        $scope.getPriceCurrency = function(price){
+            return kendo.toString(price, "c");
+        };
+
+        $scope.backtoproduct = function(){
+            $location.path('/bid/item/' + $scope.itemId);
+        };
+
+        $scope.backtohome = function(){
+            $location.path('/');
+        };
+    }]);
+    ebidController.controller('categoryController',['$scope', function($scope){
 
 	}]);
 	ebidController.controller('userController',['$scope', function($scope){
 
-	}]);	
+	}]);
 	ebidController.controller('loginController',['$scope', '$location', function($scope, $location){
 		$('#login_Info_Panel').hide();
 		isLogin(function(){

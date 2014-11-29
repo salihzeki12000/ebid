@@ -49,7 +49,23 @@ class ProductController extends baseController {
         //get product result
         $product = new Product();
         $result = $MySQLParser->select($product, ' pid = ' .$itemId, NULL,array('pid','pname', 'description', 'buyNowPrice', 'currentPrice', 'startPrice','defaultImage', 'imageLists', 'endTime', 'categoryId', 'shippingType', 'shippingCost', 'auction', 'seller', '`condition`', 'status') );
+        if(count($result) == 0){
+            $result = new Result(Result::FAILURE, 'Can not find product.');
+            return new Response(json_encode($result));
+        }
         $result = $result[0];
+        $currentTime = time();
+        $endTime = strtotime($result['endTime']);
+        if(($endTime - $currentTime) <= 0){
+            $status = intval($result['status']);
+            if($status == Product::BIDDING || $status == Product::INITIAL){
+                $product->set($result);
+                $product->status = Product::END;
+                $MySQLParser->updateSpecific($product, array('status'), array('status'), 'pid');
+            }
+            $result = new Result(Result::EXPIRE, 'Current Product is expired.');
+            return new Response(json_encode($result));
+        }
         $result['imageLists'] = json_decode($result['imageLists']);
         $product->set($result);
         //get seller info
@@ -96,7 +112,7 @@ class ProductController extends baseController {
         }else{
             $bid = new Bid();
             //get bid record
-            $res = $MySQLParser->select($bid, ' uid = ' . $user->uid, 'bidPrice DESC');
+            $res = $MySQLParser->select($bid, ' uid = ' . $user->uid . ' AND pid = '. $itemId, 'bidPrice DESC');
             if(count($res) > 0){
                 //has bid record
                 $res = $res[0];
@@ -113,6 +129,85 @@ class ProductController extends baseController {
         }
 
         $result = new Result(Result::SUCCESS, "get product successfully.", $product);
+        return new Response(json_encode($result));
+    }
+
+    public function resultAction($itemId){
+        $itemId = intval($itemId);
+        $MySQLParser = $this->container->get('MySQLParser');
+        //get product result
+        $product = new Product();
+        $result = $MySQLParser->select($product, ' pid = ' .$itemId, NULL,array('pid','pname', 'description', 'buyNowPrice', 'currentPrice', 'startPrice','defaultImage', 'endTime', 'categoryId', 'shippingType', 'shippingCost', 'auction', 'seller', '`condition`', 'status') );
+        if(count($result) == 0){
+            $result = new Result(Result::FAILURE, 'Can not find product.');
+            return new Response(json_encode($result));
+        }
+        $result = $result[0];
+        $product->set($result);
+        //get seller info
+        $user = new User($product->seller, "seller");
+        $res = $MySQLParser->select($user, 'uid = ' . $user->uid, NULL, array('uid', 'username','email', 'state'));
+        $res = $res[0];
+        $product->seller = $res;
+
+        $currentTime = time();
+        $endTime = strtotime($product->endTime);
+        if(($endTime - $currentTime) > 0){
+            //filter null record
+            $product = (object) array_filter((array) $product);
+
+            $product->hasWinner = false;
+            $product->WinnerId = -1;
+            $product->userHasBid = false;
+            $product->isEnd = false;
+        }
+        else{
+            $status = intval($product->status);
+            if($status == Product::BIDDING || $status == Product::INITIAL){
+                $product->status = Product::END;
+                $MySQLParser->updateSpecific($product, array('status'), array('status'), 'pid');
+            }
+            //filter null record
+            $product = (object) array_filter((array) $product);
+
+            //get product bid record
+            $bid = new Bid();
+            $res = $MySQLParser->select($bid, ' pid = ' . $itemId, 'bidPrice DESC, status ASC');
+            if(count($res) > 0) {
+                $res = $res[0];
+                $higherRecord = new Bid();
+                $higherRecord->set($res);
+            }
+            if($higherRecord != null){
+                $product->hasWinner = true;
+                $product->WinnerId = intval($higherRecord->uid);
+                //get bid user
+                global $session;
+                $securityContext = $session->get("security_context");
+                $user = $securityContext->getToken()->getUser();
+                if($user == null || $user == "anon."){
+                    $product->userHasBid = false;
+                }else{
+                    //get user bid record
+                    $res = $MySQLParser->select($bid, ' uid = ' . $user->uid, 'bidPrice DESC');
+                    //has bid record
+                    if(count($res) > 0){
+                        $product->userHasBid = true;
+                    }
+                    else{
+                        $product->userHasBid = false;
+                    }
+                }
+            }else{
+                $product->hasWinner = false;
+                $product->WinnerId = -1;
+                $product->userHasBid = false;
+            }
+            $product->isEnd = true;
+        }
+
+
+        $result = new Result(Result::SUCCESS, "get product result successfully.", $product);
         return new Response(json_encode($result));
     }
 
@@ -163,7 +258,7 @@ class ProductController extends baseController {
         //update product price
 
         //get product bid record
-        $res = $MySQLParser->select($bid, ' pid = ' . $itemId, 'bidPrice DESC');
+        $res = $MySQLParser->select($bid, ' pid = ' . $itemId, 'bidPrice DESC, status ASC');
         if(count($res) > 0) {
             $res = $res[0];
             $higherRecord = new Bid();
