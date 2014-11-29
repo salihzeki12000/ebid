@@ -833,7 +833,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         $scope.product = {};
 
         $scope.dateTimeOptions = {
-            format: "yyyy/MM/dd hh:mm:ss"
+            format: "yyyy/MM/dd HH:mm"
         };
 
         $scope.submit = function(){

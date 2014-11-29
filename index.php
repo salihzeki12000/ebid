@@ -58,6 +58,8 @@ $isDebug = true;
 $root = __DIR__;
 $file = __DIR__ .'/cache/container.php';
 
+date_default_timezone_set("America/New_York");
+
 $containerConfigCache = new ConfigCache($file, $isDebug);
 
 if (!$isDebug && file_exists($file) && $containerConfigCache->isFresh()) {
