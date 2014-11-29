@@ -41,6 +41,14 @@ ajax_getProductById:
 ajax_getDetail:
     path:     /ajax/getDetail
     defaults: { _controller: 'ebid\Controller\AjaxController::getDetailAction'}
+
+ajax_commingsoonProductList:
+    path:     /ajax/commingsoonProductList/{size}
+    defaults: { _controller: 'ebid\Controller\AjaxController::commingsoonProductListAction', size: 10}
+
+ajax_hotBiddingProductList:
+    path:    /ajax/hotBiddingProductList/{size}
+    defaults: { _controller: 'ebid\Controller\AjaxController::hotBiddingProductListAction', size: 10}
     
 register:
     path:     /user/register

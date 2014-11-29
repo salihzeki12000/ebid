@@ -70,5 +70,26 @@ define("directives", ['angular','jquery','elevatezoom','fancybox'], function(ang
 	        }
 	    };
 	});
+
+    app.directive('showTab',
+        function () {
+            return {
+                link: function (scope, element, attrs) {
+                    $(element).click(function(e) {
+                        e.preventDefault();
+                        $(element).tab('show');
+                    });
+                    var timer;
+                    $(element).hover(function(e) {
+                        e.preventDefault();
+                        var current = $(element);
+                        clearTimeout(timer);
+                        timer = setTimeout(function () {
+                            current.tab('show');
+                        }, 200);
+                    });
+                }
+            };
+        });
 	return app;
 });

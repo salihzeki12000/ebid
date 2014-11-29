@@ -212,7 +212,7 @@ function setupFireWall($kernel, $dispatcher, $urlgenerator){
         new SessionAuthenticationStrategy(SessionAuthenticationStrategy::NONE), $httpUtils, "ebid.security",
         new AuthenticationSuccessHandler(),
         new AuthenticationFailureHandler(),
-        array('check_path' => '/auth/login'));
+        array('check_path' => '/auth/login', 'require_previous_session'=> false));
     $anonymouslistener = new AnonymousAuthenticationListener($securityContext, "ebid.security");
     
     $accessMap = new AccessMap();

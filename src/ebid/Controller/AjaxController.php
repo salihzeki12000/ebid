@@ -165,6 +165,30 @@ class AjaxController extends baseController
         global $root;
         return $root . '/upload/images/' . $username . '/';
     }
+
+    public function commingsoonProductListAction($size){
+        $size = intval($size);
+        if($size == 0){
+            $size = 10;
+        }
+        $MySQLParser = $this->container->get('MySQLParser');
+        $sql = "SELECT Product.pid, Product.pname, Product.currentPrice, Product.defaultImage, Product.endTime, Product.categoryId, User.uid, User.username FROM " . _table('Product')." AS Product INNER JOIN " . _table('User'). " AS User ON User.uid = Product.seller WHERE (Product.endTime - now()) > 0 AND (Product.status = 0 OR Product.status = 1) ORDER BY (Product.endTime - now()) limit " . $size;
+        $result = $MySQLParser->query($sql);
+        $result = new Result(Result::SUCCESS, "fetch list successfully.", $result);
+        return new Response(json_encode($result));
+    }
+
+    public function hotBiddingProductListAction($size){
+        $size = intval($size);
+        if($size == 0){
+            $size = 10;
+        }
+        $MySQLParser = $this->container->get('MySQLParser');
+        $sql = "SELECT Product.pid, Product.pname, Product.currentPrice, Product.defaultImage, Product.endTime, Product.categoryId, count(*) as count, User.uid, User.username FROM " . _table('Product')." AS Product LEFT JOIN " . _table('Bid')." AS Bid  ON Product.pid = Bid.pid INNER JOIN " . _table('User'). " AS User ON User.uid = Product.seller WHERE (Product.endTime - now()) > 0 AND (Product.status = 0 OR Product.status = 1) group by Product.pid order by count(*) desc limit " . $size;
+        $result = $MySQLParser->query($sql);
+        $result = new Result(Result::SUCCESS, "fetch list successfully.", $result);
+        return new Response(json_encode($result));
+    }
 }
 
 ?>

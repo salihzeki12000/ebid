@@ -32,7 +32,7 @@
 		</div>
 		<div class="panel-body">
 			<div class="row">
-				<div kendo-listview  class="listView" k-data-source="source" k-template='listViewTemplate'></div>
+				<div kendo-listview  class="listView" k-data-source="endingsoonlist" k-template='listViewTemplate'></div>
 			</div>
 		</div>
 	</div>
@@ -42,7 +42,7 @@
 		</div>
 		<div class="panel-body">
 			<div class="rows">
-				<div kendo-listview  class="listView" k-data-source="source" k-template='listViewTemplate'></div>
+				<div kendo-listview  class="listView" k-data-source="hotbiddinglist" k-template='listViewTemplate'></div>
 			</div>
 		</div>
 	</div>
@@ -51,22 +51,22 @@
 		<div class="panel panel-default">
   			<div class="panel-body product-header">
 				<div class="product-img">
-					<a href="\\#/test"><img ng-src="http://demos.telerik.com/kendo-ui/content/web/foods/#:ProductID#.jpg" alt=" #:ProductName# image" />
+					<a ng-href="\\#/bid/item/#:pid#"><img ng-src="{{ dataItem.defaultImage}}" alt=" #:pname# image" />
                     </a>
 				</div>
 				<div class="product-wrapper">
 					<div class="product-description">
-						<div>Full Name: #: ProductName #</div>
-						<div>Price: #:kendo.toString(UnitPrice, "c")#</div>
+						<div>Full Name: #: pname #</div>
+						<div>Price: #:kendo.toString(currentPrice, "c")#</div>
 					</div>
 					<div class="props-mask"></div>
 				</div>
   			</div>
   			<div class="panel-footer">
 				<div class="row">
-					<div class="col-md-5"><div>From: Food</div><div>#:kendo.toString(UnitPrice, "c")#</div></div>
+					<div class="col-md-5"><div>From: #: username #</div><div>#:kendo.toString(currentPrice, "c")#</div></div>
 					<div class="col-md-3">
-						<button type="button" class="btn btn-primary">Bid</button>
+						<button type="button" class="btn btn-primary" ng-click="linkItem(dataItem.pid)">Bid</button>
 					</div>
 				</div>
 			</div>

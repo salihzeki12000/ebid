@@ -49,13 +49,16 @@ define("app",['angular','controllers', 'directives','angular_route','angular_ani
 				controller: 'registerController'					
 			})
             .when('/help/rule', {
-                    templateUrl:'partial/help/rule.html'
+                templateUrl:'partial/help/rule.html',
+                controller: 'helpController'
             })
             .when('/help/dispute', {
-                    templateUrl:'partial/help/dispute.html'
+                templateUrl:'partial/help/dispute.html',
+                controller: 'helpController'
             })
             .when('/help/contact', {
-                    templateUrl:'partial/help/contact.html'
+                templateUrl:'partial/help/contact.html',
+                controller: 'helpController'
             })
 			.otherwise({
 				templateUrl: 'partial/404.html',

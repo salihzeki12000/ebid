@@ -60,6 +60,16 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 		animate($('.bannerText'),'animated bounceIn');
 		setTimeout(repeatText, 5000);
 	};
+    var getCookie = function(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1);
+            if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
+        }
+        return "";
+    }
 	var isLogin = function(logincallback, notlogincallback){
 		$.ajax({
 			url: BASEURL + '/auth/islogin',
@@ -78,6 +88,15 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 		});
 	};
 	var renderLoginState = function($scope){
+        var id = getCookie('id');
+        var name = getCookie('username');
+        $scope.username = name;
+        $scope.id = id;
+        if(name && id){
+            $("#unlogin").hide();
+            $("#alreadylogin").show();
+        }
+/*
 		$.ajax({
 			url: BASEURL + '/auth/islogin',
 			dataType: "json",
@@ -90,7 +109,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                 $scope.id = data.data.id;
 				$scope.$apply();
 			}
-		});
+		});*/
 	};
 
 	function adjustModalMaxHeightAndPosition(){
@@ -167,7 +186,9 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 			}).done(function(data){
 				if(data.type == SUCCESS){
 					$scope.InfoNotification.show(data.message, "success");
-					$scope.username = username;
+                    var data = data.data;
+					$scope.username = data.username;
+                    $scope.id = data.id;
 					$("#unlogin").hide();
 					$("#alreadylogin").show();
 					$('#loginModal').modal('hide');
@@ -265,6 +286,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                     $location.path('/bid/item/' + $scope.itemId + '/result');
                 }
                 $scope.product = data.data;
+                document.title = " " + $scope.product.pname +" | eBid";
                 $scope.product.auction = EnumBidTypeName(GlobalEnum, $scope.product.auction);
                 $scope.product.condition = EnumConditionTypeName(GlobalEnum, $scope.product.condition);
                 $scope.product.shippingType = EnumShippingTypeName(GlobalEnum, $scope.product.shippingType);
@@ -429,9 +451,13 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 
 		$scope.placebid = function(){
             if(!$scope.userId){
-                //$('#loginModal').modal();
-                $location.path('/auth/login');
-                return;
+                if($scope.$parent.id){
+                    $scope.userId = $scope.$parent.id;
+                }else{
+                    $('#loginModal').modal();
+                    //$location.path('/auth/login');
+                    return;
+                }
             }
             if($scope.userId == $scope.product.seller.uid){
                 $scope.InfoNotification.show("You can't bid your product.", "error");
@@ -454,18 +480,6 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                     $scope.InfoNotification.show(data.message, "error");
             });
 		};
-
-		var timer;
-		$('#detail_tab  > li > a').hover(function () {
-			var current = $(this);
-			clearTimeout(timer);
-			timer = setTimeout(function () {
-				current.tab('show');
-			}, 200);
-
-		});
-
-
 	}]);
     ebidController.controller('resultController',['$scope','$http', '$location', '$routeParams','GlobalEnum', function($scope, $http, $location, $routeParams, GlobalEnum){
         kendo.culture("en-US");
@@ -479,6 +493,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                     $location.path('/nopage');
                 }
                 $scope.product = data.data;
+                document.title = " " + $scope.product.pname +" | eBid";
                 $scope.product.auction = EnumBidTypeName(GlobalEnum, $scope.product.auction);
                 $scope.product.condition = EnumConditionTypeName(GlobalEnum, $scope.product.condition);
                 $scope.product.shippingType = EnumShippingTypeName(GlobalEnum, $scope.product.shippingType);
@@ -514,10 +529,15 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
     ebidController.controller('categoryController',['$scope', function($scope){
 
 	}]);
-	ebidController.controller('userController',['$scope', function($scope){
-
+	ebidController.controller('userController',['$scope', '$location',function($scope, $location){
+        document.title = " User Home | eBid"
+        isLogin(null, function(){
+            $location.path('/auth/login');
+            if(!$scope.$$phase) $scope.$apply();
+        });
 	}]);
 	ebidController.controller('loginController',['$scope', '$location', function($scope, $location){
+        document.title = " Login | eBid"
 		$('#login_Info_Panel').hide();
 		isLogin(function(){
 			$location.path('/');
@@ -537,6 +557,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 		};
 	}]);	
 	ebidController.controller('registerController',['$scope', '$http', '$location', function($scope, $http, $location){
+        document.title = " Registration | eBid"
 		$scope.submit = function(){
 			if(!$scope.registrationForm.$valid){
 				return;
@@ -563,24 +584,70 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 			  });
 		};
 	}]);
-	ebidController.controller('homeController',['$scope', function($scope){
-		$scope.source = new kendo.data.DataSource({
+	ebidController.controller('homeController',['$scope', '$location',function($scope, $location){
+        document.title = " Electronics, Books, Coupons and More | eBid";
+		$scope.endingsoonlist = new kendo.data.DataSource({
 			transport: {
 				read: {
-					url: "test/products.json",
+					url: BASEURL + "/ajax/commingsoonProductList/10" ,
 					dataType: "json",
 					cache: true
 				}
 			},
-			pageSize: 10
+			pageSize: 10,
+            schema: {
+                data: "data"
+            }
 		});
 
+        $scope.hotbiddinglist = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: BASEURL + "/ajax/hotBiddingProductList/10" ,
+                    dataType: "json",
+                    cache: true
+                }
+            },
+            pageSize: 10,
+            schema: {
+                data: "data"
+            }
+        });
+        $scope.linkItem = function(itemId){
+            $location.path('/bid/item/' + itemId);
+        }
+        $('#home').addClass('active');
+        $('#contact').removeClass('active');
+        $('#rule').removeClass('active');
+        $('#dispute').removeClass('active');
 		$scope.listViewTemplate = $("#template").html();
 	}]);
 	ebidController.controller('NotFoundController',['$scope', '$location', function($scope, $location){
+        document.title = " Page Not Found | eBid";
 		$scope.homeURL = '#';
-	}]);	
+	}]);
+    ebidController.controller('helpController',['$scope', '$location', function($scope, $location){
+        document.title = " Customer Center | eBid";
+        var path = $location.path();
+        if(path == '/help/rule'){
+            $('#rule').addClass('active');
+            $('#dispute').removeClass('active');
+            $('#contact').removeClass('active');
+            $('#home').removeClass('active');
+        }else if(path == '/help/dispute'){
+            $('#dispute').addClass('active');
+            $('#rule').removeClass('active');
+            $('#contact').removeClass('active');
+            $('#home').removeClass('active');
+        }else if(path == '/help/contact'){
+            $('#contact').addClass('active');
+            $('#rule').removeClass('active');
+            $('#dispute').removeClass('active');
+            $('#home').removeClass('active');
+        }
+    }]);
 	ebidController.controller('bidAddController',['$scope', '$location', '$http', 'GlobalEnum', function($scope, $location, $http, GlobalEnum){
+        document.title = " Add Product | eBid";
 		isLogin(null, function(){
 			$location.path('/auth/login');
 			if(!$scope.$$phase) $scope.$apply();
