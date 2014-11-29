@@ -189,7 +189,7 @@ class ProductController extends baseController {
                     $product->userHasBid = false;
                 }else{
                     //get user bid record
-                    $res = $MySQLParser->select($bid, ' uid = ' . $user->uid, 'bidPrice DESC');
+                    $res = $MySQLParser->select($bid, ' uid = ' . $user->uid . ' AND pid = ' . $itemId , 'bidPrice DESC');
                     //has bid record
                     if(count($res) > 0){
                         $product->userHasBid = true;
@@ -223,7 +223,7 @@ class ProductController extends baseController {
         $securityContext = $session->get("security_context");
         $user = $securityContext->getToken()->getUser();
         //get user bid record
-        $res = $MySQLParser->select($bid, ' uid = ' . $user->uid, 'bidPrice DESC');
+        $res = $MySQLParser->select($bid, ' uid = ' . $user->uid . ' AND pid = ' . $itemId, 'bidPrice DESC');
         //has bid record
         if(count($res) > 0){
             $res = $res[0];
