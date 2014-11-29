@@ -8,6 +8,7 @@
 define("controllers", ['angular','kendo','bootstrap'], function(angular){
 	var BASEURL = 'index.php';
     var FIREBASEURL = 'https://ebid.firebaseio.com';
+
 	var SUCCESS = 0;
 	var FAILURE = 1;
 	var LOGIN_REQUIRE = 2;
