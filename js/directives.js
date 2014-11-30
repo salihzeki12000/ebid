@@ -91,5 +91,18 @@ define("directives", ['angular','jquery','elevatezoom','fancybox'], function(ang
                 }
             };
         });
+
+    app.directive('iframeOnload', [function(){
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs){
+                element.on('load', function(){
+                    var iFrameHeight = element[0].contentWindow.document.body.scrollHeight + 'px';
+                    var iFrameWidth = '100%';
+                    element.css('width', iFrameWidth);
+                    element.css('height', iFrameHeight);
+                })
+            }
+        }}])
 	return app;
 });

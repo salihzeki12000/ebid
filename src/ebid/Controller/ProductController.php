@@ -33,9 +33,6 @@ class ProductController extends baseController {
         $securityContext = $session->get("security_context");
         $user = $securityContext->getToken()->getUser();
         $product->seller = $user->uid;
-        if (preg_match ("/<body.*?>([\w\W]*?)<\/body>/", $product->description, $regs)) {
-            $product->description = $regs[1];
-        }
         $product->status = Product::INITIAL;
         $product->currentPrice = $product->startPrice;
         $MySQLParser->insert($product, array("pid"), array('startPrice', 'expectPrice','buyNowPrice','categoryId'));
@@ -48,12 +45,17 @@ class ProductController extends baseController {
         $MySQLParser = $this->container->get('MySQLParser');
         //get product result
         $product = new Product();
-        $result = $MySQLParser->select($product, ' pid = ' .$itemId, NULL,array('pid','pname', 'description', 'buyNowPrice', 'currentPrice', 'startPrice','defaultImage', 'imageLists', 'endTime', 'categoryId', 'shippingType', 'shippingCost', 'auction', 'seller', '`condition`', 'status') );
+        $result = $MySQLParser->select($product, ' pid = ' .$itemId, NULL,array('pid','pname', 'buyNowPrice', 'currentPrice', 'startPrice','defaultImage', 'imageLists', 'endTime', 'categoryId', 'shippingType', 'shippingCost', 'auction', 'seller', '`condition`', 'status') );
         if(count($result) == 0){
             $result = new Result(Result::FAILURE, 'Can not find product.');
             return new Response(json_encode($result));
         }
         $result = $result[0];
+        $status = intval($result['status']);
+        if($status == Product::END || $status == Product::CLOSE){
+            $result = new Result(Result::EXPIRE, 'Current Product is expired.');
+            return new Response(json_encode($result));
+        }
         $currentTime = time();
         $endTime = strtotime($result['endTime']);
         if(($endTime - $currentTime) <= 0){
@@ -73,11 +75,8 @@ class ProductController extends baseController {
         $res = $MySQLParser->select($user, 'uid = ' . $user->uid, NULL, array('uid', 'username','email', 'state'));
         $res = $res[0];
         $product->seller = $res;
-        if (preg_match ("/<body.*?>([\w\W]*?)<\/body>/", $product->description, $regs)) {
-            $product->description = $regs[1];
-        }
         //filter null record
-        $product = (object) array_filter((array) $product);
+        //$product = (object) array_filter((array) $product);
         //calc increment price and forceInc price;
         $forceInc = $inc = $this->getIncPrice($product->currentPrice);
         if($product->status == Product::INITIAL){
@@ -137,7 +136,7 @@ class ProductController extends baseController {
         $MySQLParser = $this->container->get('MySQLParser');
         //get product result
         $product = new Product();
-        $result = $MySQLParser->select($product, ' pid = ' .$itemId, NULL,array('pid','pname', 'description', 'buyNowPrice', 'currentPrice', 'startPrice','defaultImage', 'endTime', 'categoryId', 'shippingType', 'shippingCost', 'auction', 'seller', '`condition`', 'status') );
+        $result = $MySQLParser->select($product, ' pid = ' .$itemId, NULL,array('pid','pname', 'buyNowPrice', 'currentPrice', 'startPrice','defaultImage', 'endTime', 'categoryId', 'shippingType', 'shippingCost', 'auction', 'seller', '`condition`', 'status') );
         if(count($result) == 0){
             $result = new Result(Result::FAILURE, 'Can not find product.');
             return new Response(json_encode($result));
@@ -152,9 +151,10 @@ class ProductController extends baseController {
 
         $currentTime = time();
         $endTime = strtotime($product->endTime);
-        if(($endTime - $currentTime) > 0){
+        $status = intval($product->status);
+        if(($endTime - $currentTime) > 0 && $status != Product::END && $status != Product::CLOSE){
             //filter null record
-            $product = (object) array_filter((array) $product);
+            //$product = (object) array_filter((array) $product);
 
             $product->hasWinner = false;
             $product->WinnerId = -1;
@@ -162,13 +162,12 @@ class ProductController extends baseController {
             $product->isEnd = false;
         }
         else{
-            $status = intval($product->status);
             if($status == Product::BIDDING || $status == Product::INITIAL){
                 $product->status = Product::END;
                 $MySQLParser->updateSpecific($product, array('status'), array('status'), 'pid');
             }
             //filter null record
-            $product = (object) array_filter((array) $product);
+            //$product = (object) array_filter((array) $product);
 
             //get product bid record
             $bid = new Bid();
@@ -239,6 +238,18 @@ class ProductController extends baseController {
         $result = $MySQLParser->select($product, ' pid = ' .$itemId);
         $result = $result[0];
         $product->set($result);
+        //check time
+        $currentTime = time();
+        $endTime = strtotime($product->endTime);
+        if(($endTime - $currentTime) <= 0){
+            $status = intval($product->status);
+            if($status == Product::BIDDING || $status == Product::INITIAL){
+                $product->status = Product::END;
+                $MySQLParser->updateSpecific($product, array('status'), array('status'), 'pid');
+            }
+            $result = new Result(Result::EXPIRE, 'Current Product is expired.');
+            return new Response(json_encode($result));
+        }
         //check price
         if($product->status == Product::INITIAL){
             $minPrice = $product->currentPrice;
@@ -338,6 +349,7 @@ class ProductController extends baseController {
     }
 
     public function updateFirebase($itemId, $currentPrice){
+        $itemId = intval($itemId);
         $MySQLParser = $this->container->get('MySQLParser');
         $sql = 'SELECT COUNT(*) FROM ' . _table('Bid') .' WHERE pid = '. $itemId;
         $res = $MySQLParser->query($sql);
@@ -355,6 +367,21 @@ class ProductController extends baseController {
         $priceList = array('currentPrice' => floatval($currentPrice), 'bidNumber' => $bidNumber, 'winner' => $winnerId);
         $firebase = $this->container->get('Firebase');
         $ret = $firebase->set('bid/item/' . $itemId, $priceList);
+    }
+
+    public function descriptionAction($itemId){
+        $itemId = intval($itemId);
+        $MySQLParser = $this->container->get('MySQLParser');
+        //get product result
+        $product = new Product();
+        $result = $MySQLParser->select($product, ' pid = ' .$itemId, NULL,array('description') );
+        if(count($result) > 0){
+            $result = $result[0]['description'];
+        }else{
+            $result = new Result(Result::FAILURE, 'can not find product.');
+            $result = json_encode($result);
+        }
+        return new Response($result);
     }
 
     public function getIncPrice($price){

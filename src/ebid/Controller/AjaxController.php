@@ -116,7 +116,7 @@ class AjaxController extends baseController
         global $session;
         $this->checkAuthentication();
         $files = $this->request->files->get('images');
-        $data = [];
+        $data = array();
         foreach ($files as $file){
             if(($file instanceof UploadedFile)&&($file->getError() == UPLOAD_ERR_OK)){
                 $extension = $file->getClientOriginalExtension();

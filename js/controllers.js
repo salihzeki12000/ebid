@@ -49,6 +49,11 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
             return enumItem.listId === parseInt(key);
         })[0].vendors;
     };
+    ebidController.filter('reverse', function() {
+        return function(items) {
+            return items.slice().reverse();
+        };
+    });
 	var animate = function($element, $animateName,callback){
 		$element.addClass($animateName);
 		$element.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
@@ -71,7 +76,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
             if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
         }
         return "";
-    }
+    };
 	var isLogin = function(logincallback, notlogincallback){
 		$.ajax({
 			url: BASEURL + '/auth/islogin',
@@ -287,56 +292,69 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                 if(data.type == EXPIRE){
                     $location.path('/bid/item/' + $scope.itemId + '/result');
                 }
-                $scope.product = data.data;
-                document.title = " " + $scope.product.pname +" | eBid";
-                $scope.product.auction = EnumBidTypeName(GlobalEnum, $scope.product.auction);
-                $scope.product.condition = EnumConditionTypeName(GlobalEnum, $scope.product.condition);
-                $scope.product.shippingType = EnumShippingTypeName(GlobalEnum, $scope.product.shippingType);
-                if($scope.product.shippingCost == 0){
-                    $scope.product.shippingCost = "Free";
-                }
+                if(data.type == SUCCESS){
+                    $scope.product = data.data;
+                    document.title = " " + $scope.product.pname +" | eBid";
+                    $scope.product.auction = EnumBidTypeName(GlobalEnum, $scope.product.auction);
+                    $scope.product.condition = EnumConditionTypeName(GlobalEnum, $scope.product.condition);
+                    $scope.product.shippingType = EnumShippingTypeName(GlobalEnum, $scope.product.shippingType);
+                    if($scope.product.shippingCost == 0) {
+                        $scope.product.shippingCost = "Free";
+                    }
 
-                $scope.userId = $scope.$parent.id;
-                var end = moment($scope.product.endTime);
-                var now = moment();
-                var duration = moment.duration(end.diff(now));
-                $scope.remaindays = duration.days();
-                $scope.remainhours = duration.hours();
-                if($scope.remaindays != 0){
-                    $scope.product.remaining = $scope.remaindays + " d " + $scope.remainhours + " h";
-                }else{
-                    $scope.remainminutes = duration.minutes();
-                    if($scope.remainhours != 0){
-                        $scope.product.remaining = $scope.remainhours + " h " + $scope.remainminutes + " m";
+                    //$('#descriptionContent').document.body.innerHTML = $scope.product.description;
+                    $scope.descriptionURL = BASEURL + "/product/item/"+ $scope.itemId + "/description" ;
+
+                    $scope.userId = $scope.$parent.id;
+                    var end = moment($scope.product.endTime);
+                    var now = moment();
+                    var duration = moment.duration(end.diff(now));
+                    $scope.remaindays = duration.days();
+                    $scope.remainhours = duration.hours();
+                    if($scope.remaindays != 0){
+                        $scope.product.remaining = $scope.remaindays + " d " + $scope.remainhours + " h";
                     }else{
-                        $scope.remainseconds = duration.seconds();
-                        if($scope.product.remainminutes != 0){
-                            $scope.product.remaining = $scope.remainminutes + " m " + $scope.remainseconds + " s";
+                        $scope.remainminutes = duration.minutes();
+                        if($scope.remainhours != 0){
+                            $scope.product.remaining = $scope.remainhours + " h " + $scope.remainminutes + " m";
                         }else{
-                            $scope.product.remaining = $scope.remainseconds + " s ";
-                        }
-                        $('#timeReminder').addClass("hurry");
-                        $interval(function(){
-                            var now = moment();
-                            var duration = moment.duration(end.diff(now));
-                            if(duration < 0){
-                                $location.path('/bid/item/' + $scope.itemId + '/result');
-                            }
-                            $scope.remainminutes = duration.minutes();
                             $scope.remainseconds = duration.seconds();
-                            if($scope.remainminutes != 0){
+                            if($scope.product.remainminutes != 0){
                                 $scope.product.remaining = $scope.remainminutes + " m " + $scope.remainseconds + " s";
                             }else{
                                 $scope.product.remaining = $scope.remainseconds + " s ";
                             }
-                        }, 1000);
+                            $('#timeReminder').addClass("hurry");
+                            $scope.clock = $interval(function(){
+                                var now = moment();
+                                var duration = moment.duration(end.diff(now));
+                                if(duration < 0){
+                                    $scope.stopClock();
+                                    $location.path('/bid/item/' + $scope.itemId + '/result');
+                                }
+                                $scope.remainminutes = duration.minutes();
+                                $scope.remainseconds = duration.seconds();
+                                if($scope.remainminutes != 0){
+                                    $scope.product.remaining = $scope.remainminutes + " m " + $scope.remainseconds + " s";
+                                }else{
+                                    $scope.product.remaining = $scope.remainseconds + " s ";
+                                }
+                            }, 1000);
 
+                        }
                     }
-                }
 
-                //sync.$set($scope.product);
-                //$scope.product.description = $sce.trustAsHtml($scope.product.description);
+                    //sync.$set($scope.product);
+                    //$scope.product.description = $sce.trustAsHtml($scope.product.description);
+                }
         });
+
+        $scope.stopClock = function() {
+            if (angular.isDefined($scope.clock)) {
+                $interval.cancel($scope.clock);
+                $scope.clock = undefined;
+            }
+        };
 
         $scope.toBigImg = function(image){
             if(image){
@@ -474,7 +492,11 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                     if(data.type == SUCCESS){
                         $scope.product.isBid = true;
                         $scope.InfoNotification.show(data.messages, "success");
-                    }else{
+                    }else if(data.type == EXPIRE){
+                        $scope.stopClock();
+                        $location.path('/bid/item/' + $scope.itemId + '/result');
+                    }
+                    else{
                         $scope.InfoNotification.show(data.message, "error");
                     }
             })
@@ -520,13 +542,6 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
             return kendo.toString(price, "c");
         };
 
-        $scope.backtoproduct = function(){
-            $location.path('/bid/item/' + $scope.itemId);
-        };
-
-        $scope.backtohome = function(){
-            $location.path('/');
-        };
     }]);
     ebidController.controller('categoryController',['$scope', function($scope){
 

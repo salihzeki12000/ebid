@@ -83,3 +83,7 @@ ProductBid:
 ProductResult:
     path:     /product/item/{itemId}/result
     defaults: { _controller: 'ebid\Controller\ProductController::resultAction'}
+
+ProductDescription:
+    path:    /product/item/{itemId}/description
+    defaults: { _controller: 'ebid\Controller\ProductController::descriptionAction'}
