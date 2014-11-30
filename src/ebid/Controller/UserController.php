@@ -3,6 +3,7 @@ namespace ebid\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use ebid\Entity\User;
 use ebid\Entity\Result;
+use ebid\Event\RegisterEvent;
 
 /**
  *
@@ -29,8 +30,13 @@ class UserController extends baseController
             $password = $encoder->encodePassword($user->getPassword(), $user->getSalt());
             $user->password = $password;
             $user->roles = 'ROLE_USER';
-            
+
+            $registerEvent = new RegisterEvent($user);
+            $this->dispatcher->dispatch(RegisterEvent::REGISTER, $registerEvent);
+
             $MySQLParser->insert($user, array('uid'));
+
+
             $result = new Result(Result::SUCCESS, 'register successfully.');
         }
         return new Response(json_encode($result));

@@ -11,6 +11,7 @@ use ebid\Entity\Product;
 use ebid\Entity\Result;
 use ebid\Entity\User;
 use ebid\Entity\Bid;
+use ebid\Event\BidResultEvent;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends baseController {
@@ -64,6 +65,7 @@ class ProductController extends baseController {
                 $product->set($result);
                 $product->status = Product::END;
                 $MySQLParser->updateSpecific($product, array('status'), array('status'), 'pid');
+                $this->onBidFinish($itemId);
             }
             $result = new Result(Result::EXPIRE, 'Current Product is expired.');
             return new Response(json_encode($result));
@@ -165,6 +167,7 @@ class ProductController extends baseController {
             if($status == Product::BIDDING || $status == Product::INITIAL){
                 $product->status = Product::END;
                 $MySQLParser->updateSpecific($product, array('status'), array('status'), 'pid');
+                $this->onBidFinish($itemId);
             }
             //filter null record
             //$product = (object) array_filter((array) $product);
@@ -210,6 +213,32 @@ class ProductController extends baseController {
         return new Response(json_encode($result));
     }
 
+    public function onBidFinish($itemId){
+        $itemId = intval($itemId);
+        $MySQLParser = $this->container->get('MySQLParser');
+        //get winner record
+        $winnersql = 'select User.uid, User.username, User.email, Bid.uid, Bid.status, Product.pname, Product.defaultImage, Product.currentPrice, Product.endTime from ' . _table('Bid'). ' AS Bid INNER JOIN ' . _table('User'). ' AS User ON Bid.uid = User.uid INNER JOIN '. _table('Product').' AS Product ON Product.pid = Bid.pid where Bid.pid = '. $itemId.' AND Bid.`status` = ' . Bid::WIN.' group by Bid.uid';
+        $result = $MySQLParser->query($winnersql);
+        $winlists = (count($result) != 0)? $result: null;
+        $list = array();
+        if($winlists != null){
+            foreach($result as $val){
+                $list[] = $val['uid'];
+            }
+        }
+
+        $losersql =  'select User.uid, User.username, User.email, Bid.uid, Bid.status, Product.pname, Product.defaultImage, Product.currentPrice, Product.endTime from ' . _table('Bid'). ' AS Bid INNER JOIN ' . _table('User'). ' AS User ON Bid.uid = User.uid INNER JOIN '. _table('Product').' AS Product ON Product.pid = Bid.pid where Bid.pid = '. $itemId.' AND Bid.`status` = '. Bid::NOTWIN;
+        if($winlists != null){
+            $losersql .= ' AND User.uid NOT IN (' . implode(",", $list) . ')';
+        }
+        $losersql .= ' group by Bid.uid';
+        $result = $MySQLParser->query($losersql);
+        $loselists = (count($result) != 0)? $result: null;
+
+        $event = new BidResultEvent($winlists, $loselists);
+        $this->dispatcher->dispatch(BidResultEvent::BIDRESULT, $event);
+    }
+
     public function bidAction($itemId, $price){
         $itemId = intval($itemId);
         $price = floatval($price);
@@ -246,6 +275,7 @@ class ProductController extends baseController {
             if($status == Product::BIDDING || $status == Product::INITIAL){
                 $product->status = Product::END;
                 $MySQLParser->updateSpecific($product, array('status'), array('status'), 'pid');
+                $this->onBidFinish($itemId);
             }
             $result = new Result(Result::EXPIRE, 'Current Product is expired.');
             return new Response(json_encode($result));

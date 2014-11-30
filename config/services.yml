@@ -29,3 +29,9 @@ services:
     FirebaseTokeGenerator:
         class:     ebid\firebase\FirebaseTokenGenerator
         arguments: [%firebase_API%]
+    SmtpTransport:
+        class:     Swift_SmtpTransport
+        arguments: [%mail_host%, %mail_port%, %encryption%]
+    swiftMailer:
+        class:     Swift_Mailer
+        arguments: [@SmtpTransport]

@@ -50,11 +50,15 @@ use ebid\RouterExceptionListener;
 use ebid\Auth\AuthenticationSuccessHandler;
 use ebid\Auth\AuthenticationFailureHandler;
 use ebid\Auth\LogoutSuccessHandler;
+use ebid\Event\RegisterEvent;
+use ebid\Event\EmailListener;
+use ebid\Event\BidResultEvent;
 
 error_reporting(E_ERROR);
 ini_set('display_errors','On');
 
 $isDebug = true;
+$sendEmail = true;
 $root = __DIR__;
 $file = __DIR__ .'/cache/container.php';
 
@@ -98,6 +102,10 @@ $resolver = $container->get('ControllerResolver');
 //$kernel = new HttpKernel($dispatcher, $resolver);
 $kernel = $container->get('HttpKernel');
 
+$SmtpTransport = $container->get('SmtpTransport');
+$SmtpTransport->setUsername($container->getParameter('mail_username'))
+    ->setPassword($container->getParameter('mail_password'));
+
 //routing
 
 $requestContext = new RequestContext();
@@ -135,6 +143,15 @@ $dispatcher->addListener(
     KernelEvents::REQUEST,
     array($firewall, 'onKernelRequest')
 );
+
+if($sendEmail){
+    $dispatcher->addListener(
+        BidResultEvent::BIDRESULT, array(new EmailListener(), 'sendEmailOnBidFinish'),0
+    );
+    $dispatcher->addListener(
+        RegisterEvent::REGISTER, array(new EmailListener(), 'sendEmailOnRegistration'),0
+    );
+}
 
 $dispatcher->addListener(
    KernelEvents::EXCEPTION, array(new RouterExceptionListener(), 'onKernelException'), 0

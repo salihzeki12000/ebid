@@ -16,13 +16,15 @@ class baseController
     protected $request;
     protected $db;
     protected $container;
+    protected $dispatcher;
     
     function __construct()
     {
-        global $container, $request;
+        global $container, $request, $dispatcher;
         $this->container = $container;
         $this->db = $container->get('db');
         $this->request = $request;
+        $this->dispatcher = $dispatcher;
     }
     
     function renderJSON($obj){
