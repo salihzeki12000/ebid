@@ -1,44 +1,92 @@
-<div  class="panel panel-primary ">
-    <div class="panel-heading"><font size="4">My Account</font></div>
-    <div class="panel-body">
-
-        <div  class="left">
-            <table class="table table-striped">
-                <caption>Personal Information</caption>
-                <tr>
-                    <th>Name</th>
-                    <th>Balance</th>
-                </tr>
-                <tr>
-                    <td>Jack</td>
-                    <td>500</td>
-                </tr>
-                <tr>
-                    <td>John</td>
-                    <td>600</td>
-                </tr>
-            </table>
+<div class="row">
+    <div class="col-md-3">
+        <div class="panel panel-info">
+            <div class="panel-heading">User Information</div>
+            <div class="panel-body">
+                <table class="table borderless">
+                    <tr><td>Id</td><td>{{userIndex.user.id}}</td></tr>
+                    <tr><td>Name</td><td>{{userIndex.user.username}}</td></tr>
+                    <tr><td>Email</td><td>{{userIndex.user.email}}</td></tr>
+                </table>
+            </div>
         </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">Action</div>
+            <div class="panel-body">
+                <div kendo-tree-view="tree"
+                     k-data-source="Actionlist"
+                     k-template="actionTemplate"></div>
+                <script type="text/x-kendo-angular-template" id="actionTemplate">
+                    <span class="{{dataItem.imgIcon}}"></span><a ng-href="{{dataItem.path}}">{{dataItem.name}}</a>
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Selling</div>
+            <div class="panel-body">
+                <div class="row" ng-repeat="product in userIndex.seller">
+                    <div class="col-md-3 padding20">
+                        <div class="UserPageImageBox">
+                            <a href="#/bid/item/{{product.pid}}"><img ng-src="{{product.defaultImage}}" /></a>
+                        </div>
+                    </div>
+                    <div class="col-md-8 padding20">
+                        <div class="row top20">
+                            <div class="col-md-4 text">Item condition:</div>
+                            <div class="col-md-8">
+                                <b>{{getConditionName(product.condition)}}</b>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 text">Ended:</div>
+                            <div class="col-md-8">
+                                {{product.endTime | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 text">Price:</div>
+                            <div class="col-md-8">
+                                <b class="pricecurrency">US {{getPriceCurrency(product.currentPrice)}}</b>
+                            </div>
+                        </div>
 
-        <div  class="right">
-            <table class="table table-hover">
-                <caption>Recent Participation</caption>
-                <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Status</th>
-                </tr>
-                <tr>
-                    <td>Nuxus</td>
-                    <td>500</td>
-                    <td>Sale</td>
-                </tr>
-                <tr>
-                    <td>Iphone 6</td>
-                    <td>600</td>
-                    <td>Sale</td>
-                </tr>
-            </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">Bidding</div>
+            <div class="panel-body">
+                <div class="row" ng-repeat="product in userIndex.bid">
+                    <div class="col-md-3 padding20">
+                        <div class="UserPageImageBox">
+                            <a href="#/bid/item/{{product.pid}}"><img ng-src="{{product.defaultImage}}" /></a>
+                        </div>
+                    </div>
+                    <div class="col-md-8 padding20">
+                        <div class="row top20">
+                            <div class="col-md-4 text">Item condition:</div>
+                            <div class="col-md-8">
+                                <b>{{getConditionName(product.condition)}}</b>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 text">Ended:</div>
+                            <div class="col-md-8">
+                                {{product.endTime | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 text">Price:</div>
+                            <div class="col-md-8">
+                                <b class="pricecurrency">US {{getPriceCurrency(product.currentPrice)}}</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

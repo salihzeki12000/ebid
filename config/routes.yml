@@ -55,6 +55,10 @@ register:
     defaults: { _controller: 'ebid\Controller\UserController::registerAction'}
     methods:  ['POST']
 
+userInfo:
+    path:     /user/index/{size}
+    defaults: { _controller: 'ebid\Controller\UserController::IndexAction', size: 3}
+
 upload:
     path:     /ajax/upload
     defaults: { _controller: 'ebid\Controller\AjaxController::uploadAction'}

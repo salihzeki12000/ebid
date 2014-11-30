@@ -546,12 +546,36 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
     ebidController.controller('categoryController',['$scope', function($scope){
 
 	}]);
-	ebidController.controller('userController',['$scope', '$location',function($scope, $location){
+	ebidController.controller('userController',['$scope', '$location', '$http','GlobalEnum',function($scope, $location, $http, GlobalEnum){
         document.title = " User Home | eBid"
         isLogin(null, function(){
             $location.path('/auth/login');
             if(!$scope.$$phase) $scope.$apply();
         });
+        $http({
+            method: 'GET',
+            url: BASEURL + '/user/index/5'
+        })
+        .success(function(data, status, headers, config) {
+                if(data.type == FAILURE){
+                    $location.path('/');
+                }
+                if(data.type == SUCCESS){
+                    $scope.userIndex = data.data;
+                }
+        });
+        $scope.Actionlist = new kendo.data.HierarchicalDataSource({data: [
+            {name: 'Sell', path: '#/user/sell', imgIcon: 'glyphicon glyphicon-usd'},
+            {name: 'bid', path: '#/user/bid', imgIcon: 'glyphicon glyphicon-fire'}
+        ]});
+        $scope.actionTemplate = $('#actionTemplate').html();
+        $scope.getPriceCurrency = function(price){
+            return kendo.toString(price, "c");
+        };
+        $scope.getConditionName = function(number){
+            return EnumConditionTypeName(GlobalEnum, number);
+        }
+
 	}]);
 	ebidController.controller('loginController',['$scope', '$location', function($scope, $location){
         document.title = " Login | eBid"

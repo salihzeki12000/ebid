@@ -41,6 +41,24 @@ class UserController extends baseController
         }
         return new Response(json_encode($result));
     }
+
+    function IndexAction($size){
+        $size = intval($size);
+        $this->checkAuthentication();
+        $MySQLParser = $this->container->get('MySQLParser');
+        global $session;
+        $securityContext = $session->get("security_context");
+        $user = $securityContext->getToken()->getUser();
+        $result = array('user' => array('id'=> $user->uid, 'username' => $user->username, 'email' => $user->email, 'address' => $user->address, 'state' => $user->state, 'zipcode'=> $user->zipcode));
+        $sql ='SELECT pid, pname, buyNowPrice, currentPrice, startPrice, defaultImage, endTime, categoryId, shippingType, shippingCost, auction, seller, `condition`, status  FROM ' . _table('Product'). ' WHERE seller = '. $user->uid . ' LIMIT ' . $size;
+        $list = $MySQLParser->query($sql);
+        $result['seller'] = $list;
+        $sql = 'SELECT Product.pid, Product.pname, Product.buyNowPrice, Product.currentPrice, Product.startPrice, Product.defaultImage, Product.endTime, Product.categoryId, Product.shippingType, Product.shippingCost, Product.auction, Product.seller, Product.`condition`, Product.`status` as ProductStatus, Bid.`status` AS BidStatus, Bid.bidPrice FROM ' . _table('Bid') . ' AS Bid INNER JOIN '. _table('Product'). ' AS Product ON Bid.pid = Product.pid WHERE Bid.uid = ' . $user->uid . '  GROUP BY Bid.pid LIMIT ' . $size;;
+        $list = $MySQLParser->query($sql);
+        $result['bid'] = $list;
+        $result = new Result(Result::SUCCESS, 'get user list successfully.', $result);
+        return new Response(json_encode($result));
+    }
 }
 
 ?>
