@@ -119,7 +119,7 @@ class AjaxController extends baseController
         $data = array();
         foreach ($files as $file){
             if(($file instanceof UploadedFile)&&($file->getError() == UPLOAD_ERR_OK)){
-                $extension = $file->getClientOriginalExtension();
+                $extension = strtolower($file->getClientOriginalExtension());
                 $valid_filetypes = array('jpg','jpeg','bmp','png','gif');
                 if(!in_array($extension, $valid_filetypes)){
                     throw new \Exception("uplod file unvalid. must be image file.");
@@ -127,20 +127,24 @@ class AjaxController extends baseController
                 $securityContext = $session->get("security_context");
                 $user = $securityContext->getToken()->getUser();
                 $username = $user->getUsername();
-
+                $savefilename = $this->generatePicName($file->getClientOriginalName(), $file->getClientOriginalExtension(), 57);
                 $file->move(
                     $this->getUploadImagesDir($username),
-                    $file->getClientOriginalName()
+                    $savefilename
                 );
-
+                $name = $this->generateThumb($username, $savefilename, $file->getClientOriginalName(), $file->getClientOriginalExtension());
+                $name = basename($name);
                 $data[] = array(
                     'ImageName' => $file->getClientOriginalName(),
-                    'ImageURL' => $this->getRelativeImageDir($username) . $file->getClientOriginalName()
+                    'ImageURL' => $this->getRelativeImageDir($username) . $name
                 );
+                $result = new Result(Result::SUCCESS, "file upload successfully.", $data);
+            }else{
+                throw new \Exception("file upload failed.");
             }
 
         }
-        $result = new Result(Result::SUCCESS, "file upload successfully.", $data);
+
         return new Response(json_encode($result));
     }
     
@@ -151,9 +155,32 @@ class AjaxController extends baseController
         $securityContext = $session->get("security_context");
         $user = $securityContext->getToken()->getUser();
         $username = $user->getUsername();
-        unlink($this->getUploadImagesDir($username) . $filename);
+        $extension = end(explode('.', $filename));
+        unlink($this->getUploadImagesDir($username) . $this->generatePicName($filename, $extension, 12));
+        unlink($this->getUploadImagesDir($username) . $this->generatePicName($filename, $extension, 57));
         $result = new Result(Result::SUCCESS, "file delete successfully.");
         return new Response(json_encode($result));
+    }
+
+    public function generatePicName($filename, $extension, $num){
+        return basename($filename, ".".$extension). '$_' . $num .'.'.strtoupper($extension);
+    }
+
+    public function generateThumb($username, $filename, $originalname, $extension){
+        $phpThumb = new \phpThumb();
+        $phpThumb->setSourceData(file_get_contents($this->getRelativeImageDir($username).$filename));
+        $thumbnail_width = 350;
+        $output_filename = $this->getUploadImagesDir($username). $this->generatePicName($originalname, $extension, 12);
+        $phpThumb->setParameter('w', $thumbnail_width);
+        if ($phpThumb->GenerateThumbnail()) {
+            if ($phpThumb->RenderToFile($output_filename)) {
+                return $output_filename;
+            }else{
+                throw new \Exception('Failed:<pre>'.implode("\n\n", $phpThumb->debugmessages).'</pre>');
+            }
+        }else{
+            throw new \Exception('Failed:<pre>'.$phpThumb->fatalerror."\n\n".implode("\n\n", $phpThumb->debugmessages).'</pre>');
+        }
     }
 
     function getRelativeImageDir($username){
