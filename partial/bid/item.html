@@ -189,167 +189,46 @@
 		<div class="panel-heading">Customer Reviews</div>
 
 		<!-- List group -->
-		<ul class="list-group">
+		<ul class="list-group" ng-repeat="comment in comments">
 			<li class="list-group-item">
 				<div class="panel-body">
 					<dl>
 						<dt>
-							The single best value Fire in the entire line. Skip the Fire 7
-							and get the Fire 6 instead! <small>October 4, 2014</small>
+							{{comment.title}} <small>{{comment.time}}</small>
 						</dt>
-						<span class="txtsmall gry">By Mike Williams</span>
-						<div class="txtsmall mt4 fvavp">
-							<span class="inlineblock formatVariation"> <span
-								class="gr3 gry formatKey">Color Name:</span><span
-								class="formatValue">Black</span><span class="gl7 gr7 gry">|</span></span><span
-								class="inlineblock formatVariation"> <span
-								class="gr3 gry formatKey">Configuration:</span><span
-								class="formatValue">With Special Offers</span><span
-								class="gl7 gr7 gry">|</span></span><span
-								class="inlineblock formatVariation"> <span
-								class="gr3 gry formatKey">Digital Storage Capacity:</span><span
-								class="formatValue">8</span><span class="gl7 gr7 gry">|</span></span><span
-								class="inlineblock avpOrVine"><span
-								class="orange strong avp">Verified Purchase</span></span>
-						</div>
+						<span class="txtsmall gry">By {{comment.username}}</span>
 						<br />
-						<dd>If you read my Fire TV review you know that I am tough on
-							Amazon when it comes to their own items. It needs to deliver
-							quality for the price point to earn stars from me. Please take
-							the time to read my entire review and feel free to ask questions.
-							I will do my best to respond to them as I can and update the
-							review to reflect those answers and other things I discover along
-							the way.</dd>
-					</dl>
-				</div>
-			</li>
-			<li class="list-group-item"><div class="panel-body">
-					<dl>
-						<dt>
-							HD Fire 6 is great for the price! <small>October 4, 2014</small>
-						</dt>
-						<span class="txtsmall gry">By T. A Battaglia</span>
-						<div class="txtsmall mt4 fvavp">
-							<span class="inlineblock formatVariation"> <span
-								class="gr3 gry formatKey">Color Name:</span><span
-								class="formatValue">Black</span><span class="gl7 gr7 gry">|</span></span><span
-								class="inlineblock formatVariation"> <span
-								class="gr3 gry formatKey">Configuration:</span><span
-								class="formatValue">With Special Offers</span><span
-								class="gl7 gr7 gry">|</span></span><span
-								class="inlineblock formatVariation"> <span
-								class="gr3 gry formatKey">Digital Storage Capacity:</span><span
-								class="formatValue">8</span><span class="gl7 gr7 gry">|</span></span><span
-								class="inlineblock avpOrVine"><span
-								class="orange strong avp">Verified Purchase</span></span>
-						</div>
-						<br />
-						<dd>Overall... If you want an Amazon tablet, and you want the
-							best, go with the HDX series. However, if you want an amazing
-							tablet but don't want to spend as much, then these new HD 6 & 7
-							series are great! For me and my uses, the HD 6 is the perfect
-							fit.</dd>
+						<dd>{{comment.content}}</dd>
 					</dl>
 				</div></li>
-			<li class="list-group-item"><div class="panel-body">
-					<dl>
-						<dt>
-							Loved it, <small>October 4, 2014</small>
-						</dt>
-						<span class="txtsmall gry">By T. A Battaglia</span>
-						<div class="txtsmall mt4 fvavp">
-							<span class="inlineblock formatVariation"> <span
-								class="gr3 gry formatKey">Color Name:</span><span
-								class="formatValue">Black</span><span class="gl7 gr7 gry">|</span></span><span
-								class="inlineblock formatVariation"> <span
-								class="gr3 gry formatKey">Configuration:</span><span
-								class="formatValue">With Special Offers</span><span
-								class="gl7 gr7 gry">|</span></span><span
-								class="inlineblock formatVariation"> <span
-								class="gr3 gry formatKey">Digital Storage Capacity:</span><span
-								class="formatValue">8</span><span class="gl7 gr7 gry">|</span></span><span
-								class="inlineblock avpOrVine"><span
-								class="orange strong avp">Verified Purchase</span></span>
-						</div>
-						<br />
-						<dd>I bought this tablet for my sister and she loves it but
-							the only thing is your stuck with the same backgrounds and cannot
-							change them unfortunately. If she could customize it it would
-							definitely be 5 stars because other then that it's amazing.</dd>
-					</dl>
-				</div></li>
-			<li class="list-group-item"><div class="panel-body">
-					<dl>
-						<dt>
-							Great but needs refinement, <small>October 4, 2014</small>
-						</dt>
-						<span class="txtsmall gry">By T. A Battaglia</span>
-						<div class="txtsmall mt4 fvavp">
-							<span class="inlineblock formatVariation"> <span
-								class="gr3 gry formatKey">Color Name:</span><span
-								class="formatValue">Black</span><span class="gl7 gr7 gry">|</span></span><span
-								class="inlineblock formatVariation"> <span
-								class="gr3 gry formatKey">Configuration:</span><span
-								class="formatValue">With Special Offers</span><span
-								class="gl7 gr7 gry">|</span></span><span
-								class="inlineblock formatVariation"> <span
-								class="gr3 gry formatKey">Digital Storage Capacity:</span><span
-								class="formatValue">8</span><span class="gl7 gr7 gry">|</span></span><span
-								class="inlineblock avpOrVine"><span
-								class="orange strong avp">Verified Purchase</span></span>
-						</div>
-						<br />
-						<dd>Of course I love it BUT the place where you put the
-							charger into is still a very iffy thing. I can see it going
-							kaflooie one of these days. This is what happened to my first
-							kindle. Hope you guys can solve this. I get snaky whenever I have
-							to plug it into that little hole.</dd>
-					</dl>
-				</div></li>
-			<li class="list-group-item"><div class="panel-body">
-					<dl>
-						<dt>
-							Has a beautiful display, <small>October 4, 2014</small>
-						</dt>
-						<span class="txtsmall gry">By T. A Battaglia</span>
-						<div class="txtsmall mt4 fvavp">
-							<span class="inlineblock formatVariation"> <span
-								class="gr3 gry formatKey">Color Name:</span><span
-								class="formatValue">Black</span><span class="gl7 gr7 gry">|</span></span><span
-								class="inlineblock formatVariation"> <span
-								class="gr3 gry formatKey">Configuration:</span><span
-								class="formatValue">With Special Offers</span><span
-								class="gl7 gr7 gry">|</span></span><span
-								class="inlineblock formatVariation"> <span
-								class="gr3 gry formatKey">Digital Storage Capacity:</span><span
-								class="formatValue">8</span><span class="gl7 gr7 gry">|</span></span><span
-								class="inlineblock avpOrVine"><span
-								class="orange strong avp">Verified Purchase</span></span>
-						</div>
-						<br />
-						<dd>Don't pay more for a tablet! This one will exceed all
-							your expectations. Just the right size, has a beautiful display-
-							and comes in cobalt. :)</dd>
-					</dl>
-				</div> <br />
-				<button type="button" id="myButton" data-loading-text="Loading..."
-					class="btn btn-primary" autocomplete="off">Write a
-					customer review</button> <script>
-  
-   $('#myButton').on('click', function () {
-
-    var $btn = $(this).button('loading')
-    
-    // business logic...
-
-    $btn.button('reset')
-
-    })
-  
-</script></li>
-
 
 		</ul>
+        <button type="button" id="myButton" class="btn btn-primary" data-toggle="modal" data-target="#commentModal">Write a customer review</button>
 	</div>
 </div>
 </div>
+
+<div id="commentModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Write comment</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="comment_title">Title:</label>
+                    <input type="text" name="comment_title" id="comment_title" class="form-control" />
+                </div>
+                <div class="form-group">
+                        <label for="comment_content">Comment</label>
+                        <textarea class="form-control" kendo-editor rows="10" cols="30" style="height: 350px" name="comment_content" id="comment_content" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

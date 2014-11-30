@@ -281,6 +281,10 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         var hissync = $firebase(hisref);
         $scope.histories = hissync.$asArray();
 
+        var comref = new Firebase(FIREBASEURL + "/bid/comments/" +$scope.itemId );
+        var comsync = $firebase(comref);
+        $scope.comments = comsync.$asArray();
+
         $http({
             method: 'GET',
             url: BASEURL + '/product/item/' + $scope.itemId
@@ -355,6 +359,10 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                 $scope.clock = undefined;
             }
         };
+
+        $('#commentModal').on('show.bs.modal', function (event) {
+            adjustModalMaxHeightAndPosition();
+        });
 
         $scope.toBigImg = function(image){
             if(image){
