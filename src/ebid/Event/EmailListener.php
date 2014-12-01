@@ -35,7 +35,20 @@ class EmailListener {
                 $message = \Swift_Message::newInstance($winner['username'] . ', Congratulations, it\'s all yours!')
                     ->setFrom($container->getParameter('mail_email'), 'ebid')
                     ->setTo(array($winner['email'] => $winner['username']))
-                    ->setBody('Congratulations, ' . $winner['username'] .'.  You win the product: ' . $winner['pname']);
+                    ->setBody('<html><head><style>
+	                            #wrapper {
+	                                margin-top: 8%;
+		                            margin-left:10%;
+	                            }
+	                            </style>
+                                </head>
+                                <body>
+	                                <div id="wrapper">
+		                                <img src="images/congra.jpg" alt="congratulation" width="200" height="140">
+		                                    <p>Congratulation! '. $winner['username'].'</p>
+		                            <p>You just win the bid.</p>
+		                            <p> ebid will update you when your order ships.</p>
+	                                </div></body>');
 
                 $mailer = $container->get('swiftMailer');
                 $result = $mailer->send($message);
