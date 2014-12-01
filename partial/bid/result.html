@@ -56,8 +56,8 @@
 </div>
 <div class="row">
     <div class="col-md-offset-4 col-md-4">
-        <button ng-if="product.isEnd == true && product.WinnerId == userId" type="button" class="btn btn-success"><a href="#/bid/thankyou">Pay Now</a></button>
-        <button ng-if="product.isEnd == false"  type="button" class="btn btn-success"><a ng-href="#/bid/item/{{itemId}}">Back to Product</a></button>
-        <button type="button" class="btn btn-info"><a ng-href="#/">Back to Home</a></button>
+        <button ng-if="product.isEnd == true && product.WinnerId == userId" type="button" class="btn btn-success" ng-click="pathRedirect('/bid/thankyou')">Pay Now</button>
+        <button ng-if="product.isEnd == false"  type="button" class="btn btn-success" ng-click="pathRedirect('/bid/item/' + itemId)">Back to Product</button>
+        <button type="button" class="btn btn-info" ng-click="pathRedirect('/')">Back to Home</button>
     </div>
 </div>

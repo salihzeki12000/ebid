@@ -570,6 +570,10 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
             return kendo.toString(price, "c");
         };
 
+        $scope.pathRedirect = function(path){
+            $location.path(path);
+        }
+
     }]);
     ebidController.controller('categoryController',['$scope', function($scope){
 
