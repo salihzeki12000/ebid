@@ -60,6 +60,10 @@ define("app",['angular','controllers', 'directives','angular_route','angular_ani
                 templateUrl:'partial/help/contact.html',
                 controller: 'helpController'
             })
+            .when('/bid/thankyou', {
+                templateUrl:'partial/bid/thankyou.html',
+                controller: 'bidController'
+            })
 			.otherwise({
 				templateUrl: 'partial/404.html',
 				controller: 'NotFoundController'	
