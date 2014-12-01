@@ -78,10 +78,22 @@
                                 {{product.endTime | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-4 text">Price:</div>
+                        <div class="row" ng-if="product.ProductStatus == 0 || product.ProductStatus == 1">
+                            <div class="col-md-4 text">Current Price:</div>
                             <div class="col-md-8">
                                 <b class="pricecurrency">US {{getPriceCurrency(product.currentPrice)}}</b>
+                            </div>
+                        </div>
+                        <div class="row" ng-if="product.ProductStatus == 2">
+                            <div class="col-md-4 text">End Price:</div>
+                            <div class="col-md-8">
+                                <b class="pricecurrency">US {{getPriceCurrency(product.currentPrice)}}</b>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 text">Bid Price:</div>
+                            <div class="col-md-8">
+                                <b class="pricecurrency">US {{getPriceCurrency(product.bidPrice)}}</b>
                             </div>
                         </div>
                     </div>

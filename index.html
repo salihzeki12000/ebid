@@ -16,10 +16,10 @@
 <script type="text/javascript" data-main="js/main"
 	src="vendor/requirejs/require.js"></script>
 </head>
-<body ng-controller="mainController" class="ng-cloak">
+<body ng-controller="mainController" ng-cloak class="ng-cloak">
 	<header>
 		<div class="toolbar">
-			<div class="container" ng-cloak>
+			<div class="container">
 				<div class="quick-link">
 					<span>Welcome to ebid system!</span>
                     <span id="unlogin"> <a href="#"
@@ -32,7 +32,7 @@
 					<div class="collapse navbar-collapse">
 						<ul id="topmenu" class="nav navbar-nav">
 							<li class="dropdown"><a href="#" data-toggle="dropdown"
-								data-hover="dropdown" class="dropdown-toggle"> My Store <b
+								data-hover="dropdown" class="dropdown-toggle"> My Account <b
 									class="caret"></b>
 							</a>
 								<ul class="dropdown-menu">
@@ -94,7 +94,7 @@
 		</div>
 	</header>
 	<div class="container contentview">
-		<div ng-view ng-cloak></div>
+		<div ng-view ></div>
 	</div>
     <footer>
         <div class="container">

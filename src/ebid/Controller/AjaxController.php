@@ -211,8 +211,22 @@ class AjaxController extends baseController
             $size = 10;
         }
         $MySQLParser = $this->container->get('MySQLParser');
-        $sql = "SELECT Product.pid, Product.pname, Product.currentPrice, Product.defaultImage, Product.endTime, Product.categoryId, count(*) as count, User.uid, User.username FROM " . _table('Product')." AS Product LEFT JOIN " . _table('Bid')." AS Bid  ON Product.pid = Bid.pid INNER JOIN " . _table('User'). " AS User ON User.uid = Product.seller WHERE (Product.endTime - now()) > 0 AND (Product.status = 0 OR Product.status = 1) group by Product.pid order by count(*) desc limit " . $size;
+        $sql = "SELECT Product.pid, Product.pname, Product.currentPrice, Product.defaultImage, Product.endTime, Product.categoryId, count(*) as count, User.uid, User.username FROM " . _table('Product')." AS Product INNER JOIN " . _table('Bid')." AS Bid  ON Product.pid = Bid.pid INNER JOIN " . _table('User'). " AS User ON User.uid = Product.seller WHERE (Product.endTime - now()) > 0 AND (Product.status = 0 OR Product.status = 1) group by Product.pid order by count(*) desc limit " . $size;
         $result = $MySQLParser->query($sql);
+        if(count($result) < $size){
+            $num = $size - count($result);
+            $pidList = array();
+            foreach($result as $val){
+                $pidList[] = $val['pid'];
+            }
+            $pids = implode(',',$pidList);
+            $sql = "SELECT Product.pid, Product.pname, Product.currentPrice, Product.defaultImage, Product.endTime, Product.categoryId, User.uid, User.username FROM " . _table('Product')." AS Product INNER JOIN " . _table('User'). " AS User ON User.uid = Product.seller WHERE (Product.endTime - now()) > 0 AND (Product.status = 0 OR Product.status = 1) AND Product.pid NOT IN ( {$pids} )  group by Product.pid desc limit " . $num;
+            $result1 = $MySQLParser->query($sql);
+            foreach($result1 as $val){
+                $val['count'] = 0;
+            }
+            $result = array_merge($result , $result1);
+        }
         $result = new Result(Result::SUCCESS, "fetch list successfully.", $result);
         return new Response(json_encode($result));
     }
