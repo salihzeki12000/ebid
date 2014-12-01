@@ -26,7 +26,9 @@ var navDataSource = new kendo.data.DataSource({
     },
     change: function(e) {
         this.view().sort(function(a, b) {
-            return navCategories.indexOf(a.value) > navCategories.indexOf(b.value) ? 1 : -1;
+            var indexA = $.inArray(a.value, navCategories);
+            var indexB = $.inArray(b.value, navCategories);
+            return indexA > indexB ? 1 : -1;
         });
     },
     filter: { field: "disableInMobile", operator: "neq", value: true },
@@ -89,7 +91,7 @@ function onlineExamples(section, product, reject) {
 
 function mobileExamples(section) {
     return onlineExamples(section, navProduct, function(item) {
-        return item.disableInMobile;
+        return item.disableInMobile || item.url.indexOf("angular") > -1;
     });
 }
 

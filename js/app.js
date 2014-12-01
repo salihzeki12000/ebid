@@ -28,6 +28,10 @@ define("app",['angular','controllers', 'directives','angular_route','angular_ani
 				templateUrl: 'partial/bid/item.html',
 				controller: 'itemController'				
 			})
+            .when('/bid/item/:itemId/edit',{
+                templateUrl: 'partial/bid/form.html',
+                controller: 'bidEditController'
+            })
             .when('/bid/item/:itemId/result',{
                 templateUrl: 'partial/bid/result.html',
                 controller: 'resultController'

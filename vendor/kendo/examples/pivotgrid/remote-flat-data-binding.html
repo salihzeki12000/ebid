@@ -24,11 +24,12 @@
         <a class="offline-button" href="../index.html">Back</a>
     
     <div id="example">
+    <div id="configurator"></div>
     <div id="pivotgrid"></div>
 
     <script>
         $(document).ready(function () {
-            $("#pivotgrid").kendoPivotGrid({
+            var pivotgrid = $("#pivotgrid").kendoPivotGrid({
                 columnWidth: 120,
                 height: 570,
                 dataSource: {
@@ -45,7 +46,7 @@
                                 ContactTitle: { caption: "All Titles" }
                             },
                             measures: {
-                                "Contacts Count": { field: "CustomerID", aggregate: function(value, state) { return state + 1; } }
+                                "Contacts Count": { field: "CustomerID", aggregate: "count" }
                             }
                         }
                     },
@@ -53,9 +54,28 @@
                     rows: [{ name: "ContactTitle", expand: true }],
                     measures: ["Contacts Count"]
                 }
+            }).data("kendoPivotGrid");
+
+            $("#configurator").kendoPivotConfigurator({
+                dataSource: pivotgrid.dataSource,
+                height: 570
             });
         });
-</script>
+    </script>
+    <style>
+        #pivotgrid
+        {
+            display: inline-block;
+            vertical-align: top;
+            width: 70%;
+        }
+
+        #configurator
+        {
+            display: inline-block;
+            vertical-align: top;
+        }
+    </style>
 </div>
 
 

@@ -1,5 +1,5 @@
 /*
-* Kendo UI v2014.2.909 (http://www.telerik.com/kendo-ui)
+* Kendo UI v2014.3.1119 (http://www.telerik.com/kendo-ui)
 * Copyright 2014 Telerik AD. All rights reserved.
 *
 * Kendo UI commercial licenses may be obtained at
@@ -180,8 +180,15 @@
 [data-role="layout"] {
   display: none;
 }
+/**
+ * The angular tags will be converted to div kendo-mobile-view
+ *
+ */
 [data-role="view"],
-[data-role="drawer"] {
+[data-role="drawer"],
+kendo-mobile-view,
+kendo-mobile-split-view,
+kendo-mobile-drawer {
   visibility: hidden;
 }
 .km-view {
@@ -3415,11 +3422,11 @@ body:before {
 }
 .km-flat .km-switch-background,
 .km-flat .k-slider-selection {
-  background-image: -webkit-gradient(linear, 50% 0, 50% 100%, color-stop(0,#bababa), color-stop(1,#bababa));
-  background-image: -webkit-linear-gradient(top,#bababa,#bababa);
-  background-image: -moz-linear-gradient(top,#bababa,#bababa);
-  background-image: -ms-linear-gradient(top,#bababa,#bababa);
-  background-image: -o-linear-gradient(top,#bababa,#bababa);
+  background-image: linear-gradient("webkit", top #bababa #bababa);
+  background-image: linear-gradient("blink", top #bababa #bababa);
+  background-image: linear-gradient("moz", top #bababa #bababa);
+  background-image: linear-gradient("ms", top #bababa #bababa);
+  background-image: linear-gradient("o", top #bababa #bababa);
 }
 .km-flat .km-switch-handle {
   background: #f4f4f4;
@@ -4112,7 +4119,6 @@ html .km-flat .k-overflow-container.km-actionsheet > li {
   box-sizing: border-box;
   border-radius: 1em;
 }
-/* SplitView */
 .km-on-blackberry.km-blackberry6 .km-view .km-icon,
 .km-on-blackberry.km-blackberry7 .km-view .km-icon,
 .km-on-blackberry.km-ios .km-view .km-icon,

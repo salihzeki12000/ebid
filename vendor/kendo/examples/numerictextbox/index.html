@@ -25,17 +25,22 @@
     
     
         <div id="example">
-            <div id="add-product">
+            <div id="add-product" class="demo-section k-header">
+                <p class="title">Add new product</p>
                 <div>
+                    <span class="description">Price:</span>
                     <input id="currency" type="number" value="30" min="0" max="100" />
                 </div>
                 <div style="margin-top: 7px;">
+                    <span class="description">Price Discount:</span>
                     <input id="percentage" value="0.05" />
                 </div>
                 <div style="margin-top: 7px;">
+                    <span class="description">Weight:</span>
                     <input id="custom" value="2" />
                 </div>
                 <div style="margin-top: 7px;">
+                    <span class="description">Currently in stock:</span>
                     <input id="numeric" type="number" value="17" min="0" max="100" step="1" />
                 </div>
             </div>
@@ -68,13 +73,24 @@
             </script>
 
             <style scoped>
-                #add-product {
-                    height: 181px;
-                    width: 252px;
-                    margin: 30px auto;
-                    padding: 64px 0 0 143px;
-                    background: url('../content/web/numerictextbox/addProduct.png') transparent no-repeat 0 0;
-                    font-size: 12px;
+                .demo-section {
+                    width: 400px;
+                    padding: 0 0 30px 0;
+                }
+
+                #add-product .title {
+                    font-size: 16px;
+                    color: #fff;
+                    background-color: #1e88e5;
+                    padding: 15px;
+                    margin: 0 0 20px;
+               }
+
+                #add-product .description {
+                    display:inline-block;
+                    width: 160px;
+                    font-weight: bold;
+                    padding: 0 20px;
                 }
             </style>
         </div>

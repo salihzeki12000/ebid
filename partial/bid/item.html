@@ -196,9 +196,9 @@
 						<dt>
 							{{comment.title}} <small>{{comment.time}}</small>
 						</dt>
-						<span class="txtsmall gry">By {{comment.username}}</span>
+						<span class="txtsmall gry">By {{comment.name}}</span>
 						<br />
-						<dd>{{comment.content}}</dd>
+						<dd><div ng-bind="comment.content"></div></dd>
 					</dl>
 				</div></li>
 
@@ -218,16 +218,16 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="comment_title">Title:</label>
-                    <input type="text" name="comment_title" id="comment_title" class="form-control" />
+                    <input type="text" name="comment_title" id="comment_title" class="form-control" ng-model="user.commentTitle" />
                 </div>
                 <div class="form-group">
                         <label for="comment_content">Comment</label>
-                        <textarea class="form-control" kendo-editor rows="10" cols="30" style="height: 350px" name="comment_content" id="comment_content" />
+                        <textarea class="form-control" rows="10" cols="30" style="height: 250px;resize: none;" name="comment_content" id="comment_content" ng-model="user.commentContent" />
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary" ng-click="save_comment()">Save changes</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

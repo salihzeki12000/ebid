@@ -30,6 +30,7 @@
                     <div class="col-md-3 padding20">
                         <div class="UserPageImageBox">
                             <a href="#/bid/item/{{product.pid}}"><img ng-src="{{product.defaultImage}}" /></a>
+                            <img ng-if="product.status == 2 || product.status == 3" class="bidResult" ng-src="images/imgEnded.png" />
                         </div>
                     </div>
                     <div class="col-md-8 padding20">
@@ -51,7 +52,9 @@
                                 <b class="pricecurrency">US {{getPriceCurrency(product.currentPrice)}}</b>
                             </div>
                         </div>
-
+                        <div class="row top20"  ng-if="product.status != 2 && product.status != 3">
+                            <div class="pull-right"><button type="button"  class="btn btn-info" ng-click="goToEdit(product.pid)">Edit</button></div>
+                        </div>
                     </div>
                 </div>
             </div>

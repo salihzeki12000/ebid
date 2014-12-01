@@ -57,21 +57,23 @@
         .demo-section p {
             margin: 0 0 20px;
             line-height: 30px;
-        }            
+        }
+        .demo-section p .k-button {
+            margin: 0 5px;
+        }
     </style>
 </div>
 
 <script>
-  angular.module("KendoDemos", [ "kendo.directives" ]);
-
-  function MyCtrl($scope) {
-      $scope.onClick1 = function() {
-        alert("Primary button click");
-      };
-      $scope.onClick2 = function() {
-        alert("Second button click");
-      };
-  }
+  angular.module("KendoDemos", [ "kendo.directives" ])
+      .controller("MyCtrl", function($scope){
+          $scope.onClick1 = function() {
+            alert("Primary button click");
+          };
+          $scope.onClick2 = function() {
+            alert("Second button click");
+          };
+      })
 </script>
 
 

@@ -178,13 +178,13 @@
 </div>
 
 <script>
-  angular.module("KendoDemos", [ "kendo.directives" ]);
-  function MyCtrl($scope){
-      $scope.menuOrientation = "horizontal";
-      $scope.onSelect = function(ev) {
-          alert($(ev.item.firstChild).text());
-      };
-  }
+  angular.module("KendoDemos", [ "kendo.directives" ])
+      .controller("MyCtrl", function($scope){
+          $scope.menuOrientation = "horizontal";
+          $scope.onSelect = function(ev) {
+              alert($(ev.item.firstChild).text());
+          };
+      })
 </script>
 
 

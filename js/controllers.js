@@ -7,7 +7,7 @@
  */
 define("controllers", ['angular','kendo','bootstrap'], function(angular){
 	var BASEURL = 'index.php';
-    var FIREBASEURL = 'https://ebid.firebaseio.com';
+    var FIREBASEURL = 'https://ebid-release.firebaseio.com';
 
 	var SUCCESS = 0;
 	var FAILURE = 1;
@@ -232,6 +232,8 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 			}).done(function(data){
 				$("#unlogin").show();
 				$("#alreadylogin").hide();
+                $scope.username = "unknown";
+                $scope.id = -1;
 				$scope.InfoNotification.show(data.message, "success");
 				$scope.$apply();
 			});
@@ -268,7 +270,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 		new WOW().init();
 	}]);
 
-	ebidController.controller('itemController',['$scope','$http', '$location', '$routeParams', '$compile', '$sce', '$firebase', '$interval','GlobalEnum',function($scope, $http,$location, $routeParams, $compile, $sce, $firebase, $interval, GlobalEnum){
+	ebidController.controller('itemController',['$scope', '$route','$http', '$location', '$routeParams', '$compile', '$sce', '$firebase', '$interval','GlobalEnum',function($scope, $route, $http,$location, $routeParams, $compile, $sce, $firebase, $interval, GlobalEnum){
         kendo.culture("en-US");
         $scope.itemId = $routeParams.itemId;
 
@@ -281,7 +283,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         var hissync = $firebase(hisref);
         $scope.histories = hissync.$asArray();
 
-        var comref = new Firebase(FIREBASEURL + "/bid/comments/" +$scope.itemId );
+        var comref = new Firebase(FIREBASEURL + "/bid/comment/" +$scope.itemId );
         var comsync = $firebase(comref);
         $scope.comments = comsync.$asArray();
 
@@ -292,9 +294,11 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         .success(function(data, status, headers, config) {
                 if(data.type == FAILURE){
                     $location.path('/nopage');
+                    $route.reload();
                 }
                 if(data.type == EXPIRE){
                     $location.path('/bid/item/' + $scope.itemId + '/result');
+                    $route.reload();
                 }
                 if(data.type == SUCCESS){
                     $scope.product = data.data;
@@ -335,6 +339,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                                 if(duration < 0){
                                     $scope.stopClock();
                                     $location.path('/bid/item/' + $scope.itemId + '/result');
+                                    $route.reload();
                                 }
                                 $scope.remainminutes = duration.minutes();
                                 $scope.remainseconds = duration.seconds();
@@ -483,7 +488,6 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                     $scope.userId = $scope.$parent.id;
                 }else{
                     $('#loginModal').modal();
-                    //$location.path('/auth/login');
                     return;
                 }
             }
@@ -503,6 +507,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                     }else if(data.type == EXPIRE){
                         $scope.stopClock();
                         $location.path('/bid/item/' + $scope.itemId + '/result');
+                        $route.reload();
                     }
                     else{
                         $scope.InfoNotification.show(data.message, "error");
@@ -512,6 +517,21 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                     $scope.InfoNotification.show(data.message, "error");
             });
 		};
+
+        $scope.save_comment = function(){
+            var title = $scope.user.commentTitle;
+            var content = $scope.user.commentContent;
+            var uname = $scope.$parent.username;
+            if(!uname || uname == 'unknown'){
+                uname = 'guest';
+            }
+            var now = moment().format('MMMM Do YYYY, h:mm:ss a');
+
+            comref.push({name: uname, time: now, title: title, content: content});
+            $scope.user.commentTitle = "";
+            $scope.user.commentContent = "";
+            $('#commentModal').modal('hide');
+        }
 	}]);
     ebidController.controller('resultController',['$scope','$http', '$location', '$routeParams','GlobalEnum', function($scope, $http, $location, $routeParams, GlobalEnum){
         kendo.culture("en-US");
@@ -572,6 +592,9 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                     $scope.userIndex = data.data;
                 }
         });
+        $scope.goToEdit = function(itemId){
+            $location.path('bid/item/' + itemId +'/edit');
+        };
         $scope.Actionlist = new kendo.data.HierarchicalDataSource({data: [
             {name: 'Sell', path: '#/user/sell', imgIcon: 'glyphicon glyphicon-usd'},
             {name: 'bid', path: '#/user/bid', imgIcon: 'glyphicon glyphicon-fire'}
@@ -695,14 +718,13 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
             $('#home').removeClass('active');
         }
     }]);
-	ebidController.controller('bidAddController',['$scope', '$location', '$http', 'GlobalEnum', function($scope, $location, $http, GlobalEnum){
-        document.title = " Add Product | eBid";
-		isLogin(null, function(){
-			$location.path('/auth/login');
-			if(!$scope.$$phase) $scope.$apply();
-		});
-		$scope.bidType = GlobalEnum.EnumBidType;
-		$scope.shippingType = GlobalEnum.EnumShippingType;
+    var initialBidForm = function($scope, $location, $http, GlobalEnum){
+        isLogin(null, function(){
+            $location.path('/auth/login');
+            if(!$scope.$$phase) $scope.$apply();
+        });
+        $scope.bidType = GlobalEnum.EnumBidType;
+        $scope.shippingType = GlobalEnum.EnumShippingType;
 
         $scope.conditionType = GlobalEnum.EnumConditionType;
 
@@ -717,140 +739,140 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
             dataValueField: "categoryId"
 
         });
-		$scope.ProductNameAutoComplete = new kendo.data.DataSource({
-			transport: {
-				read: {
-					//url: BASEURL + "/ajax/findProducts",
-					url: BASEURL + "/ajax/autoCompleteProducts",
+        $scope.ProductNameAutoComplete = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    //url: BASEURL + "/ajax/findProducts",
+                    url: BASEURL + "/ajax/autoCompleteProducts",
                     dataType: "json",
-	                data: {
-	                	maxFetch: 3,
-	                	searchTerm: function() {
-	                        return $('#ProductName').val();
-	                    }
-	                }
-				}
-			},
-			serverFiltering: true,
-			total: 3,
-		    schema: {
-		        data: "productFamilies"
-		    }
-		});
+                    data: {
+                        maxFetch: 3,
+                        searchTerm: function() {
+                            return $('#ProductName').val();
+                        }
+                    }
+                }
+            },
+            serverFiltering: true,
+            total: 3,
+            schema: {
+                data: "productFamilies"
+            }
+        });
         $scope.imagelistViewTemplate = $('#imagepreviewtemplate').html();
         $scope.Imageslistsource = new kendo.data.DataSource({
             data: []
         });
-		$scope.ProductNameAutoCompleteOptions = {
-		          dataSource: $scope.ProductNameAutoComplete,
-		          dataTextField: "title",
-		          valuePrimitive: true,
-		          filter: 'contains',
-		          placeholder : "Enter item name here",
-		          // using  templates:
-		          template: kendo.template($("#ProductNameAutoCompleteTemplate").html()),
-		          animation: {
-		        	   close: {
-		        	     effects: "fadeOut zoom:out",
-		        	     duration: 300
-		        	   },
-		        	   open: {
-		        	     effects: "fadeIn zoom:in",
-		        	     duration: 300
-		        	   }
-		           },
-		           change: function(){
-		        	   this.dataSource.read();
-		           },
-                   select: function(e) {
-                       var val = e.item.text().trim();
-                       var data = $scope.ProductNameAutoComplete.data().slice(0);
-                       var obj;
-                       $.each(data, function(i, item){
-                           var name = item.title.trim();
-                           if(val === name){
-                               obj = item;
-                               return false;
-                           }
-                       });
-                       var itemId = obj.itemId;
-                       //remove all pictures
-                       $scope.Imageslistsource.data([]);
-                       //clear default image
-                       $scope.product.defaultImage = null;
-                       $http.get(BASEURL + "/ajax/getProductById/" + itemId)
-                           .success(function(data, status, headers, config) {
-                               $scope.product.description = data.Description;
-                               $.each(data.PictureURL, function(i, item){
-                                   var image = {
-                                       ImageName: i,
-                                       ImageURL: item,
-                                       targetUid: null
-                                   };
-                                   $scope.Imageslistsource.add(image);
-                               });
-                               if(!$scope.$$phase) {
-                                   $scope.$apply();
-                               }
-                           });
-                       /*
-                       var detailurl = obj.detailURL;
-                       var item = {
-                           ImageName: 'original',
-                           ImageURL: obj.galleryURL,
-                           targetUid: null
-                       };
-                       $scope.Imageslistsource.add(item);
-                       $http({
-                           method: 'GET',
-                           url: BASEURL + "/ajax/getDetail?url=" + encodeURIComponent(detailurl)
-                       }).success(function(data, status, headers, config) {
-                           $scope.product.description = data;
-                               if(!$scope.$$phase) {
-                                   $scope.$apply();
-                               }
-                       })
-                       */
-                   },
-		           height: 500
-		        };
-		$scope.uploadPicturesOptions = {
-                async: {
-                    saveUrl: BASEURL + "/ajax/upload",
-                    removeUrl: BASEURL + "/ajax/upload/remove",
-                    autoUpload: true
+        $scope.ProductNameAutoCompleteOptions = {
+            dataSource: $scope.ProductNameAutoComplete,
+            dataTextField: "title",
+            valuePrimitive: true,
+            filter: 'contains',
+            placeholder : "Enter item name here",
+            // using  templates:
+            template: kendo.template($("#ProductNameAutoCompleteTemplate").html()),
+            animation: {
+                close: {
+                    effects: "fadeOut zoom:out",
+                    duration: 300
                 },
-                success: function (e) {
-                    var files = e.files;
-                    if (e.operation == "upload") {
-                        var data = e.response;
-                        if(data.type == SUCCESS){
-                            $.each(data.data, function(i, item){
-                                $.each(files, function(j, file){
-                                    if(file.name == item.ImageName){
-                                        item['targetUid'] = file.uid;
-                                    }
-                                });
-                                $scope.Imageslistsource.add(item);
-                            });
+                open: {
+                    effects: "fadeIn zoom:in",
+                    duration: 300
+                }
+            },
+            change: function(){
+                this.dataSource.read();
+            },
+            select: function(e) {
+                var val = e.item.text().trim();
+                var data = $scope.ProductNameAutoComplete.data().slice(0);
+                var obj;
+                $.each(data, function(i, item){
+                    var name = item.title.trim();
+                    if(val === name){
+                        obj = item;
+                        return false;
+                    }
+                });
+                var itemId = obj.itemId;
+                //remove all pictures
+                $scope.Imageslistsource.data([]);
+                //clear default image
+                $scope.product.defaultImage = null;
+                $http.get(BASEURL + "/ajax/getProductById/" + itemId)
+                    .success(function(data, status, headers, config) {
+                        $scope.product.description = data.Description;
+                        $.each(data.PictureURL, function(i, item){
+                            var image = {
+                                ImageName: i,
+                                ImageURL: item,
+                                targetUid: null
+                            };
+                            $scope.Imageslistsource.add(image);
+                        });
+                        if(!$scope.$$phase) {
                             $scope.$apply();
                         }
-                    }else{
-                        var data = $scope.Imageslistsource.data().slice(0);
-                        $.each(data, function(i, item){
-                           var name = item.ImageName;
+                    });
+                /*
+                 var detailurl = obj.detailURL;
+                 var item = {
+                 ImageName: 'original',
+                 ImageURL: obj.galleryURL,
+                 targetUid: null
+                 };
+                 $scope.Imageslistsource.add(item);
+                 $http({
+                 method: 'GET',
+                 url: BASEURL + "/ajax/getDetail?url=" + encodeURIComponent(detailurl)
+                 }).success(function(data, status, headers, config) {
+                 $scope.product.description = data;
+                 if(!$scope.$$phase) {
+                 $scope.$apply();
+                 }
+                 })
+                 */
+            },
+            height: 500
+        };
+        $scope.uploadPicturesOptions = {
+            async: {
+                saveUrl: BASEURL + "/ajax/upload",
+                removeUrl: BASEURL + "/ajax/upload/remove",
+                autoUpload: true
+            },
+            success: function (e) {
+                var files = e.files;
+                if (e.operation == "upload") {
+                    var data = e.response;
+                    if(data.type == SUCCESS){
+                        $.each(data.data, function(i, item){
                             $.each(files, function(j, file){
-                                if(file.name == name){
-                                    if(item.ImageURL == $scope.product.defaultImage){
-                                        $scope.product.defaultImage = null;
-                                    }
-                                    $scope.Imageslistsource.remove(item);
+                                if(file.name == item.ImageName){
+                                    item['targetUid'] = file.uid;
                                 }
                             });
+                            $scope.Imageslistsource.add(item);
                         });
+                        $scope.$apply();
                     }
+                }else{
+                    var data = $scope.Imageslistsource.data().slice(0);
+                    $.each(data, function(i, item){
+                        var name = item.ImageName;
+                        $.each(files, function(j, file){
+                            if(file.name == name){
+                                if(item.ImageURL == $scope.product.defaultImage){
+                                    $scope.product.defaultImage = null;
+                                }
+                                $scope.Imageslistsource.remove(item);
+                            }
+                        });
+                    });
                 }
-		};
+            }
+        };
         $scope.ImageDefault = function(name, url){
             $scope.product.defaultImage = url;
 
@@ -882,6 +904,70 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         $scope.dateTimeOptions = {
             format: "yyyy/MM/dd HH:mm"
         };
+    };
+    ebidController.controller('bidEditController',['$scope', '$location', '$http', '$routeParams', 'GlobalEnum', function($scope, $location, $http, $routeParams, GlobalEnum){
+        document.title = " Edit Product | eBid";
+        $scope.itemId = $routeParams.itemId;
+        initialBidForm($scope, $location, $http, GlobalEnum);
+
+        $http({
+            method: 'GET',
+            url: BASEURL + '/product/' + $scope.itemId +'/edit'
+        })
+        .success(function(data, status, headers, config) {
+            if(data.type == SUCCESS){
+                $scope.product = data.data;
+                $.each($scope.product.imageLists, function(i, item){
+                    $scope.Imageslistsource.add({ImageURL: item, ImageName: ''});
+                });
+                $scope.product.endTime = moment($scope.product.endTime).format('YYYY/MM/DD HH:mm');
+            }else{
+                setTimeout(function(){
+                    $location.path('/user');
+                    $scope.$apply();
+                },2000);
+            }
+        })
+        .error(function(data, status, headers, config) {
+                $scope.InfoNotification.show("please contact system administrator.", "error");
+                setTimeout(function(){
+                    $location.path('/user');
+                    $scope.$apply();
+                },2000);
+        });
+
+        $scope.submit = function(){
+            if(!$scope.bidForm.$valid){
+                return;
+            }
+            $scope.product.imageLists = [];
+            $.each($scope.Imageslistsource.data(), function(i, item){
+                $scope.product.imageLists.push(item.ImageURL);
+            });
+            $http({
+                method: 'POST',
+                url: BASEURL + '/product/' + $scope.itemId +'/edit',
+                data: $scope.product
+            })
+                .success(function(data, status, headers, config) {
+                    if(data.type == SUCCESS){
+                        $scope.InfoNotification.show(data.message + " You will redirect to user home page within 2 seconds.", "success");
+                        setTimeout(function(){
+                            $location.path('/user');
+                            $scope.$apply();
+                        },2000);
+                    }else{
+                        $scope.InfoNotification.show(data.message, "error");
+                    }
+                })
+                .error(function(data, status, headers, config) {
+                    $scope.InfoNotification.show("please contact system administrator.", "error");
+                });
+        };
+    }]);
+	ebidController.controller('bidAddController',['$scope', '$location', '$http', 'GlobalEnum', function($scope, $location, $http, GlobalEnum){
+        document.title = " Add Product | eBid";
+        initialBidForm($scope, $location, $http, GlobalEnum);
 
         $scope.submit = function(){
             if(!$scope.bidForm.$valid){

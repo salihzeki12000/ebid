@@ -50,10 +50,10 @@ class UserController extends baseController
         $securityContext = $session->get("security_context");
         $user = $securityContext->getToken()->getUser();
         $result = array('user' => array('id'=> $user->uid, 'username' => $user->username, 'email' => $user->email, 'address' => $user->address, 'state' => $user->state, 'zipcode'=> $user->zipcode));
-        $sql ='SELECT pid, pname, buyNowPrice, currentPrice, startPrice, defaultImage, endTime, categoryId, shippingType, shippingCost, auction, seller, `condition`, status  FROM ' . _table('Product'). ' WHERE seller = '. $user->uid . ' LIMIT ' . $size;
+        $sql ='SELECT pid, pname, buyNowPrice, currentPrice, startPrice, defaultImage, endTime, categoryId, shippingType, shippingCost, auction, seller, `condition`, status  FROM ' . _table('Product'). ' WHERE seller = '. $user->uid . ' ORDER BY pid desc LIMIT ' . $size;
         $list = $MySQLParser->query($sql);
         $result['seller'] = $list;
-        $sql = 'SELECT Product.pid, Product.pname, Product.buyNowPrice, Product.currentPrice, Product.startPrice, Product.defaultImage, Product.endTime, Product.categoryId, Product.shippingType, Product.shippingCost, Product.auction, Product.seller, Product.`condition`, Product.`status` as ProductStatus, Bid.`status` AS BidStatus, Bid.bidPrice FROM (SELECT * FROM ' . _table('Bid') . ' WHERE uid = ' . $user->uid . ' ORDER BY bidPrice desc) AS Bid INNER JOIN '. _table('Product'). ' AS Product ON Bid.pid = Product.pid  GROUP BY Bid.pid LIMIT ' . $size;
+        $sql = 'SELECT Product.pid, Product.pname, Product.buyNowPrice, Product.currentPrice, Product.startPrice, Product.defaultImage, Product.endTime, Product.categoryId, Product.shippingType, Product.shippingCost, Product.auction, Product.seller, Product.`condition`, Product.`status` as ProductStatus, Bid.`status` AS BidStatus, Bid.bidPrice FROM (SELECT * FROM ' . _table('Bid') . ' WHERE uid = ' . $user->uid . ' ORDER BY bidPrice desc) AS Bid INNER JOIN '. _table('Product'). ' AS Product ON Bid.pid = Product.pid GROUP BY Bid.pid ORDER BY Product.pid DESC  LIMIT ' . $size;
         $list = $MySQLParser->query($sql);
         $result['bid'] = $list;
         $result = new Result(Result::SUCCESS, 'get user list successfully.', $result);

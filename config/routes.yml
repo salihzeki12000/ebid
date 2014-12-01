@@ -76,6 +76,16 @@ ProductAdd:
     path:     /product/add
     defaults: { _controller: 'ebid\Controller\ProductController::addAction'}
 
+ProductEditGet:
+    path:     /product/{itemId}/edit
+    defaults: { _controller: 'ebid\Controller\ProductController::editGetAction'}
+    methods:  ['GET']
+
+ProductEditPost:
+    path:     /product/{itemId}/edit
+    defaults: { _controller: 'ebid\Controller\ProductController::editPostAction'}
+    methods:  ['POST']
+
 ProductInfo:
     path:     /product/item/{itemId}
     defaults: { _controller: 'ebid\Controller\ProductController::itemAction'}

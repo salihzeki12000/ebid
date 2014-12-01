@@ -41,6 +41,62 @@ class ProductController extends baseController {
         return new Response(json_encode($result));
     }
 
+    public function editGetAction($itemId){
+        $this->checkAuthentication();
+        $MySQLParser = $this->container->get('MySQLParser');
+        $product = new Product();
+        $result = $MySQLParser->select($product, ' pid = ' . $itemId);
+        if(count($result) == 0){
+            $result = new Result(Result::FAILURE, 'Product cannot found.');
+            return new Response(json_encode($result));
+        }
+        $product->set($result[0]);
+        $product->imageLists = json_decode($product->imageLists);
+        global $session;
+        $securityContext = $session->get("security_context");
+        $user = $securityContext->getToken()->getUser();
+        if($user->uid != $product->seller){
+            $result = new Result(Result::FAILURE, 'You can\'t modify the product which is not belong to you.');
+            return new Response(json_encode($result));
+        }
+        $result = new Result(Result::SUCCESS, "Product get successfully.", $product);
+        return new Response(json_encode($result));
+    }
+
+    public function editPostAction($itemId){
+        $itemId = intval($itemId);
+        $this->checkAuthentication();
+        $product = new Product();
+        $MySQLParser = $this->container->get('MySQLParser');
+        $result = $MySQLParser->select($product, ' pid = ' . $itemId);
+        if(count($result) == 0){
+            $result = new Result(Result::FAILURE, 'Product cannot found.');
+            return new Response(json_encode($result));
+        }
+        $data = json_decode($this->request->getContent());
+
+        if(!$product->isValid($data)){
+            $result = new Result(Result::FAILURE, 'post data is not valid.');
+            return new Response(json_encode($result));
+        }
+        $product->set($data);
+        if($product->defaultImage == null || $product->defaultImage == ""){
+            if($product->imageLists != null && count($product->imageLists)){
+                $product->defaultImage = $product->imageLists[0];
+            }
+        }
+        global $session;
+        $securityContext = $session->get("security_context");
+        $user = $securityContext->getToken()->getUser();
+        if($user->uid != $product->seller){
+            $result = new Result(Result::FAILURE, 'You can\'t modify the product which is not belong to you.');
+            return new Response(json_encode($result));
+        }
+        $MySQLParser->update($product, array("pid"), array('startPrice', 'expectPrice','buyNowPrice','categoryId'), 'pid');
+        $result = new Result(Result::SUCCESS, "Product update successfully.");
+        return new Response(json_encode($result));
+    }
+
     public function itemAction($itemId){
         $itemId = intval($itemId);
         $MySQLParser = $this->container->get('MySQLParser');

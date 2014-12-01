@@ -167,7 +167,7 @@
                     }
                 });
 
-                $("#gantt").kendoGantt({
+                var gantt = $("#gantt").kendoGantt({
                     dataSource: tasksDataSource,
                     dependencies: dependenciesDataSource,
                     views: [
@@ -176,7 +176,7 @@
                         "month"
                     ],
                     columns: [
-                        { field: "id", title: "ID", width: 50 },
+                        { field: "id", title: "ID", width: 60 },
                         { field: "title", title: "Title", editable: true, sortable: true },
                         { field: "start", title: "Start Time", format: "{0:MM/dd/yyyy}", width: 100, editable: true, sortable: true },
                         { field: "end", title: "End Time", format: "{0:MM/dd/yyyy}", width: 100, editable: true, sortable: true }
@@ -185,6 +185,10 @@
 
                     showWorkHours: false,
                     showWorkDays: false
+                }).data("kendoGantt");
+
+                $(document).bind("kendo:skinChange", function() {
+                    gantt.refresh();
                 });
             });
         </script>

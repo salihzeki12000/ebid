@@ -29,7 +29,7 @@
                                      'padding': '3em',
                                      'background': menuOpen ? '#52c35d' : '' }">
       Right-click me
-      <span ng-show="menuOpen">— Menu is open</span>
+      <span ng-show="menuOpen">- Menu is open</span>
       <div ng-show="selected">Selected: <b>{{selected}}</b></div>
     </div>
     <ul kendo-context-menu
@@ -51,14 +51,13 @@
 </div>
 
 <script>
-  angular.module("KendoDemos", [ "kendo.directives" ]);
-
-  function MyCtrl($scope){
-      $scope.menuOpen = 0;
-      $scope.onSelect = function(e) {
-          $scope.selected = $(e.item).children(".k-link").text();
-      };
-  };
+  angular.module("KendoDemos", [ "kendo.directives" ])
+      .controller("MyCtrl", function($scope){
+          $scope.menuOpen = 0;
+          $scope.onSelect = function(e) {
+              $scope.selected = $(e.item).children(".k-link").text();
+          };
+      })
 </script>
 
 

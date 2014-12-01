@@ -29,16 +29,17 @@
     <div ng-controller="MyCtrl">
 
     <div class="demo-section">
-        <div kendo-listview id="listView" k-data-source="source" k-template='listViewTemplate'></div>
+        <div kendo-list-view id="listView" k-data-source="source">
+            <div class="product" k-template>
+                <img ng-src="../content/web/foods/{{dataItem.ProductID}}.jpg" alt=" {{dataItem.ProductName}} image" />
+                <h3>{{ dataItem.ProductName }}</h3>
+                <p>{{ kendo.toString(dataItem.UnitPrice, "c") }}</p>
+            </div>
+        </div>
         <div kendo-pager k-data-source="source"></div>
     </div>
 
     <script type="text/x-kendo-angular-template" id="template">
-        <div class="product">
-            <img ng-src="../content/web/foods/{{dataItem.ProductID}}.jpg" alt=" {{dataItem.ProductName}} image" />
-            <h3>{{ dataItem.ProductName }}</h3>
-            <p>{{ kendo.toString(dataItem.UnitPrice, "c") }}</p>
-        </div>
     </script>
 
     <style scoped>
@@ -109,16 +110,13 @@
 </div>
 
 <script>
-    angular.module("KendoDemos", [ "kendo.directives" ]);
-
-    function MyCtrl($scope) {
-        $scope.listViewTemplate = $("#template").html();
-
-        $scope.source = new kendo.data.DataSource({
-            data: products,
-            pageSize: 21
-        });
-    }
+    angular.module("KendoDemos", [ "kendo.directives" ])
+        .controller("MyCtrl", function($scope){
+            $scope.source = new kendo.data.DataSource({
+                data: products,
+                pageSize: 21
+            });
+        })
 </script>
 
 

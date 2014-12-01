@@ -325,6 +325,9 @@ $.fn.kendoRouter = function(options) {
 
     /// &#10;Accepts an object with the following configuration options:
     /// &#10;
+    /// &#10;ignoreCase — Boolean (default: true)
+    /// &#10;Introduced with Q3 2014. If set to false, the router instance will perform case sensitive match of the url against the defined routes.
+    /// &#10;
     /// &#10;pushState — Boolean (default: false)
     /// &#10;If set to true, the router will use the history pushState API.
     /// &#10;
@@ -694,7 +697,7 @@ kendo.data.DataSource.prototype = {
         /// <summary>
         /// Reads data items from a remote service (if the transport option is set) or from a JavaScript array (if the data option is set).
         /// </summary>
-        /// <param name="data" type="Object" >Optional data to pass to the remote service.</param>
+        /// <param name="data" type="Object" >Optional data to pass to the remote service. If you need to filter, it is better to use the filter() method or the query() method with a filter parameter.</param>
 
     },
 
@@ -1805,8 +1808,9 @@ $.fn.kendoPivotDataSource = function(options) {
     /// &#10;columns — Array 
     /// &#10;The configuration of columns axis members. An array of JavaScript objects or strings. A JavaScript objects are interpreted as column descriptors. Strings are interpreted as the hierarchal name of the member.
     /// &#10;
-    /// &#10;measures — Array 
+    /// &#10;measures — Array|Object 
     /// &#10;The configuration of measures. An string array which values are interpreted as the name of the measures to be loaded.
+/// &#10;Measures can be defined as a list of objects with name and type fields:
     /// &#10;
     /// &#10;rows — Array 
     /// &#10;The configuration of rows axis members. An array of JavaScript objects or strings. A JavaScript objects are interpreted as rows descriptors. Strings are interpreted as the hierarchal name of the member.
@@ -2055,6 +2059,2727 @@ $.fn.kendoSchedulerEvent = function(options) {
 };
 
 
+kendo.data.TreeListDataSource = function() { };
+
+kendo.data.TreeListDataSource.prototype = {
+
+
+
+
+    load: function(model) {
+        /// <summary>
+        /// Loads the child nodes for model.
+        /// </summary>
+        /// <param name="model" type="kendo.data.TreeListModel" >The model that must be loaded.</param>
+
+    },
+
+
+    childNodes: function(model) {
+        /// <summary>
+        /// Child nodes for model.
+        /// </summary>
+        /// <param name="model" type="kendo.data.TreeListModel" >The model whose children must be returned.</param>
+        /// <returns type="Array">of the child items.</returns>
+
+    },
+
+
+    rootNodes: function() {
+        /// <summary>
+        /// Return all root nodes.
+        /// </summary>
+        /// <returns type="Array">of the root items.</returns>
+
+    },
+
+
+    parentNode: function(model) {
+        /// <summary>
+        /// The parent of given node.
+        /// </summary>
+        /// <param name="model" type="kendo.data.TreeListModel" >The model whose parent must be returned.</param>
+        /// <returns type="kendo.data.TreeListModel">parent of the node.</returns>
+
+    },
+
+
+    level: function(model) {
+        /// <summary>
+        /// The hierarchical level of the node.
+        /// </summary>
+        /// <param name="model" type="kendo.data.TreeListModel" >The model whose level must be calculated.</param>
+        /// <returns type="Number">the hierachy level of the node.</returns>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoTreeListDataSource = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.data.TreeListDataSource widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.data.TreeListDataSource">The kendo.data.TreeListDataSource instance (if present).</returns>
+};
+
+$.fn.kendoTreeListDataSource = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.data.TreeListDataSource widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// &#10;schema — Object 
+    /// &#10;The schema configuration of the TreeListDataSource.
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.data.TreeListModel = function() { };
+
+kendo.data.TreeListModel.prototype = {
+
+
+
+
+    loaded: function() {
+        /// <summary>
+        /// Gets or sets the loaded flag of the TreeList. Setting the loaded flag to false allows reloading of child items.
+        /// </summary>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoTreeListModel = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.data.TreeListModel widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.data.TreeListModel">The kendo.data.TreeListModel instance (if present).</returns>
+};
+
+$.fn.kendoTreeListModel = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.data.TreeListModel widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+if (!drawing) {
+    drawing = {};
+}
+
+kendo.drawing.Arc = function() { };
+
+kendo.drawing.Arc.prototype = {
+
+
+
+
+    bbox: function() {
+        /// <summary>
+        /// Returns the bounding box of the element with transformations applied.
+/// Inherited from Element.bbox
+        /// </summary>
+        /// <returns type="kendo.geometry.Rect">The bounding box of the element with transformations applied.</returns>
+
+    },
+
+
+    clip: function(clip) {
+        /// <summary>
+        /// Gets or sets the element clipping path.
+/// Inherited from Element.clip
+        /// </summary>
+        /// <param name="clip" type="kendo.drawing.Path" >The element clipping path.</param>
+        /// <returns type="kendo.drawing.Path">The current element clipping path.</returns>
+
+    },
+
+
+    geometry: function(value) {
+        /// <summary>
+        /// Gets or sets the arc geometry.
+        /// </summary>
+        /// <param name="value" type="kendo.geometry.Arc" >The new geometry to use.</param>
+        /// <returns type="kendo.geometry.Arc">The current arc geometry.</returns>
+
+    },
+
+
+    fill: function(color,opacity) {
+        /// <summary>
+        /// Sets the shape fill.
+        /// </summary>
+        /// <param name="color" type="String" >The fill color to set.</param>
+        /// <param name="opacity" type="Number" >The fill opacity to set.</param>
+        /// <returns type="kendo.drawing.Arc">The current instance to allow chaining.</returns>
+
+    },
+
+
+    opacity: function(opacity) {
+        /// <summary>
+        /// Gets or sets the element opacity.
+/// Inherited from Element.opacityIf set, the stroke and fill opacity will be multiplied by the element opacity.
+        /// </summary>
+        /// <param name="opacity" type="Number" >The element opacity. Ranges from 0 (completely transparent) to 1 (completely opaque).</param>
+        /// <returns type="Number">The current element opacity.</returns>
+
+    },
+
+
+    stroke: function(color,width,opacity) {
+        /// <summary>
+        /// Sets the shape stroke.
+        /// </summary>
+        /// <param name="color" type="String" >The stroke color to set.</param>
+        /// <param name="width" type="Number" >The stroke width to set.</param>
+        /// <param name="opacity" type="Number" >The stroke opacity to set.</param>
+        /// <returns type="kendo.drawing.Arc">The current instance to allow chaining.</returns>
+
+    },
+
+
+    transform: function(transform) {
+        /// <summary>
+        /// Gets or sets the transformation of the element.
+/// Inherited from Element.transform
+        /// </summary>
+        /// <param name="transform" type="kendo.geometry.Transformation" >The transformation to apply to the element.</param>
+        /// <returns type="kendo.geometry.Transformation">The current transformation on the element.</returns>
+
+    },
+
+
+    visible: function(visible) {
+        /// <summary>
+        /// Gets or sets the visibility of the element.
+/// Inherited from Element.visible
+        /// </summary>
+        /// <param name="visible" type="Boolean" >A flag indicating if the element should be visible.</param>
+        /// <returns type="Boolean">true if the element is visible; false otherwise.</returns>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoArc = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.drawing.Arc widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.drawing.Arc">The kendo.drawing.Arc instance (if present).</returns>
+};
+
+$.fn.kendoArc = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.drawing.Arc widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// &#10;clip — kendo.drawing.Path 
+    /// &#10;The element clipping path.
+/// &#10;Inherited from Element.clip
+    /// &#10;
+    /// &#10;fill — kendo.drawing.FillOptions 
+    /// &#10;The fill options of the shape.
+    /// &#10;
+    /// &#10;opacity — Number 
+    /// &#10;The element opacity.
+/// &#10;Inherited from Element.opacity
+    /// &#10;
+    /// &#10;stroke — kendo.drawing.StrokeOptions 
+    /// &#10;The stroke options of the shape.
+    /// &#10;
+    /// &#10;transform — kendo.geometry.Transformation 
+    /// &#10;The transformation to apply to this element.
+/// &#10;Inherited from Element.transform
+    /// &#10;
+    /// &#10;visible — Boolean 
+    /// &#10;A flag, indicating if the element is visible.
+/// &#10;Inherited from Element.visible
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.drawing.Circle = function() { };
+
+kendo.drawing.Circle.prototype = {
+
+
+
+
+    bbox: function() {
+        /// <summary>
+        /// Returns the bounding box of the element with transformations applied.
+/// Inherited from Element.bbox
+        /// </summary>
+        /// <returns type="kendo.geometry.Rect">The bounding box of the element with transformations applied.</returns>
+
+    },
+
+
+    clip: function(clip) {
+        /// <summary>
+        /// Gets or sets the element clipping path.
+/// Inherited from Element.clip
+        /// </summary>
+        /// <param name="clip" type="kendo.drawing.Path" >The element clipping path.</param>
+        /// <returns type="kendo.drawing.Path">The current element clipping path.</returns>
+
+    },
+
+
+    geometry: function(value) {
+        /// <summary>
+        /// Gets or sets the circle geometry.
+        /// </summary>
+        /// <param name="value" type="kendo.geometry.Circle" >The new geometry to use.</param>
+        /// <returns type="kendo.geometry.Circle">The current circle geometry.</returns>
+
+    },
+
+
+    fill: function(color,opacity) {
+        /// <summary>
+        /// Sets the shape fill.
+        /// </summary>
+        /// <param name="color" type="String" >The fill color to set.</param>
+        /// <param name="opacity" type="Number" >The fill opacity to set.</param>
+        /// <returns type="kendo.drawing.Circle">The current instance to allow chaining.</returns>
+
+    },
+
+
+    opacity: function(opacity) {
+        /// <summary>
+        /// Gets or sets the element opacity.
+/// Inherited from Element.opacityIf set, the stroke and fill opacity will be multiplied by the element opacity.
+        /// </summary>
+        /// <param name="opacity" type="Number" >The element opacity. Ranges from 0 (completely transparent) to 1 (completely opaque).</param>
+        /// <returns type="Number">The current element opacity.</returns>
+
+    },
+
+
+    stroke: function(color,width,opacity) {
+        /// <summary>
+        /// Sets the shape stroke.
+        /// </summary>
+        /// <param name="color" type="String" >The stroke color to set.</param>
+        /// <param name="width" type="Number" >The stroke width to set.</param>
+        /// <param name="opacity" type="Number" >The stroke opacity to set.</param>
+        /// <returns type="kendo.drawing.Circle">The current instance to allow chaining.</returns>
+
+    },
+
+
+    transform: function(transform) {
+        /// <summary>
+        /// Gets or sets the transformation of the element.
+/// Inherited from Element.transform
+        /// </summary>
+        /// <param name="transform" type="kendo.geometry.Transformation" >The transformation to apply to the element.</param>
+        /// <returns type="kendo.geometry.Transformation">The current transformation on the element.</returns>
+
+    },
+
+
+    visible: function(visible) {
+        /// <summary>
+        /// Gets or sets the visibility of the element.
+/// Inherited from Element.visible
+        /// </summary>
+        /// <param name="visible" type="Boolean" >A flag indicating if the element should be visible.</param>
+        /// <returns type="Boolean">true if the element is visible; false otherwise.</returns>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoCircle = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.drawing.Circle widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.drawing.Circle">The kendo.drawing.Circle instance (if present).</returns>
+};
+
+$.fn.kendoCircle = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.drawing.Circle widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// &#10;clip — kendo.drawing.Path 
+    /// &#10;The element clipping path.
+/// &#10;Inherited from Element.clip
+    /// &#10;
+    /// &#10;fill — kendo.drawing.FillOptions 
+    /// &#10;The fill options of the shape.
+    /// &#10;
+    /// &#10;opacity — Number 
+    /// &#10;The element opacity.
+/// &#10;Inherited from Element.opacity
+    /// &#10;
+    /// &#10;stroke — kendo.drawing.StrokeOptions 
+    /// &#10;The stroke options of the shape.
+    /// &#10;
+    /// &#10;transform — kendo.geometry.Transformation 
+    /// &#10;The transformation to apply to this element.
+/// &#10;Inherited from Element.transform
+    /// &#10;
+    /// &#10;visible — Boolean 
+    /// &#10;A flag, indicating if the element is visible.
+/// &#10;Inherited from Element.visible
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.drawing.Element = function() { };
+
+kendo.drawing.Element.prototype = {
+
+
+
+
+    bbox: function() {
+        /// <summary>
+        /// Returns the bounding box of the element with transformations applied.
+        /// </summary>
+        /// <returns type="kendo.geometry.Rect">The bounding box of the element with transformations applied.</returns>
+
+    },
+
+
+    clip: function(clip) {
+        /// <summary>
+        /// Gets or sets the element clipping path.
+        /// </summary>
+        /// <param name="clip" type="kendo.drawing.Path" >The element clipping path.</param>
+        /// <returns type="kendo.drawing.Path">The current element clipping path.</returns>
+
+    },
+
+
+    opacity: function(opacity) {
+        /// <summary>
+        /// Gets or sets the element opacity.
+        /// </summary>
+        /// <param name="opacity" type="Number" >The element opacity. Ranges from 0 (completely transparent) to 1 (completely opaque).</param>
+        /// <returns type="Number">The current element opacity.</returns>
+
+    },
+
+
+    transform: function(transform) {
+        /// <summary>
+        /// Gets or sets the transformation of the element.
+        /// </summary>
+        /// <param name="transform" type="kendo.geometry.Transformation" >The transformation to apply to the element.</param>
+        /// <returns type="kendo.geometry.Transformation">The current transformation on the element.</returns>
+
+    },
+
+
+    visible: function(visible) {
+        /// <summary>
+        /// Gets or sets the visibility of the element.
+        /// </summary>
+        /// <param name="visible" type="Boolean" >A flag indicating if the element should be visible.</param>
+        /// <returns type="Boolean">true if the element is visible; false otherwise.</returns>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoElement = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.drawing.Element widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.drawing.Element">The kendo.drawing.Element instance (if present).</returns>
+};
+
+$.fn.kendoElement = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.drawing.Element widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// &#10;clip — kendo.drawing.Path 
+    /// &#10;The clipping path for this element.The path instance will be monitored for changes.
+/// &#10;It can be replaced by calling the clip method.
+    /// &#10;
+    /// &#10;opacity — Number 
+    /// &#10;The element opacity.
+    /// &#10;
+    /// &#10;transform — kendo.geometry.Transformation 
+    /// &#10;The transformation to apply to this element.
+    /// &#10;
+    /// &#10;visible — Boolean 
+    /// &#10;A flag, indicating if the element is visible.
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.drawing.FillOptions = function() { };
+
+kendo.drawing.FillOptions.prototype = {
+
+
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoFillOptions = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.drawing.FillOptions widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.drawing.FillOptions">The kendo.drawing.FillOptions instance (if present).</returns>
+};
+
+$.fn.kendoFillOptions = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.drawing.FillOptions widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.drawing.Group = function() { };
+
+kendo.drawing.Group.prototype = {
+
+
+
+
+    append: function(element) {
+        /// <summary>
+        /// Appends the specified element as a last child of the group.
+        /// </summary>
+        /// <param name="element" type="kendo.drawing.Element" >The element to append. Multiple parameters are accepted.</param>
+
+    },
+
+
+    clear: function() {
+        /// <summary>
+        /// Removes all child elements from the group.
+        /// </summary>
+
+    },
+
+
+    clip: function(clip) {
+        /// <summary>
+        /// Gets or sets the group clipping path.
+/// Inherited from Element.clip
+        /// </summary>
+        /// <param name="clip" type="kendo.drawing.Path" >The group clipping path.</param>
+        /// <returns type="kendo.drawing.Path">The current group clipping path.</returns>
+
+    },
+
+
+    opacity: function(opacity) {
+        /// <summary>
+        /// Gets or sets the group opacity.
+/// Inherited from Element.opacityThe opacity of any child groups and elements will be multiplied by this value.
+        /// </summary>
+        /// <param name="opacity" type="Number" >The group opacity. Ranges from 0 (completely transparent) to 1 (completely opaque).</param>
+        /// <returns type="Number">The current group opacity.</returns>
+
+    },
+
+
+    remove: function(element) {
+        /// <summary>
+        /// Removes the specified element from the group.
+        /// </summary>
+        /// <param name="element" type="kendo.drawing.Element" >The element to remove.</param>
+
+    },
+
+
+    removeAt: function(index) {
+        /// <summary>
+        /// Removes the child element at the specified position.
+        /// </summary>
+        /// <param name="index" type="Number" >The index at which the element currently resides.</param>
+
+    },
+
+
+    visible: function(visible) {
+        /// <summary>
+        /// Gets or sets the visibility of the element.
+        /// </summary>
+        /// <param name="visible" type="Boolean" >A flag indicating if the element should be visible.</param>
+        /// <returns type="Boolean">true if the element is visible; false otherwise.</returns>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoGroup = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.drawing.Group widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.drawing.Group">The kendo.drawing.Group instance (if present).</returns>
+};
+
+$.fn.kendoGroup = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.drawing.Group widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// &#10;clip — kendo.drawing.Path 
+    /// &#10;The group clipping path.
+/// &#10;Inherited from Element.clip
+    /// &#10;
+    /// &#10;opacity — Number 
+    /// &#10;The group opacity.
+/// &#10;Inherited from Element.opacityThe opacity of any child groups and elements will be multiplied by this value.
+    /// &#10;
+    /// &#10;transform — kendo.geometry.Transformation 
+    /// &#10;The transformation to apply to this group and its children.
+/// &#10;Inherited from Element.transform
+    /// &#10;
+    /// &#10;visible — Boolean 
+    /// &#10;A flag, indicating if the group and its children are visible.
+/// &#10;Inherited from Element.visible
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.drawing.Image = function() { };
+
+kendo.drawing.Image.prototype = {
+
+
+
+
+    bbox: function() {
+        /// <summary>
+        /// Returns the bounding box of the element with transformations applied.
+/// Inherited from Element.bbox
+        /// </summary>
+        /// <returns type="kendo.geometry.Rect">The bounding box of the element with transformations applied.</returns>
+
+    },
+
+
+    clip: function(clip) {
+        /// <summary>
+        /// Gets or sets the element clipping path.
+/// Inherited from Element.clip
+        /// </summary>
+        /// <param name="clip" type="kendo.drawing.Path" >The element clipping path.</param>
+        /// <returns type="kendo.drawing.Path">The current element clipping path.</returns>
+
+    },
+
+
+    opacity: function(opacity) {
+        /// <summary>
+        /// Gets or sets the element opacity.
+/// Inherited from Element.opacity
+        /// </summary>
+        /// <param name="opacity" type="Number" >The element opacity. Ranges from 0 (completely transparent) to 1 (completely opaque).</param>
+        /// <returns type="Number">The current element opacity.</returns>
+
+    },
+
+
+    src: function(value) {
+        /// <summary>
+        /// Gets or sets the image source URL.
+        /// </summary>
+        /// <param name="value" type="String" >The new source URL.</param>
+        /// <returns type="String">The current image source URL.</returns>
+
+    },
+
+
+    rect: function(value) {
+        /// <summary>
+        /// Gets or sets the rectangle defines the image position and size.
+        /// </summary>
+        /// <param name="value" type="kendo.geometry.Rect" >The new image rectangle.</param>
+        /// <returns type="kendo.geometry.Rect">The current image rectangle.</returns>
+
+    },
+
+
+    transform: function(transform) {
+        /// <summary>
+        /// Gets or sets the transformation of the element.
+/// Inherited from Element.transform
+        /// </summary>
+        /// <param name="transform" type="kendo.geometry.Transformation" >The transformation to apply to the element.</param>
+        /// <returns type="kendo.geometry.Transformation">The current transformation on the element.</returns>
+
+    },
+
+
+    visible: function(visible) {
+        /// <summary>
+        /// Gets or sets the visibility of the element.
+/// Inherited from Element.visible
+        /// </summary>
+        /// <param name="visible" type="Boolean" >A flag indicating if the element should be visible.</param>
+        /// <returns type="Boolean">true if the element is visible; false otherwise.</returns>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoImage = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.drawing.Image widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.drawing.Image">The kendo.drawing.Image instance (if present).</returns>
+};
+
+$.fn.kendoImage = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.drawing.Image widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// &#10;clip — kendo.drawing.Path 
+    /// &#10;The element clipping path.
+/// &#10;Inherited from Element.clip
+    /// &#10;
+    /// &#10;opacity — Number 
+    /// &#10;The element opacity.
+/// &#10;Inherited from Element.opacity
+    /// &#10;
+    /// &#10;transform — kendo.geometry.Transformation 
+    /// &#10;The transformation to apply to this element.
+/// &#10;Inherited from Element.transform
+    /// &#10;
+    /// &#10;visible — Boolean 
+    /// &#10;A flag, indicating if the element is visible.
+/// &#10;Inherited from Element.visible
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.drawing.MultiPath = function() { };
+
+kendo.drawing.MultiPath.prototype = {
+
+
+
+
+    bbox: function() {
+        /// <summary>
+        /// Returns the bounding box of the element with transformations applied.
+/// Inherited from Element.bbox
+        /// </summary>
+        /// <returns type="kendo.geometry.Rect">The bounding box of the element with transformations applied.</returns>
+
+    },
+
+
+    clip: function(clip) {
+        /// <summary>
+        /// Gets or sets the element clipping path.
+/// Inherited from Element.clip
+        /// </summary>
+        /// <param name="clip" type="kendo.drawing.Path" >The element clipping path.</param>
+        /// <returns type="kendo.drawing.Path">The current element clipping path.</returns>
+
+    },
+
+
+    close: function() {
+        /// <summary>
+        /// Closes the current sub-path by linking its current end point with its start point.
+        /// </summary>
+        /// <returns type="kendo.drawing.MultiPath">The current instance to allow chaining.</returns>
+
+    },
+
+
+    curveTo: function(controlOut,controlIn) {
+        /// <summary>
+        /// Draws a cubic Bézier curve (with two control points).A quadratic Bézier curve (with one control point) can be plotted by making the control point equal.
+        /// </summary>
+        /// <param name="controlOut" type="Object" >The first control point for the curve.</param>
+        /// <param name="controlIn" type="Object" >The second control point for the curve.</param>
+        /// <returns type="kendo.drawing.MultiPath">The current instance to allow chaining.</returns>
+
+    },
+
+
+    fill: function(color,opacity) {
+        /// <summary>
+        /// Sets the shape fill.
+        /// </summary>
+        /// <param name="color" type="String" >The fill color to set.</param>
+        /// <param name="opacity" type="Number" >The fill opacity to set.</param>
+        /// <returns type="kendo.drawing.MultiPath">The current instance to allow chaining.</returns>
+
+    },
+
+
+    lineTo: function(x,y) {
+        /// <summary>
+        /// Draws a straight line to the specified absolute coordinates.
+        /// </summary>
+        /// <param name="x" type="Object" >The line end X coordinate or a Point/Array with X and Y coordinates.</param>
+        /// <param name="y" type="Number" >The line end Y coordinate.Optional if the first parameter is a Point/Array.</param>
+        /// <returns type="kendo.drawing.MultiPath">The current instance to allow chaining.</returns>
+
+    },
+
+
+    moveTo: function(x,y) {
+        /// <summary>
+        /// Creates a new sub-path or clears all segments and moves the starting point to the specified absolute coordinates.
+        /// </summary>
+        /// <param name="x" type="Object" >The starting X coordinate or a Point/Array with X and Y coordinates.</param>
+        /// <param name="y" type="Number" >The starting Y coordinate.Optional if the first parameter is a Point/Array.</param>
+        /// <returns type="kendo.drawing.MultiPath">The current instance to allow chaining.</returns>
+
+    },
+
+
+    opacity: function(opacity) {
+        /// <summary>
+        /// Gets or sets the element opacity.
+/// Inherited from Element.opacityIf set, the stroke and fill opacity will be multiplied by the element opacity.
+        /// </summary>
+        /// <param name="opacity" type="Number" >The element opacity. Ranges from 0 (completely transparent) to 1 (completely opaque).</param>
+        /// <returns type="Number">The current element opacity.</returns>
+
+    },
+
+
+    stroke: function(color,width,opacity) {
+        /// <summary>
+        /// Sets the shape stroke.
+        /// </summary>
+        /// <param name="color" type="String" >The stroke color to set.</param>
+        /// <param name="width" type="Number" >The stroke width to set.</param>
+        /// <param name="opacity" type="Number" >The stroke opacity to set.</param>
+        /// <returns type="kendo.drawing.MultiPath">The current instance to allow chaining.</returns>
+
+    },
+
+
+    transform: function(transform) {
+        /// <summary>
+        /// Gets or sets the transformation of the element.
+/// Inherited from Element.transform
+        /// </summary>
+        /// <param name="transform" type="kendo.geometry.Transformation" >The transformation to apply to the element.</param>
+        /// <returns type="kendo.geometry.Transformation">The current transformation on the element.</returns>
+
+    },
+
+
+    visible: function(visible) {
+        /// <summary>
+        /// Gets or sets the visibility of the element.
+/// Inherited from Element.visible
+        /// </summary>
+        /// <param name="visible" type="Boolean" >A flag indicating if the element should be visible.</param>
+        /// <returns type="Boolean">true if the element is visible; false otherwise.</returns>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoMultiPath = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.drawing.MultiPath widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.drawing.MultiPath">The kendo.drawing.MultiPath instance (if present).</returns>
+};
+
+$.fn.kendoMultiPath = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.drawing.MultiPath widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// &#10;clip — kendo.drawing.Path 
+    /// &#10;The element clipping path.
+/// &#10;Inherited from Element.clip
+    /// &#10;
+    /// &#10;fill — kendo.drawing.FillOptions 
+    /// &#10;The fill options of the shape.
+    /// &#10;
+    /// &#10;opacity — Number 
+    /// &#10;The element opacity.
+/// &#10;Inherited from Element.opacity
+    /// &#10;
+    /// &#10;stroke — kendo.drawing.StrokeOptions 
+    /// &#10;The stroke options of the shape.
+    /// &#10;
+    /// &#10;transform — kendo.geometry.Transformation 
+    /// &#10;The transformation to apply to this element.
+/// &#10;Inherited from Element.transform
+    /// &#10;
+    /// &#10;visible — Boolean 
+    /// &#10;A flag, indicating if the element is visible.
+/// &#10;Inherited from Element.visible
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.drawing.OptionsStore = function() { };
+
+kendo.drawing.OptionsStore.prototype = {
+
+
+
+
+    get: function(field) {
+        /// <summary>
+        /// Gets the value of the specified option.
+        /// </summary>
+        /// <param name="field" type="String" >The field name to retrieve. Must be a fully qualified name (e.g. "foo.bar") for nested options.</param>
+        /// <returns type="Object">The current option value.</returns>
+
+    },
+
+
+    set: function(field,value) {
+        /// <summary>
+        /// Sets the value of the specified option.
+        /// </summary>
+        /// <param name="field" type="String" >The name of the option to set. Must be a fully qualified name (e.g. "foo.bar") for nested options.</param>
+        /// <param name="value" type="Object" >The new option value.If the new value is exactly the same as the new value the operation will not trigger options change on the observer (if any).</param>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoOptionsStore = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.drawing.OptionsStore widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.drawing.OptionsStore">The kendo.drawing.OptionsStore instance (if present).</returns>
+};
+
+$.fn.kendoOptionsStore = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.drawing.OptionsStore widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.drawing.PDFOptions = function() { };
+
+kendo.drawing.PDFOptions.prototype = {
+
+
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoPDFOptions = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.drawing.PDFOptions widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.drawing.PDFOptions">The kendo.drawing.PDFOptions instance (if present).</returns>
+};
+
+$.fn.kendoPDFOptions = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.drawing.PDFOptions widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.drawing.Path = function() { };
+
+kendo.drawing.Path.prototype = {
+
+
+
+
+    bbox: function() {
+        /// <summary>
+        /// Returns the bounding box of the element with transformations applied.
+/// Inherited from Element.bbox
+        /// </summary>
+        /// <returns type="kendo.geometry.Rect">The bounding box of the element with transformations applied.</returns>
+
+    },
+
+
+    clip: function(clip) {
+        /// <summary>
+        /// Gets or sets the element clipping path.
+/// Inherited from Element.clip
+        /// </summary>
+        /// <param name="clip" type="kendo.drawing.Path" >The element clipping path.</param>
+        /// <returns type="kendo.drawing.Path">The current element clipping path.</returns>
+
+    },
+
+
+    close: function() {
+        /// <summary>
+        /// Closes the path by linking the current end point with the start point.
+        /// </summary>
+        /// <returns type="kendo.drawing.Path">The current instance to allow chaining.</returns>
+
+    },
+
+
+    curveTo: function(controlOut,controlIn) {
+        /// <summary>
+        /// Draws a cubic Bézier curve (with two control points).A quadratic Bézier curve (with one control point) can be plotted by making the control point equal.
+        /// </summary>
+        /// <param name="controlOut" type="Object" >The first control point for the curve.</param>
+        /// <param name="controlIn" type="Object" >The second control point for the curve.</param>
+        /// <returns type="kendo.drawing.Path">The current instance to allow chaining.</returns>
+
+    },
+
+
+    fill: function(color,opacity) {
+        /// <summary>
+        /// Sets the shape fill.
+        /// </summary>
+        /// <param name="color" type="String" >The fill color to set.</param>
+        /// <param name="opacity" type="Number" >The fill opacity to set.</param>
+        /// <returns type="kendo.drawing.Path">The current instance to allow chaining.</returns>
+
+    },
+
+
+    lineTo: function(x,y) {
+        /// <summary>
+        /// Draws a straight line to the specified absolute coordinates.
+        /// </summary>
+        /// <param name="x" type="Object" >The line end X coordinate or a Point/Array with X and Y coordinates.</param>
+        /// <param name="y" type="Number" >The line end Y coordinate.Optional if the first parameter is a Point/Array.</param>
+        /// <returns type="kendo.drawing.Path">The current instance to allow chaining.</returns>
+
+    },
+
+
+    moveTo: function(x,y) {
+        /// <summary>
+        /// Clears all existing segments and moves the starting point to the specified absolute coordinates.
+        /// </summary>
+        /// <param name="x" type="Object" >The starting X coordinate or a Point/Array with X and Y coordinates.</param>
+        /// <param name="y" type="Number" >The starting Y coordinate.Optional if the first parameter is a Point/Array.</param>
+        /// <returns type="kendo.drawing.Path">The current instance to allow chaining.</returns>
+
+    },
+
+
+    opacity: function(opacity) {
+        /// <summary>
+        /// Gets or sets the element opacity.
+/// Inherited from Element.opacityIf set, the stroke and fill opacity will be multiplied by the element opacity.
+        /// </summary>
+        /// <param name="opacity" type="Number" >The element opacity. Ranges from 0 (completely transparent) to 1 (completely opaque).</param>
+        /// <returns type="Number">The current element opacity.</returns>
+
+    },
+
+
+    stroke: function(color,width,opacity) {
+        /// <summary>
+        /// Sets the shape stroke.
+        /// </summary>
+        /// <param name="color" type="String" >The stroke color to set.</param>
+        /// <param name="width" type="Number" >The stroke width to set.</param>
+        /// <param name="opacity" type="Number" >The stroke opacity to set.</param>
+        /// <returns type="kendo.drawing.Path">The current instance to allow chaining.</returns>
+
+    },
+
+
+    transform: function(transform) {
+        /// <summary>
+        /// Gets or sets the transformation of the element.
+/// Inherited from Element.transform
+        /// </summary>
+        /// <param name="transform" type="kendo.geometry.Transformation" >The transformation to apply to the element.</param>
+        /// <returns type="kendo.geometry.Transformation">The current transformation on the element.</returns>
+
+    },
+
+
+    visible: function(visible) {
+        /// <summary>
+        /// Gets or sets the visibility of the element.
+/// Inherited from Element.visible
+        /// </summary>
+        /// <param name="visible" type="Boolean" >A flag indicating if the element should be visible.</param>
+        /// <returns type="Boolean">true if the element is visible; false otherwise.</returns>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoPath = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.drawing.Path widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.drawing.Path">The kendo.drawing.Path instance (if present).</returns>
+};
+
+$.fn.kendoPath = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.drawing.Path widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// &#10;clip — kendo.drawing.Path 
+    /// &#10;The element clipping path.
+/// &#10;Inherited from Element.clip
+    /// &#10;
+    /// &#10;fill — kendo.drawing.FillOptions 
+    /// &#10;The fill options of the shape.
+    /// &#10;
+    /// &#10;opacity — Number 
+    /// &#10;The element opacity.
+/// &#10;Inherited from Element.opacity
+    /// &#10;
+    /// &#10;stroke — kendo.drawing.StrokeOptions 
+    /// &#10;The stroke options of the shape.
+    /// &#10;
+    /// &#10;transform — kendo.geometry.Transformation 
+    /// &#10;The transformation to apply to this element.
+/// &#10;Inherited from Element.transform
+    /// &#10;
+    /// &#10;visible — Boolean 
+    /// &#10;A flag, indicating if the element is visible.
+/// &#10;Inherited from Element.visible
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.drawing.Segment = function() { };
+
+kendo.drawing.Segment.prototype = {
+
+
+
+
+    anchor: function(value) {
+        /// <summary>
+        /// Gets or sets the segment anchor point.The setter returns the current Segment to allow chaining.
+        /// </summary>
+        /// <param name="value" type="kendo.geometry.Point" >The new anchor point.</param>
+        /// <returns type="kendo.geometry.Point">The current anchor point.</returns>
+
+    },
+
+
+    controlIn: function(value) {
+        /// <summary>
+        /// Gets or sets the first curve control point of this segment.The setter returns the current Segment to allow chaining.
+        /// </summary>
+        /// <param name="value" type="kendo.geometry.Point" >The new control point.</param>
+        /// <returns type="kendo.geometry.Point">The current control point.</returns>
+
+    },
+
+
+    controlOut: function(value) {
+        /// <summary>
+        /// Gets or sets the second curve control point of this segment.The setter returns the current Segment to allow chaining.
+        /// </summary>
+        /// <param name="value" type="kendo.geometry.Point" >The new control point.</param>
+        /// <returns type="kendo.geometry.Point">The current control point.</returns>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoSegment = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.drawing.Segment widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.drawing.Segment">The kendo.drawing.Segment instance (if present).</returns>
+};
+
+$.fn.kendoSegment = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.drawing.Segment widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.drawing.StrokeOptions = function() { };
+
+kendo.drawing.StrokeOptions.prototype = {
+
+
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoStrokeOptions = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.drawing.StrokeOptions widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.drawing.StrokeOptions">The kendo.drawing.StrokeOptions instance (if present).</returns>
+};
+
+$.fn.kendoStrokeOptions = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.drawing.StrokeOptions widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.drawing.Surface = function() { };
+
+kendo.drawing.Surface.prototype = {
+
+
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoSurface = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.drawing.Surface widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.drawing.Surface">The kendo.drawing.Surface instance (if present).</returns>
+};
+
+$.fn.kendoSurface = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.drawing.Surface widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// &#10;type — String 
+    /// &#10;The preferred type of surface to create.
+/// &#10;Supported types (case insensitive):
+/// &#10;- svg
+/// &#10;- canvas
+/// &#10;- vmlThis option will be ignored if not supported by the browser.
+/// &#10;See Supported Browsers
+    /// &#10;
+    /// &#10;height — String (default: "100%")
+    /// &#10;The height of the surface element.
+/// &#10;By default the surface will expand to fill the height of the first positioned container.
+    /// &#10;
+    /// &#10;width — String (default: "100%")
+    /// &#10;The width of the surface element.
+/// &#10;By default the surface will expand to fill the width of the first positioned container.
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.drawing.Text = function() { };
+
+kendo.drawing.Text.prototype = {
+
+
+
+
+    bbox: function() {
+        /// <summary>
+        /// Returns the bounding box of the element with transformations applied.
+/// Inherited from Element.bbox
+        /// </summary>
+        /// <returns type="kendo.geometry.Rect">The bounding box of the element with transformations applied.</returns>
+
+    },
+
+
+    clip: function(clip) {
+        /// <summary>
+        /// Gets or sets the element clipping path.
+/// Inherited from Element.clip
+        /// </summary>
+        /// <param name="clip" type="kendo.drawing.Path" >The element clipping path.</param>
+        /// <returns type="kendo.drawing.Path">The current element clipping path.</returns>
+
+    },
+
+
+    content: function(value) {
+        /// <summary>
+        /// Gets or sets the text content.
+        /// </summary>
+        /// <param name="value" type="String" >The new text content to set.</param>
+        /// <returns type="String">The current content of the text.</returns>
+
+    },
+
+
+    fill: function(color,opacity) {
+        /// <summary>
+        /// Sets the text fill.
+        /// </summary>
+        /// <param name="color" type="String" >The fill color to set.</param>
+        /// <param name="opacity" type="Number" >The fill opacity to set.</param>
+        /// <returns type="kendo.drawing.Text">The current instance to allow chaining.</returns>
+
+    },
+
+
+    opacity: function(opacity) {
+        /// <summary>
+        /// Gets or sets the element opacity.
+/// Inherited from Element.opacityIf set, the stroke and fill opacity will be multiplied by the element opacity.
+        /// </summary>
+        /// <param name="opacity" type="Number" >The element opacity. Ranges from 0 (completely transparent) to 1 (completely opaque).</param>
+        /// <returns type="Number">The current element opacity.</returns>
+
+    },
+
+
+    position: function(value) {
+        /// <summary>
+        /// Gets or sets the position of the text upper left corner.
+        /// </summary>
+        /// <param name="value" type="kendo.geometry.Point" >The new position of the text upper left corner.</param>
+        /// <returns type="kendo.geometry.Point">The current position of the text upper left corner.</returns>
+
+    },
+
+
+    stroke: function(color,width,opacity) {
+        /// <summary>
+        /// Sets the text stroke.
+        /// </summary>
+        /// <param name="color" type="String" >The stroke color to set.</param>
+        /// <param name="width" type="Number" >The stroke width to set.</param>
+        /// <param name="opacity" type="Number" >The stroke opacity to set.</param>
+        /// <returns type="kendo.drawing.Text">The current instance to allow chaining.</returns>
+
+    },
+
+
+    transform: function(transform) {
+        /// <summary>
+        /// Gets or sets the transformation of the element.
+/// Inherited from Element.transform
+        /// </summary>
+        /// <param name="transform" type="kendo.geometry.Transformation" >The transformation to apply to the element.</param>
+        /// <returns type="kendo.geometry.Transformation">The current transformation on the element.</returns>
+
+    },
+
+
+    visible: function(visible) {
+        /// <summary>
+        /// Gets or sets the visibility of the element.
+/// Inherited from Element.visible
+        /// </summary>
+        /// <param name="visible" type="Boolean" >A flag indicating if the element should be visible.</param>
+        /// <returns type="Boolean">true if the element is visible; false otherwise.</returns>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoText = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.drawing.Text widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.drawing.Text">The kendo.drawing.Text instance (if present).</returns>
+};
+
+$.fn.kendoText = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.drawing.Text widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// &#10;clip — kendo.drawing.Path 
+    /// &#10;The element clipping path.
+/// &#10;Inherited from Element.clip
+    /// &#10;
+    /// &#10;fill — kendo.drawing.FillOptions 
+    /// &#10;The fill options of the text.
+    /// &#10;
+    /// &#10;opacity — Number 
+    /// &#10;The element opacity.
+/// &#10;Inherited from Element.opacity
+    /// &#10;
+    /// &#10;stroke — kendo.drawing.StrokeOptions 
+    /// &#10;The stroke options of the text.
+    /// &#10;
+    /// &#10;transform — kendo.geometry.Transformation 
+    /// &#10;The transformation to apply to this element.
+/// &#10;Inherited from Element.transform
+    /// &#10;
+    /// &#10;visible — Boolean 
+    /// &#10;A flag, indicating if the element is visible.
+/// &#10;Inherited from Element.visible
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.geometry.Arc = function() { };
+
+kendo.geometry.Arc.prototype = {
+
+
+
+
+    bbox: function(matrix) {
+        /// <summary>
+        /// Returns the bounding box of this arc after applying the specified transformation matrix.
+        /// </summary>
+        /// <param name="matrix" type="kendo.geometry.Matrix" >Transformation matrix to apply.</param>
+        /// <returns type="kendo.geometry.Rect">The bounding box after applying the transformation matrix.</returns>
+
+    },
+
+
+    getAnticlockwise: function() {
+        /// <summary>
+        /// Gets the arc anticlokwise flag.
+        /// </summary>
+        /// <returns type="Boolean">The anticlokwise flag of the arc.</returns>
+
+    },
+
+
+    getCenter: function() {
+        /// <summary>
+        /// Gets the arc center location.
+        /// </summary>
+        /// <returns type="kendo.geometry.Point">The location of the arc center.</returns>
+
+    },
+
+
+    getEndAngle: function() {
+        /// <summary>
+        /// Gets the end angle of the arc in decimal degrees.
+/// Measured in clockwise direction with 0 pointing "right".
+        /// </summary>
+        /// <returns type="Number">The end angle of the arc.</returns>
+
+    },
+
+
+    getRadiusX: function() {
+        /// <summary>
+        /// Gets the x radius of the arc.
+        /// </summary>
+        /// <returns type="Number">The x radius of the arc.</returns>
+
+    },
+
+
+    getRadiusY: function() {
+        /// <summary>
+        /// Gets the y radius of the arc.
+        /// </summary>
+        /// <returns type="Number">The y radius of the arc.</returns>
+
+    },
+
+
+    getStartAngle: function() {
+        /// <summary>
+        /// Gets the start angle of the arc in decimal degrees.
+/// Measured in clockwise direction with 0 pointing "right".
+        /// </summary>
+        /// <returns type="Number">The start angle of the arc.</returns>
+
+    },
+
+
+    pointAt: function(angle) {
+        /// <summary>
+        /// Gets the location of a point on the arc's circumference at a given angle.
+        /// </summary>
+        /// <param name="angle" type="Number" >Angle in decimal degrees. Measured in clockwise direction with 0 pointing "right". Negative values or values greater than 360 will be normalized.</param>
+        /// <returns type="kendo.geometry.Point">The point on the arc's circumference.</returns>
+
+    },
+
+
+    setAnticlockwise: function(value) {
+        /// <summary>
+        /// Sets the arc anticlokwise flag.
+        /// </summary>
+        /// <param name="value" type="Boolean" >The new anticlockwise value.</param>
+        /// <returns type="kendo.geometry.Arc">The current arc instance.</returns>
+
+    },
+
+
+    setCenter: function(value) {
+        /// <summary>
+        /// Sets the arc center location.
+        /// </summary>
+        /// <param name="value" type="kendo.geometry.Point" >The new arc center.</param>
+        /// <returns type="kendo.geometry.Arc">The current arc instance.</returns>
+
+    },
+
+
+    setEndAngle: function(value) {
+        /// <summary>
+        /// Sets the end angle of the arc in decimal degrees.
+/// Measured in clockwise direction with 0 pointing "right".
+        /// </summary>
+        /// <param name="value" type="Number" >The new arc end angle.</param>
+        /// <returns type="kendo.geometry.Arc">The current arc instance.</returns>
+
+    },
+
+
+    setRadiusX: function(value) {
+        /// <summary>
+        /// Sets the x radius of the arc.
+        /// </summary>
+        /// <param name="value" type="Number" >The new arc x radius.</param>
+        /// <returns type="kendo.geometry.Arc">The current arc instance.</returns>
+
+    },
+
+
+    setRadiusY: function(value) {
+        /// <summary>
+        /// Sets the y radius of the arc.
+        /// </summary>
+        /// <param name="value" type="Number" >The new arc y radius.</param>
+        /// <returns type="kendo.geometry.Arc">The current arc instance.</returns>
+
+    },
+
+
+    setStartAngle: function(value) {
+        /// <summary>
+        /// Sets the start angle of the arc in decimal degrees.
+/// Measured in clockwise direction with 0 pointing "right".
+        /// </summary>
+        /// <param name="value" type="Number" >The new arc atart angle.</param>
+        /// <returns type="kendo.geometry.Arc">The current arc instance.</returns>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoArc = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.geometry.Arc widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.geometry.Arc">The kendo.geometry.Arc instance (if present).</returns>
+};
+
+$.fn.kendoArc = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.geometry.Arc widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.geometry.Circle = function() { };
+
+kendo.geometry.Circle.prototype = {
+
+
+
+
+    bbox: function(matrix) {
+        /// <summary>
+        /// Returns the bounding box of this circle after applying the
+/// specified transformation matrix.
+        /// </summary>
+        /// <param name="matrix" type="kendo.geometry.Matrix" >Transformation matrix to apply.</param>
+        /// <returns type="kendo.geometry.Rect">The bounding box after applying the transformation matrix.</returns>
+
+    },
+
+
+    clone: function() {
+        /// <summary>
+        /// Creates a new instance with the same center and radius.
+        /// </summary>
+        /// <returns type="kendo.geometry.Circle">A new Circle instance with the same center and radius.</returns>
+
+    },
+
+
+    equals: function(other) {
+        /// <summary>
+        /// Compares this circle with another instance.
+        /// </summary>
+        /// <param name="other" type="kendo.geometry.Circle" >The circle to compare with.</param>
+        /// <returns type="Boolean">true if the point coordinates match; false otherwise.</returns>
+
+    },
+
+
+    getCenter: function() {
+        /// <summary>
+        /// Gets the circle center location.
+        /// </summary>
+        /// <returns type="kendo.geometry.Point">The location of the circle center.</returns>
+
+    },
+
+
+    getRadius: function() {
+        /// <summary>
+        /// Gets the circle radius.
+        /// </summary>
+        /// <returns type="Number">The radius of the circle.</returns>
+
+    },
+
+
+    pointAt: function(angle) {
+        /// <summary>
+        /// Gets the location of a point on the circle's circumference at a given angle.
+        /// </summary>
+        /// <param name="angle" type="Number" >Angle in decimal degrees. Measured in clockwise direction with 0 pointing "right". Negative values or values greater than 360 will be normalized.</param>
+        /// <returns type="kendo.geometry.Point">The point on the circle's circumference.</returns>
+
+    },
+
+
+    setCenter: function(value) {
+        /// <summary>
+        /// Sets the location of the circle center.
+        /// </summary>
+        /// <param name="value" type="Object" >The new center Point or equivalent [x, y] array.</param>
+        /// <returns type="kendo.geometry.Point">The location of the circle center.</returns>
+
+    },
+
+
+    setRadius: function(value) {
+        /// <summary>
+        /// Sets the circle radius.
+        /// </summary>
+        /// <param name="value" type="Number" >The new circle radius.</param>
+        /// <returns type="kendo.geometry.Circle">The current circle instance.</returns>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoCircle = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.geometry.Circle widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.geometry.Circle">The kendo.geometry.Circle instance (if present).</returns>
+};
+
+$.fn.kendoCircle = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.geometry.Circle widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.geometry.Matrix = function() { };
+
+kendo.geometry.Matrix.prototype = {
+
+
+
+
+    clone: function() {
+        /// <summary>
+        /// Creates a new instance with the same element values.
+        /// </summary>
+        /// <returns type="kendo.geometry.Matrix">A new Matrix instance with the same element values.</returns>
+
+    },
+
+
+    equals: function(other) {
+        /// <summary>
+        /// Compares this matrix with another instance.
+        /// </summary>
+        /// <param name="other" type="kendo.geometry.Matrix" >The matrix instance to compare with.</param>
+        /// <returns type="Boolean">true if the matrix elements match; false otherwise.</returns>
+
+    },
+
+
+    round: function(digits) {
+        /// <summary>
+        /// Rounds the matrix elements to the specified number of fractional digits.
+        /// </summary>
+        /// <param name="digits" type="Number" >Number of fractional digits.</param>
+        /// <returns type="kendo.geometry.Matrix">The current matrix instance.</returns>
+
+    },
+
+
+    multiplyCopy: function(matrix) {
+        /// <summary>
+        /// Multiplies the matrix with another one and returns the result as new instance.
+/// The current instance elements are not altered.
+        /// </summary>
+        /// <param name="matrix" type="kendo.geometry.Matrix" >The matrix to multiply by.</param>
+        /// <returns type="kendo.geometry.Matrix">The result of the multiplication.</returns>
+
+    },
+
+
+    toArray: function(digits) {
+        /// <summary>
+        /// Returns the matrix elements as an [a, b, c, d, e, f] array.
+        /// </summary>
+        /// <param name="digits" type="Number" >(Optional) Number of fractional digits.</param>
+        /// <returns type="Array">An array representation of the matrix.</returns>
+
+    },
+
+
+    toString: function(digits,separator) {
+        /// <summary>
+        /// Formats the matrix elements as a string.
+        /// </summary>
+        /// <param name="digits" type="Number" >(Optional) Number of fractional digits.</param>
+        /// <param name="separator" type="String" >The separator to place between elements.</param>
+        /// <returns type="String">A string representation of the matrix, e.g. "1, 0, 0, 1, 0, 0".</returns>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoMatrix = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.geometry.Matrix widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.geometry.Matrix">The kendo.geometry.Matrix instance (if present).</returns>
+};
+
+$.fn.kendoMatrix = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.geometry.Matrix widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.geometry.Point = function() { };
+
+kendo.geometry.Point.prototype = {
+
+
+
+
+    clone: function() {
+        /// <summary>
+        /// Creates a new instance with the same coordinates.
+        /// </summary>
+        /// <returns type="kendo.geometry.Point">A new Point instance with the same coordinates.</returns>
+
+    },
+
+
+    distanceTo: function(point) {
+        /// <summary>
+        /// Calculates the distance to another point.
+        /// </summary>
+        /// <param name="point" type="kendo.geometry.Point" >The point to calculate the distance to.</param>
+        /// <returns type="Number">The straight line distance to the given point.</returns>
+
+    },
+
+
+    equals: function(other) {
+        /// <summary>
+        /// Compares this point with another instance.
+        /// </summary>
+        /// <param name="other" type="kendo.geometry.Point" >The point to compare with.</param>
+        /// <returns type="Boolean">true if the point coordinates match; false otherwise.</returns>
+
+    },
+
+
+    getX: function() {
+        /// <summary>
+        /// Gets the x coordinate value.
+        /// </summary>
+        /// <returns type="Number">The current x coordinate value.</returns>
+
+    },
+
+
+    getY: function() {
+        /// <summary>
+        /// Gets the y coordinate value.
+        /// </summary>
+        /// <returns type="Number">The current y coordinate value.</returns>
+
+    },
+
+
+    move: function(x,y) {
+        /// <summary>
+        /// Moves the point to the specified x and y coordinates.
+        /// </summary>
+        /// <param name="x" type="Number" >The new X coordinate.</param>
+        /// <param name="y" type="Number" >The new Y coordinate.</param>
+        /// <returns type="kendo.geometry.Point">The current point instance.</returns>
+
+    },
+
+
+    rotate: function(angle,center) {
+        /// <summary>
+        /// Rotates the point around the given center.
+        /// </summary>
+        /// <param name="angle" type="Number" >Angle in decimal degrees. Measured in clockwise direction with 0 pointing "right". Negative values or values greater than 360 will be normalized.</param>
+        /// <param name="center" type="Object" >The rotation center. Can be a Point instance or an [x, y] array.</param>
+        /// <returns type="kendo.geometry.Point">The current Point instance.</returns>
+
+    },
+
+
+    round: function(digits) {
+        /// <summary>
+        /// Rounds the point coordinates to the specified number of fractional digits.
+        /// </summary>
+        /// <param name="digits" type="Number" >Number of fractional digits.</param>
+        /// <returns type="kendo.geometry.Point">The current Point instance.</returns>
+
+    },
+
+
+    scale: function(scaleX,scaleY) {
+        /// <summary>
+        /// Scales the point coordinates along the x and y axis.
+        /// </summary>
+        /// <param name="scaleX" type="Number" >The x scale multiplier.</param>
+        /// <param name="scaleY" type="Number" >The y scale multiplier.</param>
+        /// <returns type="kendo.geometry.Point">The current point instance.</returns>
+
+    },
+
+
+    scaleCopy: function(scaleX,scaleY) {
+        /// <summary>
+        /// Scales the point coordinates on a copy of the current point.
+/// The callee coordinates will remain unchanged.
+        /// </summary>
+        /// <param name="scaleX" type="Number" >The x scale multiplier.</param>
+        /// <param name="scaleY" type="Number" >The y scale multiplier.</param>
+        /// <returns type="kendo.geometry.Point">The new Point instance.</returns>
+
+    },
+
+
+    setX: function(value) {
+        /// <summary>
+        /// Sets the x coordinate to a new value.
+        /// </summary>
+        /// <param name="value" type="Number" >The new x coordinate value.</param>
+        /// <returns type="kendo.geometry.Point">The current Point instance.</returns>
+
+    },
+
+
+    setY: function(value) {
+        /// <summary>
+        /// Sets the y coordinate to a new value.
+        /// </summary>
+        /// <param name="value" type="Number" >The new y coordinate value.</param>
+        /// <returns type="kendo.geometry.Point">The current Point instance.</returns>
+
+    },
+
+
+    toArray: function(digits) {
+        /// <summary>
+        /// Returns the point coordinates as an [x, y] array.
+        /// </summary>
+        /// <param name="digits" type="Number" >(Optional) Number of fractional digits.</param>
+        /// <returns type="Array">An array representation of the point, e.g. [10, 20]</returns>
+
+    },
+
+
+    toString: function(digits,separator) {
+        /// <summary>
+        /// Formats the point value to a string.
+        /// </summary>
+        /// <param name="digits" type="Number" >(Optional) Number of fractional digits.</param>
+        /// <param name="separator" type="String" >The separator to place between coordinates.</param>
+        /// <returns type="String">A string representation of the point, e.g. "10 20".</returns>
+
+    },
+
+
+    transform: function(tansformation) {
+        /// <summary>
+        /// Applies a transformation to the point coordinates.
+/// The current coordinates will be overriden.
+        /// </summary>
+        /// <param name="tansformation" type="kendo.geometry.Transformation" >The transformation to apply.</param>
+        /// <returns type="kendo.geometry.Point">The current Point instance.</returns>
+
+    },
+
+
+    transformCopy: function(tansformation) {
+        /// <summary>
+        /// Applies a transformation on a copy of the current point.
+/// The callee coordinates will remain unchanged.
+        /// </summary>
+        /// <param name="tansformation" type="kendo.geometry.Transformation" >The transformation to apply.</param>
+        /// <returns type="kendo.geometry.Point">The new Point instance.</returns>
+
+    },
+
+
+    translate: function(dx,dy) {
+        /// <summary>
+        /// Translates the point along the x and y axis.
+        /// </summary>
+        /// <param name="dx" type="Number" >The distance to move along the X axis.</param>
+        /// <param name="dy" type="Number" >The distance to move along the Y axis.</param>
+        /// <returns type="kendo.geometry.Point">The current point instance.</returns>
+
+    },
+
+
+    translateWith: function(vector) {
+        /// <summary>
+        /// Translates the point by using a Point instance as a vector of translation.
+        /// </summary>
+        /// <param name="vector" type="Object" >The vector of translation. Can be either a Point instance or an [x, y] array.</param>
+        /// <returns type="kendo.geometry.Point">The current point instance.</returns>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoPoint = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.geometry.Point widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.geometry.Point">The kendo.geometry.Point instance (if present).</returns>
+};
+
+$.fn.kendoPoint = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.geometry.Point widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.geometry.Rect = function() { };
+
+kendo.geometry.Rect.prototype = {
+
+
+
+
+    bbox: function(matrix) {
+        /// <summary>
+        /// Returns the bounding box of this rectangle after applying the
+/// specified transformation matrix.
+        /// </summary>
+        /// <param name="matrix" type="kendo.geometry.Matrix" >Transformation matrix to apply.</param>
+        /// <returns type="kendo.geometry.Rect">The bounding box after applying the transformation matrix.</returns>
+
+    },
+
+
+    bottomLeft: function() {
+        /// <summary>
+        /// Gets the position of the bottom-left corner of the rectangle.
+/// This is also the rectangle origin
+        /// </summary>
+        /// <returns type="kendo.geometry.Point">The position of the bottom-left corner.</returns>
+
+    },
+
+
+    bottomRight: function() {
+        /// <summary>
+        /// Gets the position of the bottom-right corner of the rectangle.
+        /// </summary>
+        /// <returns type="kendo.geometry.Point">The position of the bottom-right corner.</returns>
+
+    },
+
+
+    center: function() {
+        /// <summary>
+        /// Gets the position of the center of the rectangle.
+        /// </summary>
+        /// <returns type="kendo.geometry.Point">The position of the center.</returns>
+
+    },
+
+
+    clone: function() {
+        /// <summary>
+        /// Creates a new instance with the same origin and size.
+        /// </summary>
+        /// <returns type="kendo.geometry.Rect">A new Rect instance with the same origin and size.</returns>
+
+    },
+
+
+    equals: function(other) {
+        /// <summary>
+        /// Compares this rectangle with another instance.
+        /// </summary>
+        /// <param name="other" type="kendo.geometry.Rect" >The rectangle to compare with.</param>
+        /// <returns type="Boolean">true if the origin and size is the same for both rectangles; false otherwise.</returns>
+
+    },
+
+
+    getOrigin: function() {
+        /// <summary>
+        /// Gets the origin (top-left point) of the rectangle.
+        /// </summary>
+        /// <returns type="kendo.geometry.Point">The origin (top-left point).</returns>
+
+    },
+
+
+    getSize: function() {
+        /// <summary>
+        /// Gets the rectangle size.
+        /// </summary>
+        /// <returns type="kendo.geometry.Size">The current rectangle Size.</returns>
+
+    },
+
+
+    height: function() {
+        /// <summary>
+        /// Gets the rectangle height.
+        /// </summary>
+        /// <returns type="Number">The rectangle height.</returns>
+
+    },
+
+
+    setOrigin: function(value) {
+        /// <summary>
+        /// Sets the origin (top-left point) of the rectangle.
+        /// </summary>
+        /// <param name="value" type="Object" >The new origin Point or equivalent [x, y] array.</param>
+        /// <returns type="kendo.geometry.Rect">The current rectangle instance.</returns>
+
+    },
+
+
+    setSize: function(value) {
+        /// <summary>
+        /// Sets the rectangle size.
+        /// </summary>
+        /// <param name="value" type="Object" >The new rectangle Size or equivalent [width, height] array.</param>
+        /// <returns type="kendo.geometry.Rect">The current rectangle instance.</returns>
+
+    },
+
+
+    topLeft: function() {
+        /// <summary>
+        /// Gets the position of the top-left corner of the rectangle.
+/// This is also the rectangle origin
+        /// </summary>
+        /// <returns type="kendo.geometry.Point">The position of the top-left corner.</returns>
+
+    },
+
+
+    topRight: function() {
+        /// <summary>
+        /// Gets the position of the top-right corner of the rectangle.
+        /// </summary>
+        /// <returns type="kendo.geometry.Point">The position of the top-right corner.</returns>
+
+    },
+
+
+    width: function() {
+        /// <summary>
+        /// Gets the rectangle width.
+        /// </summary>
+        /// <returns type="Number">The rectangle width.</returns>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoRect = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.geometry.Rect widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.geometry.Rect">The kendo.geometry.Rect instance (if present).</returns>
+};
+
+$.fn.kendoRect = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.geometry.Rect widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.geometry.Size = function() { };
+
+kendo.geometry.Size.prototype = {
+
+
+
+
+    clone: function() {
+        /// <summary>
+        /// Creates a new instance with the same width and height.
+        /// </summary>
+        /// <returns type="kendo.geometry.Size">A new Size instance with the same coordinates.</returns>
+
+    },
+
+
+    equals: function(other) {
+        /// <summary>
+        /// Compares this Size with another instance.
+        /// </summary>
+        /// <param name="other" type="kendo.geometry.Size" >The Size to compare with.</param>
+        /// <returns type="Boolean">true if the size members match; false otherwise.</returns>
+
+    },
+
+
+    getWidth: function() {
+        /// <summary>
+        /// Gets the width value.
+        /// </summary>
+        /// <returns type="Number">The current width value.</returns>
+
+    },
+
+
+    getHeight: function() {
+        /// <summary>
+        /// Gets the height value.
+        /// </summary>
+        /// <returns type="Number">The current height value.</returns>
+
+    },
+
+
+    setWidth: function(value) {
+        /// <summary>
+        /// Sets the width to a new value.
+        /// </summary>
+        /// <param name="value" type="Number" >The new width value.</param>
+        /// <returns type="kendo.geometry.Size">The current Size instance.</returns>
+
+    },
+
+
+    setHeight: function(value) {
+        /// <summary>
+        /// Sets the height to a new value.
+        /// </summary>
+        /// <param name="value" type="Number" >The new height value.</param>
+        /// <returns type="kendo.geometry.Size">The current Size instance.</returns>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoSize = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.geometry.Size widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.geometry.Size">The kendo.geometry.Size instance (if present).</returns>
+};
+
+$.fn.kendoSize = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.geometry.Size widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
+kendo.geometry.Transformation = function() { };
+
+kendo.geometry.Transformation.prototype = {
+
+
+
+
+    clone: function() {
+        /// <summary>
+        /// Creates a new instance with the same transformation matrix.
+        /// </summary>
+        /// <returns type="kendo.geometry.Transformation">A new Transformation instance with the same matrix.</returns>
+
+    },
+
+
+    equals: function(other) {
+        /// <summary>
+        /// Compares this transformation with another instance.
+        /// </summary>
+        /// <param name="other" type="kendo.geometry.Transformation" >The transformation to compare with.</param>
+        /// <returns type="Boolean">true if the transformation matrix is the same; false otherwise.</returns>
+
+    },
+
+
+    matrix: function() {
+        /// <summary>
+        /// Gets the current transformation matrix for this transformation.
+        /// </summary>
+        /// <returns type="kendo.geometry.Matrix">The current transformation matrix.</returns>
+
+    },
+
+
+    multiply: function(transformation) {
+        /// <summary>
+        /// Multiplies the transformation with another.
+/// The underlying transformation matrix is updated in-place.
+        /// </summary>
+        /// <param name="transformation" type="kendo.geometry.Transformation" >The transformation to multiply by.</param>
+        /// <returns type="kendo.geometry.Transformation">The current transformation instance.</returns>
+
+    },
+
+
+    rotate: function(angle,x,y) {
+        /// <summary>
+        /// Sets rotation with the specified parameters.
+        /// </summary>
+        /// <param name="angle" type="Number" >The angle of rotation in decimal degrees. Measured in clockwise direction with 0 pointing "right". Negative values or values greater than 360 will be normalized.</param>
+        /// <param name="x" type="Number" >The center of rotation on the X axis.</param>
+        /// <param name="y" type="Number" >The center of rotation on the Y axis.</param>
+        /// <returns type="kendo.geometry.Transformation">The current transformation instance.</returns>
+
+    },
+
+
+    scale: function(scaleX,scaleY) {
+        /// <summary>
+        /// Sets scale with the specified parameters.
+        /// </summary>
+        /// <param name="scaleX" type="Number" >The scale factor on the X axis.</param>
+        /// <param name="scaleY" type="Number" >The scale factor on the Y axis.</param>
+        /// <returns type="kendo.geometry.Transformation">The current transformation instance.</returns>
+
+    },
+
+
+    translate: function(x,y) {
+        /// <summary>
+        /// Sets translation with the specified parameters.
+        /// </summary>
+        /// <param name="x" type="Number" >The distance to translate along the X axis.</param>
+        /// <param name="y" type="Number" >The distance to translate along the Y axis.</param>
+        /// <returns type="kendo.geometry.Transformation">The current transformation instance.</returns>
+
+    },
+
+    bind: function(event, callback) {
+        /// <summary>
+        /// Binds to a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be executed when the event is triggered.</param>
+    },
+
+    unbind: function(event, callback) {
+        /// <summary>
+        /// Unbinds a callback from a widget event.
+        /// </summary>
+        /// <param name="event" type="String">The event name</param>
+        /// <param name="callback" type="Function">The callback to be removed.</param>
+    }
+
+};
+
+$.fn.getKendoTransformation = function() {
+    /// <summary>
+    /// Returns a reference to the kendo.geometry.Transformation widget, instantiated on the selector.
+    /// </summary>
+    /// <returns type="kendo.geometry.Transformation">The kendo.geometry.Transformation instance (if present).</returns>
+};
+
+$.fn.kendoTransformation = function(options) {
+    /// <summary>
+    /// Instantiates a kendo.geometry.Transformation widget based the DOM elements that match the selector.
+
+    /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// </summary>
+    /// <param name="options" type="Object">
+    /// The widget configuration options
+    /// </param>
+};
+
+
 kendo.mobile.Application = function() { };
 
 kendo.mobile.Application.prototype = {
@@ -2164,6 +4889,9 @@ $.fn.kendoMobileApplication = function(options) {
     /// Instantiates a kendo.mobile.Application widget based the DOM elements that match the selector.
 
     /// &#10;Accepts an object with the following configuration options:
+    /// &#10;
+    /// &#10;browserHistory — Boolean (default: true)
+    /// &#10;Introduced in the 2014 Q3 release. If set to false, the navigation will not update or read the browser location fragment.
     /// &#10;
     /// &#10;hashBang — Boolean (default: false)
     /// &#10;Introduced in the 2014 Q1 Service Pack 1 release. If set to true, the navigation will parse and prefix the url fragment value with !,
@@ -2863,8 +5591,8 @@ $.fn.kendoMobileListView = function(options) {
     /// &#10;loadMore — Boolean (default: false)
     /// &#10;If set to true, a button is rendered at the bottom of the listview. Tapping it fetches and displays the items from the next page of the DataSource.
     /// &#10;
-    /// &#10;loadMoreText — String (default: "Press to load more")
-    /// &#10;The text of the rendered load-more button (applies only if loadMore is set to true).
+    /// &#10;messages — Object 
+    /// &#10;Defines the text of the ListView messages. Used primary for localization.
     /// &#10;
     /// &#10;pullToRefresh — Boolean (default: false)
     /// &#10;If set to true, the listview will reload its data when the user pulls the view over the top limit.
@@ -2885,7 +5613,7 @@ $.fn.kendoMobileListView = function(options) {
     /// &#10;filterable — Boolean (default: false)
     /// &#10;Indicates whether the filter input must be visible or not.
     /// &#10;
-    /// &#10;filterable — Object 
+    /// &#10;filterable — Object (default: false)
     /// &#10;Indicates whether the filter input must be visible or not.
     /// &#10;
     /// </summary>
@@ -3575,25 +6303,16 @@ $.fn.kendoMobileScroller = function(options) {
     /// &#10;elastic — Boolean (default: true)
     /// &#10;Weather or not to allow out of bounds dragging and easing.
     /// &#10;
+    /// &#10;messages — Object 
+    /// &#10;Defines the text of the Scroller pull to refresh messages. Used primary for localization.
+    /// &#10;
     /// &#10;pullOffset — Number (default: 140)
     /// &#10;The threshold below which releasing the scroller will trigger the pull event.
-/// &#10;Has effect only when the pullToRefresh option is set to true.
-    /// &#10;
-    /// &#10;pullTemplate — String (default: "Pull to refresh")
-    /// &#10;The message template displayed when the user pulls the scroller.
 /// &#10;Has effect only when the pullToRefresh option is set to true.
     /// &#10;
     /// &#10;pullToRefresh — Boolean (default: false)
     /// &#10;If set to true, the scroller will display a hint when the user pulls the container beyond its top limit.
 /// &#10;If a pull beyond the specified pullOffset occurs, a pull event will be triggered.
-    /// &#10;
-    /// &#10;refreshTemplate — String (default: "Refreshing")
-    /// &#10;The message template displayed during the refresh.
-/// &#10;Has effect only when the pullToRefresh option is set to true.
-    /// &#10;
-    /// &#10;releaseTemplate — String (default: "Release to refresh")
-    /// &#10;The message template displayed when the user pulls the scroller below the pullOffset, indicating that pullToRefresh will occur.
-/// &#10;Has effect only when the pullToRefresh option is set to true.
     /// &#10;
     /// &#10;useNative — Boolean (default: false)
     /// &#10;If set to true, the scroller will use the native scrolling available in the current platform. This should help with form issues on some platforms (namely Android and WP8).

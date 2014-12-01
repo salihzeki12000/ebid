@@ -15,7 +15,7 @@ requirejs.config({
         angular_sanitize: '../vendor/angular-sanitize/angular-sanitize',
 		angular_messages : '../vendor/angular-messages/angular-messages',
 		bootstrap : '../vendor/bootstrap/dist/js/bootstrap',	
-		kendo : ['../vendor/kendo/src/js/kendo.all', '../vendor/kendo/js/kendo.all.min'],
+		kendo : ['../vendor/kendo/src/src/kendo.all', '../vendor/kendo/js/kendo.all.min'],
 		elevatezoom : '../vendor/elevatezoom/jquery.elevatezoom',
 		bootstrapHoverDropdown : '../vendor/bootstrap-hover-dropdown/bootstrap-hover-dropdown',
 		fancybox : '../vendor/fancybox/source/jquery.fancybox',

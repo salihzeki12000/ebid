@@ -92,6 +92,12 @@ class MySQLParser
                 if(is_array($value)){
                     $value = json_encode($value);
                 }
+                if($key == 'condition'){
+                    $key = '`condition`';
+                }
+                if($key == 'status'){
+                    $key = '`status`';
+                }
                 $value = addslashes($value);
                 if(in_array($key, $restrict)){
                     if($value == null){
@@ -123,6 +129,12 @@ class MySQLParser
             if(!in_array($key, $include)) continue;
             if(is_array($value)){
                 $value = json_encode($value);
+            }
+            if($key == 'condition'){
+                $key = '`condition`';
+            }
+            if($key == 'status'){
+                $key = '`status`';
             }
             $value = addslashes($value);
             if(in_array($key, $restrict)){

@@ -28,8 +28,8 @@
             <div id="pivotgrid"></div>
 
             <script id="dataCellTemplate" type="text/x-kendo-tmpl">
-                # var columnMember = columnTuple.members[0]; #
-                # var rowMember = rowTuple.members[0]; #
+                # var columnMember = columnTuple ? columnTuple.members[0] : { children: [] }; #
+                # var rowMember = rowTuple ? rowTuple.members[0] : { children: [] }; #
                 # var value = kendo.toString(kendo.parseFloat(dataItem.value) || "N/A", "c2"); #
 
                 # if (columnMember.children.length || rowMember.children.length) { #
@@ -54,12 +54,12 @@
                         columnHeaderTemplate: $("#headerTemplate").html(),
                         rowHeaderTemplate: $("#headerTemplate").html(),
                         columnWidth: 200,
-                        height: 282,
+                        height: 320,
                         dataSource: {
                             type: "xmla",
                             columns: [{ name: "[Date].[Calendar]", expand: true }],
                             rows: [{ name: "[Product].[Product Line]", expand: true }],
-                            measures: ["[Measures].[Internet Sales Amount]"],
+                            measures: ["[Measures].[Reseller Freight Cost]"],
                             transport: {
                                 connection: {
                                     catalog: "Adventure Works DW 2008R2",

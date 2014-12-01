@@ -108,8 +108,6 @@
         }
     });
 
-    var MOBILE_CLASSES = "km-ios km-ios4 km-ios5 km-ios6 km-ios7 km-android km-android-dark km-android-light km-blackberry km-wp km-wp-dark km-wp-light km-flat";
-
     var ThemeChooserViewModel = kendo.observable({
         themes: [
             { value: "default", name: "Default", colors: [ "#ef6f1c", "#e24b17", "#5a4b43" ]  },
@@ -122,7 +120,9 @@
             { value: "metroblack", name: "Metro Black", colors: [ "#00aba9", "#0e0e0e", "#565656" ]  },
             { value: "highcontrast", name: "High Contrast", colors: [ "#b11e9c", "#880275", "#1b141a" ]  },
             { value: "moonlight", name: "Moonlight", colors: [ "#ee9f05", "#40444f", "#212a33" ]  },
-            { value: "flat", name: "Flat", colors: [ "#363940", "#2eb3a6", "#fff" ]  }
+            { value: "flat", name: "Flat", colors: [ "#363940", "#2eb3a6", "#fff" ]  },
+            { value: "material", name: "Material", colors: [ "#3f51b5", "#283593", "#fff" ]  },
+            { value: "materialblack", name: "Material Black", colors: [ "#3f51b5", "#1c1c1c", "#4d4d4d" ]  }
         ],
         mobileThemes: [
             { name: "iOS7", value:"ios7", colors: [ "#007aff", "#f5f5f5", "#ffffff" ]  },
@@ -132,11 +132,14 @@
             { name: "BlackBerry", value: "blackberry", colors: [ "#357fad", "#d9d9d9", "#ffffff" ]  },
             { name: "WP8 Light", value: "wp-light", colors: [ "#01abaa", "#000000", "#ffffff" ]  },
             { name: "WP8 Dark", value: "wp-dark", colors: [ "#01abaa", "#ffffff", "#000000" ]  },
-            { name: "Flat Skin", value: "flat", colors: [ "#10c4b2", "#dcdcdc", "#f4f4f4" ]  }
+            { name: "Flat Skin", value: "flat", colors: [ "#10c4b2", "#dcdcdc", "#f4f4f4" ]  },
+            { name: "Material", value: "material", colors: [ "#3f51b5", "#283593", "#fff" ]  },
+            { name: "Material Black", value: "materialblack", colors: [ "#3f51b5", "#1c1c1c", "#4d4d4d" ]  }
         ],
         sizes: [
             { name: "Standard", value: "common" },
-            { name: "Bootstrap", value: "common-bootstrap", relativity: "larger" }
+            { name: "Bootstrap", value: "common-bootstrap", relativity: "larger" },
+            { name: "Material", value: "common-material", relativity: "bold" }
         ],
 
         selectedTheme: window.kendoTheme,
@@ -151,18 +154,25 @@
 
         updateTheme: function(e) {
             var themeName = e.item.value;
-            ThemeChooser.changeTheme(themeName, true);
-        },
+            var commonFile = ThemeChooser.getCommonUrl();
 
-        updateCommon: function(e) {
-            ThemeChooser.changeCommon(e.item.value, true);
-            cookie("commonFile", e.item.value, Infinity, "/");
+            if (/material/i.test(themeName) && !/material/i.test(commonFile)) {
+                commonFile = "common-material";
+            } else if (/bootstrap/i.test(themeName) && !/bootstrap/i.test(commonFile)) {
+                commonFile = "common-bootstrap";
+            } else if (!/material|bootstrap/i.test(themeName)) {
+                commonFile = "common";
+            }
+
+            ThemeChooser.changeThemePair(themeName, commonFile, true);
         },
 
         setMobileTheme: function(themeName) {
             var mobileContainer = $("#mobile-application-container");
-            mobileContainer.removeClass(MOBILE_CLASSES).addClass("km-" + themeName + (" km-" + themeName.replace(/-.*/, "")));
-            $("#device-wrapper").removeClass("ios7 ios wp-dark wp-light android-light android-dark blackberry flat").addClass(themeName);
+            var toClass = function(x) { return "km-" + x + (" km-" + x.replace(/-.*/, "")) };
+            var themeIds = $.map(this.mobileThemes, function(x) { return x.value; });
+            mobileContainer.removeClass($.map(themeIds, toClass).join(" ")).addClass(toClass(themeName));
+            $("#device-wrapper").removeClass(themeIds.join(" ")).addClass(themeName);
             cookie("mobileTheme", themeName, Infinity, "/");
             kendo.resize(mobileContainer);
         }
@@ -177,12 +187,17 @@
 
     extend(ThemeChooser, {
         preloadStylesheet: function (file, callback) {
-            var element = $("<link rel='stylesheet' media='print' href='" + file + "' />").appendTo("head");
+            var deferred = $.Deferred();
+            var element = $("<link rel='stylesheet' media='print' href='" + file + "' />");
+            element.appendTo("head");
+            deferred.then(callback);
 
             setTimeout(function () {
-                callback();
+                deferred.resolve();
                 element.remove();
             }, 100);
+
+            return deferred.promise();
         },
 
         getCurrentCommonLink: function () {
@@ -233,6 +248,7 @@
                 themeLink = ThemeChooser.getCurrentCommonLink();
 
             ThemeChooser.updateLink(themeLink, newCommonUrl);
+            cookie("commonFile", commonName, Infinity, "/");
         },
 
         replaceWebTheme: function (themeName) {
@@ -318,14 +334,32 @@
             $("#example").trigger("kendo:skinChange");
         },
 
+        currentlyUsing: function(href) {
+            if (/common/.test(href)) {
+                return ThemeChooser.getCurrentCommonLink().attr("href") == href;
+            } else {
+                return ThemeChooser.getCurrentThemeLink().attr("href") == href;
+            }
+        },
+
         animateCssChange: function(options) {
             options = $.extend({ complete: $.noop, replace: $.noop }, options);
 
-            if (options.prefetch == options.link.attr("href")) {
+            var prefetch = options.prefetch;
+
+            if (!$.isArray(prefetch)) {
+                prefetch = [prefetch];
+            }
+
+            prefetch = $.grep(prefetch, function(x) {
+                return !ThemeChooser.currentlyUsing(x);
+            });
+
+            if (!prefetch.length) {
                 return;
             }
 
-            ThemeChooser.preloadStylesheet(options.prefetch, function () {
+            $.when.apply($, prefetch).then(function() {
                 var example = $("#example");
 
                 example.kendoStop().kendoAnimate(extend({}, animation.hide, {
@@ -341,6 +375,10 @@
                                     .kendoStop()
                                     .kendoAnimate(animation.show);
 
+                                if (prefetch.join(":").indexOf("common") > -1) {
+                                    kendo.resize(example, true);
+                                }
+
                                 options.complete();
                             }, 100);
                         }
@@ -352,7 +390,6 @@
         changeCommon: function(commonName, animate) {
             ThemeChooser.animateCssChange({
                 prefetch: ThemeChooser.getCommonUrl(commonName),
-                link: ThemeChooser.getCurrentCommonLink(),
                 replace: function() {
                     ThemeChooser.replaceCommon(commonName);
                 }
@@ -366,7 +403,6 @@
             if (animate) {
                 ThemeChooser.animateCssChange({
                     prefetch: ThemeChooser.getThemeUrl(themeName),
-                    link: ThemeChooser.getCurrentThemeLink(),
                     replace: function() {
                         ThemeChooser.replaceTheme(themeName);
                     },
@@ -375,6 +411,19 @@
             } else {
                 ThemeChooser.replaceTheme(themeName);
             }
+        },
+
+        changeThemePair: function(themeName, commonName, animate) {
+            ThemeChooser.animateCssChange({
+                prefetch: [
+                    ThemeChooser.getCommonUrl(commonName),
+                    ThemeChooser.getThemeUrl(themeName)
+                ],
+                replace: function() {
+                    ThemeChooser.replaceCommon(commonName);
+                    ThemeChooser.replaceTheme(themeName);
+                }
+            });
         }
     });
 

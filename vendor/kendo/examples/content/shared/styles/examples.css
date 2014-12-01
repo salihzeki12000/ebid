@@ -26,6 +26,9 @@
     font-style: normal;
 }
 
+/*Roboto Font used in Material Theme preview*/
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500italic,700,700italic,300,300italic);
+
 [class^="k-uni"],
 .tc-activator:after,
 .back-nav:before,
@@ -440,6 +443,7 @@ div.submenu-box ol {
 
 #source-code .k-item {
     font-weight: bold;
+    text-transform: initial;
 }
 
 .demos-nav
@@ -693,7 +697,6 @@ div.submenu-box ol {
 
 .tc-column:first-child
 {
-    border-right: 1px solid #cad0d6;
     margin-right: 30px;
     padding-right: 5px;
 }
@@ -703,7 +706,7 @@ div.submenu-box ol {
     border: 0;
     text-align: left;
     overflow: hidden;
-    padding: 25px 87px;
+    padding: 25px 87px 40px;
 }
 
 .tc-theme-list ul
@@ -717,10 +720,10 @@ div.submenu-box ol {
 
 .tc-theme-list .themes-grid
 {
-    -webkit-columns: 3;
-    -moz-columns: 3;
-    columns: 3;
-    width: 480px;
+    -webkit-columns: 5;
+    -moz-columns: 5;
+    columns: 5;
+    width: 100%;
 }
 
 .tc-column h4+ul
@@ -731,6 +734,7 @@ div.submenu-box ol {
 .tc-item
 {
     display: block;
+    width: 132px;
     cursor: pointer;
     line-height: 26px;
     color: #2d3e50;
@@ -760,7 +764,7 @@ div.submenu-box ol {
     background-color: #e2e4e7;
 }
 
-.tc-name
+.themes-grid .tc-name
 {
     padding-left: 5px;
 }
@@ -784,7 +788,6 @@ div.submenu-box ol {
     display: inline-block;
     width: 10px;
     height: 10px;
-    box-shadow: 0 0 0 1px #c5c8ca;
 }
 
 #qrWrap
@@ -1610,7 +1613,9 @@ li.L1,li.L3,li.L5,li.L7,li.L9 { background: #eee; }
     background-image: url("wpSkin.png");
 }
 
-#device-wrapper.flat {
+#device-wrapper.flat,
+#device-wrapper.material,
+#device-wrapper.materialblack {
     background-image: url("flat.png");
 }
 
@@ -1661,7 +1666,7 @@ li.L1,li.L3,li.L5,li.L7,li.L9 { background: #eee; }
 
 #device-wrapper,
 #mobile-application-container {
-    height: 455px;
+    height: 460px;
     overflow: hidden;
     position: relative;
     width: 282px;
@@ -2106,7 +2111,7 @@ ul.keyboard-legend li a {
     opacity:.9;
 }
 
-#draggable
+/*#draggable
 {
     cursor: pointer;
     position: absolute;
@@ -2131,7 +2136,7 @@ ul.keyboard-legend li a {
     cursor: default;
     background: #ececec;
     border-color: #cbcbcb;
-}
+}*/
 
 .floatWrap.narrowCol
 {
@@ -2212,10 +2217,9 @@ ul.keyboard-legend li a {
 
 .footer-links {
     display: inline-block;
-    font-size: 11px;
     color: #fff;
-    padding: 0 8px;
-    font: 400 11px/1 Arial,Helvetica,sans-serif;
+    font: 400 12px/1.4 Arial,Helvetica,sans-serif;
+    padding: 0 1em;
     border-left: 1px solid #47494c;
 }
 
@@ -2231,9 +2235,9 @@ a.footer-links:hover,
 }
 
 .quick-links {
-     padding-top: 1.917em;
-     padding-bottom: 1em;
-     padding-left: 36px;
+     padding-top: 20px;
+     padding-bottom: 10px;
+     padding-left: 20px;
 }
 
 #telerik-logo {
@@ -2244,14 +2248,15 @@ a.footer-links:hover,
 }
 
 .copyright {
-
-    padding-left: 36px;
-    padding-bottom: 24px;
+    line-height: 1.4em;
+    padding-left: 20px;
+    padding-bottom: 20px;
 }
 
 .copyright p {
-    font-size: 11px;
-    margin-left: 35px;
+    font-size: 12px;
+    margin-left: 40px;
+    color: #818692;
 }
 
 /* Root navigation */
@@ -2609,20 +2614,22 @@ a.footer-links:hover,
     font-size: 16px;
     line-height: 16px;
     height: 1.188em;
+    text-indent: 0.75em;
 }
 
 #example-search-wrapper .k-uniE600 {
    position: absolute;
-   right: 6px;
-   top: 9px;
-   color: #000;
+   font-size: 15px;
+   right: 8px;
+   top: 7px;
+   color: #2d3e50;
 }
 
 #layout-search-wrapper .k-uniE600 {
    font-size: 16px;
    position: absolute;
    top: 13px;
-   right: 6px;
+   right: 13px;
    color: #000;
 }
 
@@ -2801,7 +2808,7 @@ a.footer-links:hover,
 
 .application {
     float: left;
-    width: 116px;
+    width: 240px;
 }
 
 h5 {
@@ -2890,7 +2897,7 @@ h5 {
 .application p {
     font-size: 13px;
     line-height: 16px;
-    height: 50px;
+    height: 20px;
     padding-top: 3px;
 }
 
@@ -2925,6 +2932,30 @@ html.k-flat .demo-section.k-header {
   background-color: #fff;
   color: #4c5356;
 }
+
+html.k-material #example,
+html.k-materialblack #example {
+    font-family: "Roboto", Helvetica, Arial, sans-serif;
+}
+
+html.k-material .demo-section.k-header,
+html.k-material .demo-section.k-content {
+     background-color: #fefefe;
+     border-color: #fefefe;
+     box-shadow: 0 1px 2px 1px rgba(0,0,0,.10), 0 2px 5px rgba(0,0,0,.10);
+     color: #444;
+     font-weight: normal;
+}
+
+html.k-materialblack .demo-section.k-header,
+html.k-materialblack .demo-section.k-content {
+     background-color: #1c1c1c;
+     border-color: #1c1c1c;
+     box-shadow: 0 1px 2px 1px rgba(0,0,0,.10), 0 2px 5px rgba(0,0,0,.10);
+     color: #fff;
+     font-weight: normal;
+}
+
 .box h4,
 .demo-section h4 {
     margin-bottom: 1em;
@@ -2956,20 +2987,28 @@ html.k-flat .demo-section.k-header {
     border-color: #ccc;
     color: #7c7c7c;
 }
+.box .k-widget.k-slider {
+    background-color: transparent;
+}
 
 .box .k-button {
     cursor: pointer;
     border-radius: 2px;
-    padding: 2px 6px;
     font-size: inherit;
     color: #333;
-    background: #e1e5ea;
-    border-color: #c2ccd4;
+    background: #e2e4e7;
+    border-color: #e2e4e7;
+    min-width: 90px;
+    box-shadow: none;
 }
 
-.box .k-button:hover {
-    background: #c2ccd4;
+.box .k-button:hover,
+.box .k-button:focus:active:not(.k-state-disabled):not([disabled]),
+.box .k-button:focus:not(.k-state-disabled):not([disabled]) {
+    background: #cad0d6;
+    border-color: #cad0d6;
     color: #000;
+    box-shadow: none;
 }
 
 .box .k-primary {
@@ -2978,26 +3017,32 @@ html.k-flat .demo-section.k-header {
     border-color: #015991;
 }
 
-.box .k-primary:hover {
+.box .k-primary:hover,
+.box .k-primary:focus:active:not(.k-state-disabled):not([disabled]),
+.box .k-primary:focus:not(.k-state-disabled):not([disabled]) {
     background: #013A5E;
+    border-color: #013A5E;
     color: #fff;
 }
 
 .box .k-textbox,
 .box textarea {
     background: #fff;
-    border-color: #ccc;
+    border-color: #e2e4e7;
     color: #555;
-    border-radius: 0;
+    border-radius: 2px;
 }
 
 .box .k-textbox:hover,
 .box .k-textbox:active,
+.box .k-textbox:focus,
 .box textarea:hover,
-.box textarea:active {
-    border-color: #999;
+.box textarea:active,
+.box textarea:focus {
+    border-color: #cad0d6;
     background: #fff;
     color: #333;
+    box-shadow: none;
 }
 
 .demo-hint {
@@ -3005,4 +3050,38 @@ html.k-flat .demo-section.k-header {
     color: #aaa;
     font-style: italic;
     font-size: .9em;
+}
+
+@media only screen and (max-width : 1720px) {
+  .application {
+      width: 180px;
+  }
+}
+  
+@media only screen and (max-width : 1352px) {
+  #overview,
+  #applications-and-tools {
+      width: 1100px;
+      text-align: left;
+  }
+  
+  #overview-widgets h2, #most-popular h3, #most-popular .overview-col {
+      padding-left: 0;
+  }
+  
+  .application {
+      width: 240px;
+  }
+}
+
+@media only screen and (max-width : 1252px) {
+  #overview,
+  #applications-and-tools {
+      width: 940px;
+      text-align: left;
+  }
+  
+  .application {
+      width: 200px;
+  }
 }
