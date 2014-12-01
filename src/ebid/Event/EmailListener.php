@@ -17,7 +17,7 @@ class EmailListener {
         global $container;
         $user = $event->getUser();
         $message = \Swift_Message::newInstance($user->getUsername() . ', Welcome to ebid')
-            ->setFrom('IADProject_ebid@yahoo.com', 'ebid')
+            ->setFrom($container->getParameter('mail_email'), 'ebid')
             ->setTo(array($user->getEmail() => $user->getUsername()))
             ->setBody('Hello ' . $user->getUsername() .', Thank you for your registration.');
 
@@ -33,7 +33,7 @@ class EmailListener {
         if($winlists != null){
             foreach($winlists as $winner){
                 $message = \Swift_Message::newInstance($winner['username'] . ', Congratulations, it\'s all yours!')
-                    ->setFrom('IADProject_ebid@yahoo.com', 'ebid')
+                    ->setFrom($container->getParameter('mail_email'), 'ebid')
                     ->setTo(array($winner['email'] => $winner['username']))
                     ->setBody('Congratulations, ' . $winner['username'] .'.  You win the product: ' . $winner['pname']);
 
@@ -45,7 +45,7 @@ class EmailListener {
         if($loselists != null){
             foreach($loselists as $loser){
                 $message = \Swift_Message::newInstance($loser['username'] . ', Thank you for your participation')
-                    ->setFrom('IADProject_ebid@yahoo.com', 'ebid')
+                    ->setFrom($container->getParameter('mail_email'), 'ebid')
                     ->setTo(array($loser['email'] => $loser['username']))
                     ->setBody('Sorry, ' . $loser['username'] .', Thank you for your participation. You didn\'t win the product '. $loser['pname']);
 
