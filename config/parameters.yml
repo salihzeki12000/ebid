@@ -6,8 +6,8 @@ parameters:
     database_prefix: IAD_
     firebase_url: https://ebid.firebaseio.com
     firebase_API: e5A8EV0jVok7il8goWmX5nQNX2VECH41UKmQvqIQ
-    mail_host:  smtp.mail.yahoo.com
+    mail_host:  smtp.gmail.com
     mail_port:  465
-    mail_username:  IADProject_ebid
+    mail_username:  iadebid2014@gmail.com
     mail_password:  ebid2014
     encryption: ssl
