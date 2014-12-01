@@ -13,9 +13,13 @@ define("directives", ['angular','jquery','elevatezoom','fancybox'], function(ang
 		    link: function(scope, element, attrs) {
 
 		      //Will watch for changes on the attribute
-		      attrs.$observe('zoomImage',function(){
+		      attrs.$observe('zoomImage',function(newValue, oldValue){
 		        linkElevateZoom();
 		      });
+
+                scope.$on('$destroy', function() {
+                    $('.zoomContainer').remove();
+                });
 
                 var isDuplicate = false;
 
