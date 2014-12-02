@@ -185,6 +185,8 @@ class ProductController extends baseController {
             }
         }
 
+        $product->serverTime = date('Y-m-d H:i:s', time());
+
         $result = new Result(Result::SUCCESS, "get product successfully.", $product);
         return new Response(json_encode($result));
     }

@@ -309,7 +309,8 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 
                     $scope.userId = $scope.$parent.id;
                     var end = moment($scope.product.endTime);
-                    var now = moment();
+                    var now = moment($scope.product.serverTime);
+                    var diff = moment.duration(now.diff(moment()));
                     var duration = moment.duration(end.diff(now));
                     $scope.remaindays = duration.days();
                     $scope.remainhours = duration.hours();
@@ -321,14 +322,14 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                             $scope.product.remaining = $scope.remainhours + " h " + $scope.remainminutes + " m";
                         }else{
                             $scope.remainseconds = duration.seconds();
-                            if($scope.product.remainminutes != 0){
+                            if($scope.product.remainminutes > 0){
                                 $scope.product.remaining = $scope.remainminutes + " m " + $scope.remainseconds + " s";
                             }else{
                                 $scope.product.remaining = $scope.remainseconds + " s ";
                             }
                             $('#timeReminder').addClass("hurry");
                             $scope.clock = $interval(function(){
-                                var now = moment();
+                                var now = moment().add(diff);
                                 var duration = moment.duration(end.diff(now));
                                 if(duration < 0){
                                     $scope.stopClock();

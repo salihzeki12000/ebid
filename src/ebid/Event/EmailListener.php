@@ -22,7 +22,10 @@ class EmailListener {
             ->setBody('Hello ' . $user->getUsername() .', Thank you for your registration.');
 
         $mailer = $container->get('swiftMailer');
-        $result = $mailer->send($message);
+        try{
+            $result = $mailer->send($message);
+        }catch (\Exception $e){}
+
     }
 
     public function sendEmailOnBidFinish(BidResultEvent $event){
@@ -41,6 +44,7 @@ class EmailListener {
 		                            margin-left:10%;
 	                            }
 	                            </style>
+	                            <base href="'. $container->getParameter('server_url') .'"/>
                                 </head>
                                 <body>
 	                                <div id="wrapper">
@@ -48,10 +52,14 @@ class EmailListener {
 		                                    <p>Congratulation! '. $winner['username'].'</p>
 		                            <p>You just win the bid.</p>
 		                            <p> ebid will update you when your order ships.</p>
-	                                </div></body>');
+	                                </div>
+                                </body>
+                                </html>', 'text/html');
 
                 $mailer = $container->get('swiftMailer');
-                $result = $mailer->send($message);
+                try{
+                    $result = $mailer->send($message);
+                }catch (\Exception $e){}
             }
         }
 
@@ -63,7 +71,9 @@ class EmailListener {
                     ->setBody('Sorry, ' . $loser['username'] .', Thank you for your participation. You didn\'t win the product '. $loser['pname']);
 
                 $mailer = $container->get('swiftMailer');
-                $result = $mailer->send($message);
+                try{
+                    $result = $mailer->send($message);
+                }catch (\Exception $e){}
             }
         }
 
