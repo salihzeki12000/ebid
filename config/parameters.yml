@@ -4,7 +4,7 @@ parameters:
     database_user: wy590204
     database_password: 64011402
     database_prefix: IAD_
-    server_url: http://localhost/ebid/
+    server_url: http://54.149.37.27/
     firebase_url: https://ebid-release.firebaseio.com
     firebase_API: l2GdIeIHtaHzE9N9knb9VXHC003SO4pRURh8zcRK
     mail_host: smtp.163.com
