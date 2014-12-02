@@ -23,6 +23,7 @@ class EmailListener {
 
         $mailer = $container->get('swiftMailer');
         $result = $mailer->send($message);
+
     }
 
     public function sendEmailOnBidFinish(BidResultEvent $event){
@@ -35,20 +36,17 @@ class EmailListener {
                 $message = \Swift_Message::newInstance($winner['username'] . ', Congratulations, it\'s all yours!')
                     ->setFrom($container->getParameter('mail_email'), 'ebid')
                     ->setTo(array($winner['email'] => $winner['username']))
-                    ->setBody('<html><head><style>
-	                            #wrapper {
-	                                margin-top: 8%;
-		                            margin-left:10%;
-	                            }
-	                            </style>
+                    ->setBody('<html><head>
                                 </head>
                                 <body>
-	                                <div id="wrapper">
-		                                <img src="images/congra.jpg" alt="congratulation" width="200" height="140">
+	                                <div style="margin-top: 8%;margin-left:10%;">
+		                                <img src="'. $container->getParameter('server_url') .'images/congra.jpg" alt="congratulation" width="200" height="140">
 		                                    <p>Congratulation! '. $winner['username'].'</p>
-		                            <p>You just win the bid.</p>
+		                            <p>You just win the product '. $winner['pname'] .'.</p>
 		                            <p> ebid will update you when your order ships.</p>
-	                                </div></body>');
+	                                </div>
+                                </body>
+                                </html>', 'text/html');
 
                 $mailer = $container->get('swiftMailer');
                 $result = $mailer->send($message);
@@ -60,8 +58,16 @@ class EmailListener {
                 $message = \Swift_Message::newInstance($loser['username'] . ', Thank you for your participation')
                     ->setFrom($container->getParameter('mail_email'), 'ebid')
                     ->setTo(array($loser['email'] => $loser['username']))
-                    ->setBody('Sorry, ' . $loser['username'] .', Thank you for your participation. You didn\'t win the product '. $loser['pname']);
-
+                    ->setBody('<html><head>
+                        </head>
+                        <body>
+	                        <div style="margin-top: 6.5%;margin-left:10%;">
+		                        <img src="'. $container->getParameter('server_url') .'images/crybaby.jpg" alt="Keep trying" width="200" height="140" />
+		                        <p>Sorry, ' . $loser['username'] .'Thank you for your participation. You didn\'t win the product '. $loser['pname'] .'</p>
+		                        <p>Stay cool and keep trying!</p>
+	                        </div>
+                        </body>
+                    </html>', 'text/html');
                 $mailer = $container->get('swiftMailer');
                 $result = $mailer->send($message);
             }
