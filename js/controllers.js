@@ -103,20 +103,6 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
             $("#unlogin").hide();
             $("#alreadylogin").show();
         }
-/*
-		$.ajax({
-			url: BASEURL + '/auth/islogin',
-			dataType: "json",
-			type: "POST"
-		}).done(function(data){
-			if(data.type == 0 && data.data.islogin){
-				$("#unlogin").hide();
-				$("#alreadylogin").show();
-				$scope.username = data.data.username;
-                $scope.id = data.data.id;
-				$scope.$apply();
-			}
-		});*/
 	};
 
 	function adjustModalMaxHeightAndPosition(){
@@ -214,6 +200,14 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 				$scope.$apply();
 			});
 		};
+        $scope.getClass = function(path) {
+            var currentPath = $location.path();
+            if (currentPath == path) {
+                return "active"
+            } else {
+                return ""
+            }
+        };
 		$scope.login = function(){
 			var username = $("#username").val();
 			var passwd = $("#password").val();
@@ -575,8 +569,48 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         }
 
     }]);
-    ebidController.controller('categoryController',['$scope', function($scope){
+    ebidController.controller('categoryController',['$scope', '$location','$routeParams', '$http', function($scope, $location, $routeParams, $http){
+        document.title = " Category Home | eBid";
+        $scope.categoryId = typeof($routeParams.categoryId) == "undefined" ? "all" : $routeParams.categoryId;
+        $scope.Categorylist = new kendo.data.HierarchicalDataSource({
+            transport: {
+                read: {
+                    url: BASEURL + "/ajax/getCategoryHierarchy" ,
+                    dataType: "json",
+                    cache: true
+                }
+            },
+            schema: {
+                data: 'data',
+                model:{
+                    children:'items'
+                }
+            }
+        });
+        $scope.CategoryTemplate = $('#CategoryTemplate').html();
+        $scope.categoryOptions = {
+        };
 
+        $scope.pageSize = 20;
+
+        $scope.productlist = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: BASEURL + "/ajax/getProductByCategory/" + $scope.categoryId ,
+                    dataType: "json"
+                }
+            },
+            pageSize: $scope.pageSize,
+            serverPaging: true,
+            schema: {
+                data: "data",
+                total: "total"
+            }
+        });
+        $scope.productlistTemplate = $("#productlisttemplate").html();
+        $scope.pathRedirect = function(path){
+            $location.path(path);
+        };
 	}]);
 	ebidController.controller('userController',['$scope', '$location', '$http','GlobalEnum',function($scope, $location, $http, GlobalEnum){
         document.title = " User Home | eBid"
@@ -692,10 +726,6 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         $scope.linkItem = function(itemId){
             $location.path('/bid/item/' + itemId);
         }
-        $('#home').addClass('active');
-        $('#contact').removeClass('active');
-        $('#rule').removeClass('active');
-        $('#dispute').removeClass('active');
 		$scope.listViewTemplate = $("#template").html();
 	}]);
 	ebidController.controller('NotFoundController',['$scope', '$location', function($scope, $location){
@@ -705,22 +735,6 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
     ebidController.controller('helpController',['$scope', '$location', function($scope, $location){
         document.title = " Customer Center | eBid";
         var path = $location.path();
-        if(path == '/help/rule'){
-            $('#rule').addClass('active');
-            $('#dispute').removeClass('active');
-            $('#contact').removeClass('active');
-            $('#home').removeClass('active');
-        }else if(path == '/help/dispute'){
-            $('#dispute').addClass('active');
-            $('#rule').removeClass('active');
-            $('#contact').removeClass('active');
-            $('#home').removeClass('active');
-        }else if(path == '/help/contact'){
-            $('#contact').addClass('active');
-            $('#rule').removeClass('active');
-            $('#dispute').removeClass('active');
-            $('#home').removeClass('active');
-        }
     }]);
     var initialBidForm = function($scope, $location, $http, GlobalEnum){
         isLogin(null, function(){
@@ -939,6 +953,9 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                     $scope.$apply();
                 },2000);
         });
+
+        $('#startPriceForm').hide();
+        $('#endDayForm').hide();
 
         $scope.submit = function(){
             if(!$scope.bidForm.$valid){

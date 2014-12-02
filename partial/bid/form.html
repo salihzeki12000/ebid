@@ -91,7 +91,7 @@
                         </div>
                     </div>
 
-					<div class="form-group">
+					<div id="startPriceForm" class="form-group">
 						<label class="col-md-2 control-label" for="startprice">Start
 							Price</label>
 						<div class="col-md-10">
@@ -99,7 +99,7 @@
 						</div>
 					</div>
 
-					<div class="form-group">
+					<div class="form-group" style="display: none;">
 						<label class="col-md-2 control-label" for="expectprice">Expect
 							Price</label>
 						<div class="col-md-10">
@@ -107,7 +107,7 @@
 						</div>
 					</div>
 
-					<div class="form-group">
+					<div class="form-group" style="display: none;">
 						<label class="col-md-2 control-label" for="buynowprice">Buy
 							Now Price</label>
 						<div class="col-md-10">
@@ -115,7 +115,7 @@
 						</div>
 					</div>
 
-					<div class="form-group">
+					<div id="endDayForm" class="form-group">
 						<label class="col-md-2 control-label" for="datetimepicker">End Day</label>
 						<div class="col-md-10">
 							<input id="datetimepicker" kendo-date-time-picker required style="width: 153px" ng-model="product.endTime" k-options="dateTimeOptions" />

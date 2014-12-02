@@ -24,6 +24,10 @@ define("app",['angular','controllers', 'directives','angular_route','angular_ani
 				templateUrl: 'partial/category.html',
 				controller: 'categoryController'				
 			})
+            .when('/category/:categoryId', {
+                templateUrl: 'partial/category.html',
+                controller: 'categoryController'
+             })
 			.when('/bid/item/:itemId',{
 				templateUrl: 'partial/bid/item.html',
 				controller: 'itemController'				

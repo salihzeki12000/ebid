@@ -82,10 +82,11 @@
 			<div class="menu">
 				<a class="toggleMenu" href="#"><img src="images/nav.png" alt="" /></a>
 				<ul class="nav" id="nav">
-					<li id="home"><a href="#/">Home</a></li>
-					<li id="rule"><a href="#/help/rule">Bid Rule</a></li>
-					<li id="dispute"><a href="#/help/dispute">Dispute deal</a></li>
-					<li id="contact"><a href="#/help/contact">Contact us</a></li>
+					<li ng-class="getClass('/')"><a href="#/">Home</a></li>
+                    <li ng-class="getClass('/category')"><a href="#/category">Category</a> </li>
+					<li ng-class="getClass('/help/rule')"><a href="#/help/rule">Bid Rule</a></li>
+					<li ng-class="getClass('/help/dispute')"><a href="#/help/dispute">Dispute deal</a></li>
+					<li ng-class="getClass('/help/contact')"><a href="#/help/contact">Contact us</a></li>
 				</ul>
 				<div class="clearfix"></div>
 			</div>

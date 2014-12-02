@@ -71,6 +71,13 @@ getCategory:
     path:     /ajax/getCategory
     defaults: { _controller: 'ebid\Controller\AjaxController::getCategoryAction'}
 
+getCategoryHierarchy:
+    path:     /ajax/getCategoryHierarchy
+    defaults: { _controller: 'ebid\Controller\AjaxController::getCategoryHierarchyAction'}
+
+getProductByCategory:
+    path:     /ajax/getProductByCategory/{categoryId}
+    defaults: { _controller: 'ebid\Controller\AjaxController::getProductByCategoryAction', categoryId: 'all'}
 
 ProductAdd:
     path:     /product/add

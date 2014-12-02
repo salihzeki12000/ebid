@@ -1,1 +1,51 @@
-<!-- ToDo: add category html code here. -->
+<div class="row top20">
+    <div class="col-md-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><a href="" ng-click="pathRedirect('/category/all')" >Category</a></div>
+            <div class="panel-body">
+                <div kendo-tree-view="tree" k-options="categoryOptions"
+                     k-data-source="Categorylist"
+                     k-template="CategoryTemplate"></div>
+                <script type="text/x-kendo-angular-template" id="CategoryTemplate">
+                    <a ng-href="\#/category/{{dataItem.categoryId}}">{{dataItem.cname}}</a>
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Product</div>
+            <div class="panel-body">
+                <div kendo-listview  class="listView" k-data-source="productlist" k-template='productlistTemplate'></div>
+                <div kendo-pager k-data-source="productlist"></div>
+                <script type="text/x-kendo-angular-template" id="productlisttemplate">
+                    <div class="col-md-3 col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body product-header">
+                                <div class="product-img">
+                                    <a ng-href="\\#/bid/item/#:pid#"><img ng-src="{{ dataItem.defaultImage}}" alt=" #:pname# image" />
+                                    </a>
+                                </div>
+                                <div class="product-wrapper">
+                                    <div class="product-description">
+                                        <div>Full Name: #: pname #</div>
+                                        <div>Price: #:kendo.toString(currentPrice, "c")#</div>
+                                    </div>
+                                    <div class="props-mask"></div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="col-md-5"><div>From: </div><div>#: username #</div><div>#:kendo.toString(currentPrice, "c")#</div></div>
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn btn-primary" ng-click="linkItem(dataItem.pid)">Bid</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </script>
+            </div>
+        </div>
+    </div>
+</div>

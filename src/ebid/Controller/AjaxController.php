@@ -94,6 +94,82 @@ class AjaxController extends baseController
         }
         return new Response(json_encode($result));
     }
+
+    public function getCategoryHierarchyAction(){
+        $MySQLParser = $this->container->get('MySQLParser');
+        $category = new Category();
+        $arr = $MySQLParser->select($category, 'parentId is NULL');
+
+        $result = array();
+        foreach ($arr as $item) {
+            if($item['childrenId']!= NULL){
+                $childrenArr = $this->CategoryHierarchyRecursive($item['childrenId'], $MySQLParser);
+                $item['items'] = $childrenArr;
+            }
+            $item['expanded'] = true;
+            $result['data'][] = $item;
+        }
+        return new Response(json_encode($result));
+    }
+
+    public function CategoryHierarchyRecursive($childrenId, $MySQLParser){
+        $category = new Category();
+        $arr = $MySQLParser->select($category, 'categoryId in (' . $childrenId . ')');
+        $result = array();
+        foreach ($arr as $item) {
+            if($item['childrenId']!= NULL){
+                $childrenArr = $this->CategoryHierarchyRecursive($item['childrenId'], $MySQLParser);
+                $item['items'] = $childrenArr;
+            }
+            $result[] = $item;
+        }
+        return $result;
+    }
+
+    public function getAllChildId($categoryId, $MySQLParser){
+        $category = new Category();
+        $arr = $MySQLParser->select($category, 'categoryId in (' . $categoryId . ')', NULL, array('categoryId', 'childrenId'));
+        $result = array();
+        foreach ($arr as $item) {
+            if($item['childrenId']!= NULL){
+                $childrenArr = $this->getAllChildId($item['childrenId'], $MySQLParser);
+                $result = array_merge($result, $childrenArr);
+            }
+            $result[] = $item['categoryId'];
+        }
+        return $result;
+    }
+
+    public function getProductByCategoryAction($categoryId){
+        $page = $this->request->query->get('page');
+        $pageSize = $this->request->query->get('pageSize');
+        $MySQLParser = $this->container->get('MySQLParser');
+        if($categoryId != 'all'){
+            $categoryId = intval($categoryId);
+            $arr = $this->getAllChildId($categoryId, $MySQLParser);
+            $categoryId = implode(',', $arr);
+            $sql = "SELECT Product.pid, Product.pname, Product.buyNowPrice, Product.currentPrice, Product.startPrice, Product.defaultImage, Product.endTime, Product.categoryId, Product.shippingType, Product.shippingCost, Product.auction, Product.seller, Product.`condition`, Product.`status`, User.uid, User.username FROM " . _table('Product') ." AS Product INNER JOIN " . _table('User'). " AS User ON User.uid = Product.seller WHERE (Product.endTime - now()) > 0 AND (Product.status = 0 OR Product.status = 1)  AND categoryId IN (" .$categoryId . ") ";
+        }
+        else{
+            $sql = "SELECT Product.pid, Product.pname, Product.buyNowPrice, Product.currentPrice, Product.startPrice, Product.defaultImage, Product.endTime, Product.categoryId, Product.shippingType, Product.shippingCost, Product.auction, Product.seller, Product.`condition`, Product.`status`, User.uid, User.username FROM " . _table('Product') ." AS Product INNER JOIN " . _table('User'). " AS User ON User.uid = Product.seller WHERE (Product.endTime - now()) > 0 AND (Product.status = 0 OR Product.status = 1) ";
+        }
+        $start = ($page - 1) * $pageSize;
+        $end = $page * $pageSize;
+        $sql .= ' LIMIT '. $start . ' , ' . $end;
+
+
+        $result = $MySQLParser->query($sql);
+        $result = new Result(Result::SUCCESS, "fetch product list successfully", $result);
+        //calc total
+        if($categoryId != 'all'){
+            $sql = "SELECT COUNT(*) FROM " . _table('Product') ." WHERE categoryId IN (" .$categoryId . ") AND (endTime - now()) > 0 AND (status = 0 OR status = 1)";
+        }else{
+            $sql = "SELECT COUNT(*) FROM " . _table('Product') . " WHERE (endTime - now()) > 0 AND (status = 0 OR status = 1)";
+        }
+        $count = $MySQLParser->query($sql);
+        $result->total = intval($count[0]['COUNT(*)']);
+        return new Response(json_encode($result));
+    }
     
     public function getProductByIdAction($itemId){
         $url = 'http://open.api.ebay.com/shopping?callname=GetSingleItem&responseencoding=JSON&appid=' . AjaxController::APPID .'&%20siteid=0&version=515&ItemID=' . $itemId .'&IncludeSelector=Description,ItemSpecifics';
