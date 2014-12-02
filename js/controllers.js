@@ -322,7 +322,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                             $scope.product.remaining = $scope.remainhours + " h " + $scope.remainminutes + " m";
                         }else{
                             $scope.remainseconds = duration.seconds();
-                            if($scope.product.remainminutes > 0){
+                            if($scope.remainminutes > 0){
                                 $scope.product.remaining = $scope.remainminutes + " m " + $scope.remainseconds + " s";
                             }else{
                                 $scope.product.remaining = $scope.remainseconds + " s ";
@@ -437,6 +437,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
             'price.bidNumber',
             function(newval, oldval){
                 //current price change
+                if(!$scope.product) return;
                 if(newval == 1 && $scope.product.userMinPrice == $scope.price.currentPrice){
                     $scope.setUserMinPrice($scope.product.userMinPrice);
                 }
