@@ -67,7 +67,15 @@ INSERT INTO `IAD_Category` (`categoryId`, `cname`, `parentId`, `childrenId`) VAL
   (8, 'Entertainment', NULL, '9, 10, 11'),
   (9, 'Music', 8, NULL),
   (10, 'DVD & Movies', 8, NULL),
-  (11, 'Video games', 8, NULL);
+  (11, 'Video games', 8, NULL),
+  (12, 'Home & garden', NULL, NULL),
+  (13, 'Motors', NULL, '14, 15, 16'),
+  (14, 'Cars & trucks', 13, NULL),
+  (15, 'Motorcycles', 13, NULL),
+  (16, 'Passenger vehicles', 13, NULL),
+  (17, 'Other', NULL, '18,19'),
+  (18, 'Health & beauty', 17, NULL),
+  (19, 'Musical instruments & gear', 17, NULL);
 
 -- -----------------------------------------------------
 -- Table `IAD_Final_Project`.`bid`
