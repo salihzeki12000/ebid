@@ -154,8 +154,7 @@ class AjaxController extends baseController
             $sql = "SELECT Product.pid, Product.pname, Product.buyNowPrice, Product.currentPrice, Product.startPrice, Product.defaultImage, Product.endTime, Product.categoryId, Product.shippingType, Product.shippingCost, Product.auction, Product.seller, Product.`condition`, Product.`status`, User.uid, User.username FROM " . _table('Product') ." AS Product INNER JOIN " . _table('User'). " AS User ON User.uid = Product.seller WHERE (Product.endTime - now()) > 0 AND (Product.status = 0 OR Product.status = 1) ";
         }
         $start = ($page - 1) * $pageSize;
-        $end = $page * $pageSize;
-        $sql .= ' LIMIT '. $start . ' , ' . $end;
+        $sql .= ' LIMIT '. $start . ' , ' . $pageSize;
 
 
         $result = $MySQLParser->query($sql);
