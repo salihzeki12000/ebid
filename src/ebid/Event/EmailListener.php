@@ -22,7 +22,11 @@ class EmailListener {
             ->setBody('Hello ' . $user->getUsername() .', Thank you for your registration.');
 
         $mailer = $container->get('swiftMailer');
-        $result = $mailer->send($message);
+        try{
+            $result = $mailer->send($message);
+        }catch (\Exception $e){
+        }
+
 
     }
 
@@ -49,7 +53,10 @@ class EmailListener {
                                 </html>', 'text/html');
 
                 $mailer = $container->get('swiftMailer');
-                $result = $mailer->send($message);
+                try{
+                    $result = $mailer->send($message);
+                }catch (\Exception $e){
+                }
             }
         }
 
@@ -69,7 +76,10 @@ class EmailListener {
                         </body>
                     </html>', 'text/html');
                 $mailer = $container->get('swiftMailer');
-                $result = $mailer->send($message);
+                try{
+                    $result = $mailer->send($message);
+                }catch (\Exception $e){
+                }
             }
         }
 

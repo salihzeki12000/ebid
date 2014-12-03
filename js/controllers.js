@@ -375,6 +375,8 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
             }
         };
 
+        $scope.$on('$destroy', function () { $interval.cancel($scope.clock); });
+
         $('#commentModal').on('show.bs.modal', function (event) {
             adjustModalMaxHeightAndPosition();
         });
@@ -555,25 +557,30 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                 if(data.type == FAILURE){
                     $location.path('/nopage').replace();
                 }
-                $scope.product = data.data;
-                document.title = " " + $scope.product.pname +" | eBid";
-                $scope.product.auction = EnumBidTypeName(GlobalEnum, $scope.product.auction);
-                $scope.product.condition = EnumConditionTypeName(GlobalEnum, $scope.product.condition);
-                $scope.product.shippingType = EnumShippingTypeName(GlobalEnum, $scope.product.shippingType);
-                if($scope.product.shippingCost == 0){
-                    $scope.product.shippingCost = "Free";
-                }
-                $scope.userId = $scope.$parent.id;
-                if($scope.product.isEnd == true && $scope.product.hasWinner == true){
-                    $scope.product.productStatusImg = "images/imgSold.png";
-                }else{
-                    $scope.product.productStatusImg = "images/imgEnded.png";
-                }
+                if(data.type == SUCCESS){
+                    $scope.product = data.data;
+                    document.title = " " + $scope.product.pname +" | eBid";
+                    $scope.product.auction = EnumBidTypeName(GlobalEnum, $scope.product.auction);
+                    $scope.product.condition = EnumConditionTypeName(GlobalEnum, $scope.product.condition);
+                    $scope.product.shippingType = EnumShippingTypeName(GlobalEnum, $scope.product.shippingType);
+                    if($scope.product.shippingCost == 0){
+                        $scope.product.shippingCost = "Free";
+                    }
+                    $scope.userId = $scope.$parent.id;
+                    if($scope.product.isEnd == true && $scope.product.hasWinner == true){
+                        $scope.product.productStatusImg = "images/imgSold.png";
+                    }else{
+                        $scope.product.productStatusImg = "images/imgEnded.png";
+                    }
 
-                if($scope.product.isEnd == true && $scope.product.WinnerId == $scope.userId){
-                    $scope.product.userStatusImg = "images/winner.jpg";
+                    if($scope.product.isEnd == true && $scope.product.WinnerId == $scope.userId){
+                        $scope.product.userStatusImg = "images/winner.jpg";
+                    }else{
+                        $scope.product.userStatusImg = "images/fail.gif";
+                    }
                 }else{
-                    $scope.product.userStatusImg = "images/fail.gif";
+                    $scope.InfoNotification.show(data.message, "error");
+                    $scope.$apply();
                 }
         });
 
