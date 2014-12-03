@@ -375,7 +375,9 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
             }
         };
 
-        $scope.$on('$destroy', function () { $interval.cancel($scope.clock); });
+        $scope.$on('$destroy', function () {
+            $interval.cancel($scope.clock);
+        });
 
         $('#commentModal').on('show.bs.modal', function (event) {
             adjustModalMaxHeightAndPosition();

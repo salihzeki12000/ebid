@@ -83,6 +83,9 @@ define("app",['angular','controllers', 'directives','angular_route','angular_ani
 		   $rootScope.$on('$viewContentLoaded', function() {
 		      $templateCache.removeAll();
 		   });
+            $rootScope.$on('$routeChangeStart', function(next, current) {
+                $('.zoomContainer').remove();
+            });
 		});
 	return app;
 });
