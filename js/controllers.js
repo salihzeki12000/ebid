@@ -54,6 +54,17 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
             return items.slice().reverse();
         };
     });
+    String.prototype.startWith = function(str) {
+        if(str==null||str==""||this.length==0||str.length>this.length)
+            return false;
+
+        if(this.substr(0,str.length)==str)
+            return true;
+        else
+            return false;
+
+        return true;
+    };
 	var animate = function($element, $animateName,callback){
 		$element.addClass($animateName);
 		$element.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
@@ -229,6 +240,10 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                 $scope.username = "unknown";
                 $scope.id = -1;
 				$scope.InfoNotification.show(data.message, "success");
+                var currentPath = $location.path();
+                if(currentPath.startWith('/user') || currentPath == '/bid/add'){
+                    $location.path('/').replace();
+                }
 				$scope.$apply();
 			});
 		};
