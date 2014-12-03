@@ -188,7 +188,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 					var path = $location.path();
 					if(/^\/auth\/login/.test(path)){
 						setTimeout(function(){
-							$location.path('/');
+							$location.path('/').replace();
 							$scope.$apply();
 						},2000);
 					}
@@ -287,11 +287,11 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         })
         .success(function(data, status, headers, config) {
                 if(data.type == FAILURE){
-                    $location.path('/nopage');
+                    $location.path('/nopage').replace();
                     $route.reload();
                 }
                 if(data.type == EXPIRE){
-                    $location.path('/bid/item/' + $scope.itemId + '/result');
+                    $location.path('/bid/item/' + $scope.itemId + '/result').replace();
                     $route.reload();
                 }
                 if(data.type == SUCCESS){
@@ -333,7 +333,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                                 var duration = moment.duration(end.diff(now));
                                 if(duration < 0){
                                     $scope.stopClock();
-                                    $location.path('/bid/item/' + $scope.itemId + '/result');
+                                    $location.path('/bid/item/' + $scope.itemId + '/result').replace();
                                     $route.reload();
                                 }
                                 $scope.remainminutes = duration.minutes();
@@ -502,7 +502,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                         $scope.InfoNotification.show(data.messages, "success");
                     }else if(data.type == EXPIRE){
                         $scope.stopClock();
-                        $location.path('/bid/item/' + $scope.itemId + '/result');
+                        $location.path('/bid/item/' + $scope.itemId + '/result').replace();
                         $route.reload();
                     }
                     else{
@@ -538,7 +538,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         })
         .success(function(data, status, headers, config) {
                 if(data.type == FAILURE){
-                    $location.path('/nopage');
+                    $location.path('/nopage').replace();
                 }
                 $scope.product = data.data;
                 document.title = " " + $scope.product.pname +" | eBid";
@@ -613,11 +613,14 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         $scope.pathRedirect = function(path){
             $location.path(path);
         };
+        $scope.linkItem = function(itemId){
+            $location.path('/bid/item/' + itemId);
+        };
 	}]);
 	ebidController.controller('userController',['$scope', '$location', '$http','GlobalEnum',function($scope, $location, $http, GlobalEnum){
         document.title = " User Home | eBid"
         isLogin(null, function(){
-            $location.path('/auth/login');
+            $location.path('/auth/login').replace();
             if(!$scope.$$phase) $scope.$apply();
         });
         $http({
@@ -626,7 +629,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         })
         .success(function(data, status, headers, config) {
                 if(data.type == FAILURE){
-                    $location.path('/');
+                    $location.path('/').replace();
                 }
                 if(data.type == SUCCESS){
                     $scope.userIndex = data.data;
@@ -652,7 +655,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         document.title = " Login | eBid"
 		$('#login_Info_Panel').hide();
 		isLogin(function(){
-			$location.path('/');
+			$location.path('/').replace();
 			if(!$scope.$$phase) $scope.$apply();
 		},null);
 		$scope.submit = function(){
@@ -740,7 +743,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
     }]);
     var initialBidForm = function($scope, $location, $http, GlobalEnum){
         isLogin(null, function(){
-            $location.path('/auth/login');
+            $location.path('/auth/login').replace();
             if(!$scope.$$phase) $scope.$apply();
         });
         $scope.bidType = GlobalEnum.EnumBidType;
