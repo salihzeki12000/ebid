@@ -593,7 +593,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         $scope.categoryOptions = {
         };
 
-        $scope.pageSize = 20;
+        $scope.pageSize = 12;
 
         $scope.productlist = new kendo.data.DataSource({
             transport: {
