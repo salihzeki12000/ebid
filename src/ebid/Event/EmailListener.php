@@ -63,7 +63,8 @@ class EmailListener {
                         <body>
 	                        <div style="margin-top: 6.5%;margin-left:10%;">
 		                        <img src="'. $container->getParameter('server_url') .'images/crybaby.jpg" alt="Keep trying" width="200" height="140" />
-		                        <p>Sorry, ' . $loser['username'] .'. Thank you for your participation. You didn\'t win the product '. $loser['pname'] .'</p>
+		                        <p>Sorry, ' . $loser['username'] .'. Thank you for your participation. </p>
+		                        <p>You didn\'t win the product '. $loser['pname'] .'</p>
 		                        <p>Stay cool and keep trying!</p>
 	                        </div>
                         </body>
