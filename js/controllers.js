@@ -54,6 +54,17 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
             return items.slice().reverse();
         };
     });
+    String.prototype.startWith = function(str) {
+        if(str==null||str==""||this.length==0||str.length>this.length)
+            return false;
+
+        if(this.substr(0,str.length)==str)
+            return true;
+        else
+            return false;
+
+        return true;
+    };
 	var animate = function($element, $animateName,callback){
 		$element.addClass($animateName);
 		$element.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
@@ -188,7 +199,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
 					var path = $location.path();
 					if(/^\/auth\/login/.test(path)){
 						setTimeout(function(){
-							$location.path('/');
+							$location.path('/').replace();
 							$scope.$apply();
 						},2000);
 					}
@@ -229,6 +240,10 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                 $scope.username = "unknown";
                 $scope.id = -1;
 				$scope.InfoNotification.show(data.message, "success");
+                var currentPath = $location.path();
+                if(currentPath.startWith('/user') || currentPath == '/bid/add'){
+                    $location.path('/').replace();
+                }
 				$scope.$apply();
 			});
 		};
@@ -287,11 +302,11 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         })
         .success(function(data, status, headers, config) {
                 if(data.type == FAILURE){
-                    $location.path('/nopage');
+                    $location.path('/nopage').replace();
                     $route.reload();
                 }
                 if(data.type == EXPIRE){
-                    $location.path('/bid/item/' + $scope.itemId + '/result');
+                    $location.path('/bid/item/' + $scope.itemId + '/result').replace();
                     $route.reload();
                 }
                 if(data.type == SUCCESS){
@@ -333,7 +348,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                                 var duration = moment.duration(end.diff(now));
                                 if(duration < 0){
                                     $scope.stopClock();
-                                    $location.path('/bid/item/' + $scope.itemId + '/result');
+                                    $location.path('/bid/item/' + $scope.itemId + '/result').replace();
                                     $route.reload();
                                 }
                                 $scope.remainminutes = duration.minutes();
@@ -359,6 +374,10 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                 $scope.clock = undefined;
             }
         };
+
+        $scope.$on('$destroy', function () {
+            $interval.cancel($scope.clock);
+        });
 
         $('#commentModal').on('show.bs.modal', function (event) {
             adjustModalMaxHeightAndPosition();
@@ -502,7 +521,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
                         $scope.InfoNotification.show(data.messages, "success");
                     }else if(data.type == EXPIRE){
                         $scope.stopClock();
-                        $location.path('/bid/item/' + $scope.itemId + '/result');
+                        $location.path('/bid/item/' + $scope.itemId + '/result').replace();
                         $route.reload();
                     }
                     else{
@@ -538,27 +557,32 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         })
         .success(function(data, status, headers, config) {
                 if(data.type == FAILURE){
-                    $location.path('/nopage');
+                    $location.path('/nopage').replace();
                 }
-                $scope.product = data.data;
-                document.title = " " + $scope.product.pname +" | eBid";
-                $scope.product.auction = EnumBidTypeName(GlobalEnum, $scope.product.auction);
-                $scope.product.condition = EnumConditionTypeName(GlobalEnum, $scope.product.condition);
-                $scope.product.shippingType = EnumShippingTypeName(GlobalEnum, $scope.product.shippingType);
-                if($scope.product.shippingCost == 0){
-                    $scope.product.shippingCost = "Free";
-                }
-                $scope.userId = $scope.$parent.id;
-                if($scope.product.isEnd == true && $scope.product.hasWinner == true){
-                    $scope.product.productStatusImg = "images/imgSold.png";
-                }else{
-                    $scope.product.productStatusImg = "images/imgEnded.png";
-                }
+                if(data.type == SUCCESS){
+                    $scope.product = data.data;
+                    document.title = " " + $scope.product.pname +" | eBid";
+                    $scope.product.auction = EnumBidTypeName(GlobalEnum, $scope.product.auction);
+                    $scope.product.condition = EnumConditionTypeName(GlobalEnum, $scope.product.condition);
+                    $scope.product.shippingType = EnumShippingTypeName(GlobalEnum, $scope.product.shippingType);
+                    if($scope.product.shippingCost == 0){
+                        $scope.product.shippingCost = "Free";
+                    }
+                    $scope.userId = $scope.$parent.id;
+                    if($scope.product.isEnd == true && $scope.product.hasWinner == true){
+                        $scope.product.productStatusImg = "images/imgSold.png";
+                    }else{
+                        $scope.product.productStatusImg = "images/imgEnded.png";
+                    }
 
-                if($scope.product.isEnd == true && $scope.product.WinnerId == $scope.userId){
-                    $scope.product.userStatusImg = "images/winner.jpg";
+                    if($scope.product.isEnd == true && $scope.product.WinnerId == $scope.userId){
+                        $scope.product.userStatusImg = "images/winner.jpg";
+                    }else{
+                        $scope.product.userStatusImg = "images/fail.gif";
+                    }
                 }else{
-                    $scope.product.userStatusImg = "images/fail.gif";
+                    $scope.InfoNotification.show(data.message, "error");
+                    $scope.$apply();
                 }
         });
 
@@ -593,7 +617,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         $scope.categoryOptions = {
         };
 
-        $scope.pageSize = 20;
+        $scope.pageSize = 12;
 
         $scope.productlist = new kendo.data.DataSource({
             transport: {
@@ -613,11 +637,14 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         $scope.pathRedirect = function(path){
             $location.path(path);
         };
+        $scope.linkItem = function(itemId){
+            $location.path('/bid/item/' + itemId);
+        };
 	}]);
 	ebidController.controller('userController',['$scope', '$location', '$http','GlobalEnum',function($scope, $location, $http, GlobalEnum){
         document.title = " User Home | eBid"
         isLogin(null, function(){
-            $location.path('/auth/login');
+            $location.path('/auth/login').replace();
             if(!$scope.$$phase) $scope.$apply();
         });
         $http({
@@ -626,7 +653,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         })
         .success(function(data, status, headers, config) {
                 if(data.type == FAILURE){
-                    $location.path('/');
+                    $location.path('/').replace();
                 }
                 if(data.type == SUCCESS){
                     $scope.userIndex = data.data;
@@ -652,7 +679,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
         document.title = " Login | eBid"
 		$('#login_Info_Panel').hide();
 		isLogin(function(){
-			$location.path('/');
+			$location.path('/').replace();
 			if(!$scope.$$phase) $scope.$apply();
 		},null);
 		$scope.submit = function(){
@@ -740,7 +767,7 @@ define("controllers", ['angular','kendo','bootstrap'], function(angular){
     }]);
     var initialBidForm = function($scope, $location, $http, GlobalEnum){
         isLogin(null, function(){
-            $location.path('/auth/login');
+            $location.path('/auth/login').replace();
             if(!$scope.$$phase) $scope.$apply();
         });
         $scope.bidType = GlobalEnum.EnumBidType;

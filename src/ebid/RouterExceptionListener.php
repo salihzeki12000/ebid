@@ -40,6 +40,7 @@ class RouterExceptionListener
     
         // HttpExceptionInterface is a special type of exception that
         // holds status code and header details
+        $response->headers->set('X-Status-Code', Response::HTTP_OK);
         if ($exception instanceof HttpExceptionInterface) {
             $response->setStatusCode($exception->getStatusCode());
             $response->headers->replace($exception->getHeaders());
