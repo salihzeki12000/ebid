@@ -295,7 +295,12 @@ class AjaxController extends baseController
                 $pidList[] = $val['pid'];
             }
             $pids = implode(',',$pidList);
-            $sql = "SELECT Product.pid, Product.pname, Product.currentPrice, Product.defaultImage, Product.endTime, Product.categoryId, User.uid, User.username FROM " . _table('Product')." AS Product INNER JOIN " . _table('User'). " AS User ON User.uid = Product.seller WHERE (Product.endTime - now()) > 0 AND (Product.status = 0 OR Product.status = 1) AND Product.pid NOT IN ( {$pids} )  group by Product.pid desc limit " . $num;
+
+            $sql = "SELECT Product.pid, Product.pname, Product.currentPrice, Product.defaultImage, Product.endTime, Product.categoryId, User.uid, User.username FROM " . _table('Product')." AS Product INNER JOIN " . _table('User'). " AS User ON User.uid = Product.seller WHERE (Product.endTime - now()) > 0 AND (Product.status = 0 OR Product.status = 1) " ;
+            if($pids != ""){
+                $sql .= " AND Product.pid NOT IN ( {$pids} ) ";
+            }
+            $sql .="group by Product.pid desc limit " . $num;
             $result1 = $MySQLParser->query($sql);
             foreach($result1 as $val){
                 $val['count'] = 0;
